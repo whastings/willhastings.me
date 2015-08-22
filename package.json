@@ -1,0 +1,25 @@
+{
+  "name": "objectdotcreate.net",
+  "version": "0.0.1",
+  "description": "The portfolio website of Will Hastings.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --harmony index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whastings/objectdotcreate.net-v2.git"
+  },
+  "author": "Will Hastings",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/whastings/objectdotcreate.net-v2/issues"
+  },
+  "homepage": "https://github.com/whastings/objectdotcreate.net-v2#readme",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "express": "^4.13.3",
+    "express-handlebars": "^2.0.1"
+  }
+}
