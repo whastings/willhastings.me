@@ -19,10 +19,10 @@
 ## Tech
 
 * Backend
-  * Framework: Koa
+  * Framework: Express
   * DB: Mongo
   * ORM: Mongoose
-  * Build: Gulp
+  * Build: Broccoli
     * Markdown to HTML
     * ES6 -> ES5
   * Rendering: React
@@ -41,6 +41,7 @@
 * dist
 * components
 * images
+* lib
 * models
 * styles
 * routes
