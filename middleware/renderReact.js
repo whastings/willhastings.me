@@ -1,17 +1,24 @@
 import React from 'react';
+import Router from 'react-router';
+import routes from '../components/routes.jsx';
 
 export default function renderReactMiddleware() {
   return function renderReact(req, res) {
-    var reactData = res.reactData,
+    var reactContent = res.reactContent,
+        router = Router.create({routes, location: req.url}),
         html;
-    if (!reactData) {
-      return next();
-    }
 
-    html = React.renderToString(
-      React.createElement(reactData.component, {content: reactData.content})
-    );
+    router.run(function(Handler) {
+      var state = {};
+      if (reactContent) {
+        state.content = reactContent;
+      }
 
-    res.render('base', {html});
+      html = React.renderToString(
+        React.createElement(Handler, state)
+      );
+
+      res.render('base', {html});
+    });
   };
 }

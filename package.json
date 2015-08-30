@@ -29,6 +29,7 @@
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
     "react": "^0.13.3",
+    "react-router": "^0.13.3",
     "rimraf": "^2.4.3"
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ app.set('view engine', '.hbs');
 [homeRoute].forEach(route => route(app));
 
 // Apply post-routes middleware.
-app.use(renderReact());
+app.get('*', renderReact());
 
 console.log(`Listening on ${PORT}`);
 app.listen(PORT);
