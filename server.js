@@ -1,5 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
+import renderReact from './middleware/renderReact';
 
 // Routes:
 import homeRoute from './routes/home';
@@ -14,6 +15,9 @@ app.set('view engine', '.hbs');
 
 // Apply routes.
 [homeRoute].forEach(route => route(app));
+
+// Apply post-routes middleware.
+app.use(renderReact());
 
 console.log(`Listening on ${PORT}`);
 app.listen(PORT);

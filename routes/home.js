@@ -1,11 +1,14 @@
+import co from 'co';
 import HomePage from '../components/pages/HomePage';
-import React from 'react';
+import loadHtml from '../lib/loadHtml';
 
 export default function homeRoute(app) {
-  app.get('/', function(req, res) {
-    var content = React.renderToString(
-      React.createElement(HomePage, {content: '<strong>Welcome!</strong>'})
-    );
-    res.render('base', {content});
-  });
+  app.get('/', co.wrap(function*(req, res, next) {
+    res.reactData = {
+      component: HomePage,
+      content: yield loadHtml('pages/home.html')
+    }
+
+    next();
+  }));
 }
