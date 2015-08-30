@@ -1,5 +1,5 @@
 import React from 'react';
-import template from './home.jsx';
+import template from './templates/homePage.jsx';
 
 export default React.createClass({
   render() {

@@ -1,4 +1,4 @@
-import HomePage from './pages/HomePage';
+import HomePage from './home/HomePage';
 import ProjectsPage from './projects/ProjectsPage';
 import React from 'react';
 import { DefaultRoute, Route } from 'react-router';
