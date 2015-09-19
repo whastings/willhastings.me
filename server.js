@@ -12,6 +12,7 @@ var app = express();
 // App settings:
 app.engine('.hbs', handlebars({defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
+app.use(express.static('dist'));
 
 // Apply routes.
 [homeRoute].forEach(route => route(app));
