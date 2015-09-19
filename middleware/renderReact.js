@@ -3,16 +3,20 @@ import Router from 'react-router';
 import routes from '../components/routes.jsx';
 
 export default function renderReactMiddleware() {
-  return function renderReact(req, res) {
+  return function renderReact(req, res, next) {
     var reactContent = res.reactContent,
-        router = Router.create({routes, location: req.url}),
+        router,
         html;
+
+    if (!reactContent) {
+      return next();
+    }
+
+    router = Router.create({routes, location: req.url});
 
     router.run(function(Handler) {
       var state = {};
-      if (reactContent) {
-        state.content = reactContent;
-      }
+      state.content = reactContent;
 
       html = React.renderToString(
         React.createElement(Handler, state)

@@ -25,6 +25,7 @@
   * Build: Broccoli
     * Markdown to HTML
     * ES6 -> ES5
+    * SCSS -> CSS
   * Rendering: React
 * Frontend
   * Rendering: React
@@ -89,7 +90,8 @@
 
 ## Resources
 
-* `https://github.com/koajs/examples`
-* `https://github.com/koajs/api-boilerplate`
-* `http://koajs.in/doc/`
-* `https://github.com/alexmingoia/koa-router`
+* expressjs.com
+
+## Inspiration
+
+* aerotwist.com

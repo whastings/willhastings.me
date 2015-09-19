@@ -1,19 +1,9 @@
-// Build assets w/ Broccoli.
-var broccoli = require('broccoli'),
-    copyDereferenceSync = require('copy-dereference').sync,
-    path = require('path'),
-    rimraf = require('rimraf'),
-    tree = require('./Brocfile.js');
+var builder = require('./lib/builder'),
+    path = require('path');
 
-var builder = new broccoli.Builder(tree),
-    destination = path.join(__dirname, 'dist');
-
-builder.build()
-  .then(function(output) {
-    rimraf.sync(destination);
-    copyDereferenceSync(output.directory, destination);
-    startServer();
-  })
+// Run initial build.
+builder.build(path.join(__dirname, 'dist'))
+  .then(startServer)
   .catch(console.log.bind(console));
 
 function startServer() {
