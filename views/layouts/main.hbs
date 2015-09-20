@@ -8,9 +8,18 @@
     <link rel="stylesheet" href="/styles/app.css">
   </head>
   <body>
-    <header class="site-header" role="banner">
+    <header class="site-header">
       <h1>Will Hastings</h1>
     </header>
+
     {{{body}}}
+
+    <footer class="site-footer">
+      &copy; 2015 Will Hastings
+    </footer>
+
+    {{#unless isProd}}
+      <script src="//localhost:35729/livereload.js"></script>
+    {{/unless}}
   </body>
 </html>

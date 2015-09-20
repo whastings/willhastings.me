@@ -36,6 +36,7 @@
     "rimraf": "^2.4.3"
   },
   "devDependencies": {
-    "broccoli-cli": "^1.0.0"
+    "broccoli-cli": "^1.0.0",
+    "tiny-lr": "^0.1.6"
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import Router from 'react-router';
 import routes from '../components/routes.jsx';
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+
 export default function renderReactMiddleware() {
   return function renderReact(req, res, next) {
     var reactContent = res.reactContent,
@@ -15,14 +17,17 @@ export default function renderReactMiddleware() {
     router = Router.create({routes, location: req.url});
 
     router.run(function(Handler) {
-      var state = {};
+      var state = {},
+          data;
       state.content = reactContent;
 
       html = React.renderToString(
         React.createElement(Handler, state)
       );
 
-      res.render('base', {html});
+      data = {html, isProd: IS_PROD};
+
+      res.render('base', data);
     });
   };
 }
