@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/whastings/objectdotcreate.net-v2#readme",
   "dependencies": {
+    "@whastings/css_utils": "0.0.2",
     "babel": "^5.8.21",
     "broccoli": "^0.16.7",
     "broccoli-eyeglass": "^1.2.1",

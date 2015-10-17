@@ -14,6 +14,7 @@ export default function renderReactMiddleware() {
       return next();
     }
 
+    // TODO: Memoize router?
     router = Router.create({routes, location: req.url});
 
     router.run(function(Handler) {

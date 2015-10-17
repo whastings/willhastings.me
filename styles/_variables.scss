@@ -1,0 +1,16 @@
+$site-colors: (
+  blue: #0791d6,
+  dark-blue: #31708f,
+  dark-gray: #666,
+  light-blue: #b0e0f8
+);
+
+@function get-color($name) {
+  $color: map-get($site-colors, $name);
+
+  @if $color == null {
+    @error "There is no site color named #{$color}.";
+  }
+
+  @return $color;
+}

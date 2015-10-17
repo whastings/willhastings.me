@@ -1,3 +1,9 @@
+html {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 62.5%;
+}
+
 body {
-  color: #666;
+  color: get-color(dark-gray);
+  font-size: 1.2rem;
 }
