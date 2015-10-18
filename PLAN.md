@@ -56,14 +56,15 @@
 * /admin
 * /blog
   * /blog/:post
-  * /blog/:post.json
 * /blog.json
 * /projects
-  * /projects/:project
-  * /projects/:project.json
-* /projects.json
-* /:page
-* /:page.json
+* /contact
+* /api
+  * /api/home
+  * /api/blog
+    * /api/blog/:post
+  * /api/projects
+  * /api/contact
 
 ## Models
 
@@ -78,9 +79,10 @@
 * Comment
 * `CommentForm`
 * `ContactForm`
-* Page
-* `ProjectList`
-  * Project
+* `ProjectsPage`
+  * `ProjectTabs`
+    * `ProjectList`
+      * `Project`
 * Post
   * `PostHeader`
 * `PostList`

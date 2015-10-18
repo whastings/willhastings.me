@@ -7,8 +7,9 @@ import renderReact from './middleware/renderReact';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
-// Routes:
+// Load routes.
 import homeRoute from './routes/home';
+import projectsRoute from './routes/projects';
 
 var PORT = 8000;
 
@@ -19,7 +20,7 @@ app.engine('.hbs', handlebars({defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 // Apply routes.
-[homeRoute].forEach(route => route(app));
+[homeRoute, projectsRoute].forEach(route => route(app));
 
 // Apply post-routes middleware.
 app.get('*', renderReact());

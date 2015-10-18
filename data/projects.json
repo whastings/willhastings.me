@@ -1,1 +1,35 @@
-{}
+[
+  {
+    "name": "Open Source",
+    "key": "open-source",
+    "projects": [
+      {
+        "name": "Protomatter.js",
+        "repo": "https://github.com/whastings/protomatter.js",
+        "key": "protomatter"
+      },
+      {
+        "name": "closureType",
+        "repo": "https://github.com/whastings/closure-type",
+        "key": "closureType"
+      }
+    ]
+  },
+  {
+    "name": "Learning",
+    "key": "learning",
+    "projects": [
+      {
+        "name": "Zasteroids",
+        "link": "http://objectdotcreate.net/zasteroids",
+        "repo": "https://github.com/whastings/zasteroids",
+        "key": "zasteroids"
+      },
+      {
+        "name": "App Academy Projects",
+        "repo": "https://github.com/whastings/app-academy-projects",
+        "key": "aa"
+      }
+    ]
+  }
+]
