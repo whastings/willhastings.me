@@ -1,5 +1,6 @@
 import React from 'react';
-import Router from 'react-router';
+import { match, RoutingContext } from 'react-router';
+import { renderToString } from 'react-dom/server';
 import routes from '../components/routes.jsx';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -7,28 +8,22 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 export default function renderReactMiddleware() {
   return function renderReact(req, res, next) {
     var reactContent = res.reactContent,
-        router,
         html;
 
     if (!reactContent) {
       return next();
     }
 
-    // TODO: Memoize router?
-    router = Router.create({routes, location: req.url});
-
-    router.run(function(Handler) {
-      var state = {},
-          data;
-      state.content = reactContent;
-
-      html = React.renderToString(
-        React.createElement(Handler, state)
-      );
-
-      data = {html, isProd: IS_PROD};
-
-      res.render('base', data);
+    match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
+      if (error) {
+        res.send(500, error.message);
+      } else if (redirectLocation) {
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+      } else if (renderProps) {
+        res.send(200, renderToString(<RoutingContext {...renderProps} />))
+      } else {
+        res.send(404, 'Not found')
+      }
     });
   };
 }
