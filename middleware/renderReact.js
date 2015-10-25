@@ -6,8 +6,9 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 
 export default function renderReactMiddleware() {
   return function renderReact(req, res, next) {
-    var reactProps = res.reactProps,
+    let reactProps = res.reactProps,
         component = reactProps ? componentRouter(res.routePath) : null,
+        initData = res.initData,
         html;
 
     if (!component) {
@@ -18,7 +19,7 @@ export default function renderReactMiddleware() {
 
     res.render('base', {
       html,
-      data: JSON.stringify(reactProps),
+      data: JSON.stringify(initData || reactProps),
       isProd: IS_PROD
     });
   };

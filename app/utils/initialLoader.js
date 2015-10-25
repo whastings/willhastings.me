@@ -7,7 +7,17 @@ export default function initialLoader() {
 
     let initData = document.getElementById('init-data');
     data.props = JSON.parse(initData.innerHTML);
+    addContent(data.props);
     firstLoad = false;
     next();
   }
+}
+
+function addContent(data) {
+  Object.keys(data).forEach((key) => {
+    let value = data[key];
+    if (/^#/.test(value)) {
+      data[key] = document.querySelector(value).innerHTML;
+    }
+  });
 }
