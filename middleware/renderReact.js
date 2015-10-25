@@ -16,6 +16,10 @@ export default function renderReactMiddleware() {
 
     html = renderToString(React.createElement(component, reactProps));
 
-    res.render('base', {html, isProd: IS_PROD});
+    res.render('base', {
+      html,
+      data: JSON.stringify(reactProps),
+      isProd: IS_PROD
+    });
   };
 }

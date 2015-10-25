@@ -1,9 +1,17 @@
 export default {
-  '/': function() {
+  '/': function(data, next) {
     // TODO: Load data.
+    if (data.props) {
+      return next();
+    }
+
+    data.props = {
+      html: '<p>Foobar</p>'
+    };
+    next();
   },
 
-  '/projects': function() {
+  '/projects': function(data, next) {
     // TODO: Load data.
   }
 }

@@ -27,7 +27,12 @@
       &copy; 2015 Will Hastings
     </footer>
 
+    {{#if data}}
+      <script type="text/json" id="init-data">{{{data}}}</script>
+    {{/if}}
+
     <script src="/app/app.js"></script>
+
     {{#unless isProd}}
       <script src="//localhost:35729/livereload.js"></script>
     {{/unless}}
