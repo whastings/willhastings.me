@@ -6,6 +6,7 @@ export default function homeRoute(app) {
     res.reactProps = {
       content: yield loadHtml('pages/home.html')
     };
+    res.routePath = req.route.path;
 
     next();
   }));

@@ -6,6 +6,7 @@ export default function projectsRoute(app) {
     res.reactProps = {
       categories: yield loadJson('projects.json')
     };
+    res.routePath = req.route.path;
 
     next();
   }));

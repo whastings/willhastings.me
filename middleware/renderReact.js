@@ -7,7 +7,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 export default function renderReactMiddleware() {
   return function renderReact(req, res, next) {
     var reactProps = res.reactProps,
-        component = reactProps ? componentRouter(req.path) : null,
+        component = reactProps ? componentRouter(res.routePath) : null,
         html;
 
     if (!component) {
