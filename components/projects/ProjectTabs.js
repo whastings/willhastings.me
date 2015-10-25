@@ -16,7 +16,8 @@ export default React.createClass({
     });
   },
 
-  _changeTab(index) {
+  _changeTab(index, event) {
+    event.preventDefault();
     this.setState({
       currentCategory: this.props.categories[index]
     });
