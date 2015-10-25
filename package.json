@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "broccoli-cli": "^1.0.0",
+    "broccoli-watched-tree": "^0.1.2",
     "tiny-lr": "^0.1.6"
   }
 }

@@ -3,10 +3,13 @@ var Eyeglass = require('broccoli-eyeglass'),
     mergeTrees = require('broccoli-merge-trees'),
     path = require('path'),
     stew = require('broccoli-stew'),
+    watchedTree = require('broccoli-watched-tree'),
     webpack = require('broccoli-webpack-fast'),
     webpackConfig = require('./config/webpack.config');
 
 var find = stew.find;
+
+var IS_PROD = process.env.NODE_ENV === 'production';
 
 // Directories:
 var contentTree = 'content/',
@@ -15,6 +18,10 @@ var contentTree = 'content/',
 var htmlTree = md(find(contentTree, '**/*.md'));
 
 var jsTree = webpack(webpackConfig);
+
+if (!IS_PROD) {
+  jsTree = mergeTrees([jsTree, watchedTree('app/')])
+}
 
 stylesTree = new Eyeglass([stylesTree], {
   cssDir: 'styles',
