@@ -5,6 +5,7 @@
 * Home
   * Photo (me coding?)
   * About
+  * Recent posts
   * Interests (word cloud?)
 * Projects (tabs for subpages)
   * Open-source
@@ -94,6 +95,14 @@
 
 * expressjs.com
 
-## Inspiration
+## Inspirations
 
 * aerotwist.com
+* nolanlawson.com
+* christianheilmann.com
+* davidwalsh.name
+* jakearchibald.com
+* nczonline.net
+* ponyfoo.com
+* programwitherik.com
+* ruben.verborgh.org
