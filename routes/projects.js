@@ -1,5 +1,7 @@
 import co from 'co';
+import loadHtml from '../lib/loadHtml';
 import loadJson from '../lib/loadJson';
+import { flatten } from '@whastings/js_utils/lib/array_utils';
 
 export default function projectsRoute(app) {
   app.get('/projects', co.wrap(function*(req, res, next) {
@@ -18,6 +20,17 @@ export default function projectsRoute(app) {
   }));
 }
 
+function loadContent(projectData) {
+  let loadPromises = projectData.map((category) => category.projects.map((project) => {
+    return loadHtml(`projects/${category.key}/${project.key}.html`)
+      .then((content) => project.description = content.toString());
+  }));
+
+  return Promise.all(flatten(loadPromises))
+    .then(() => projectData);
+}
+
 function loadData() {
-  return loadJson('projects.json');
+  return loadJson('projects.json')
+    .then((projectData) => loadContent(projectData));
 }

@@ -20,7 +20,7 @@ var htmlTree = md(find(contentTree, '**/*.md'));
 var jsTree = webpack(webpackConfig);
 
 if (!IS_PROD) {
-  jsTree = mergeTrees([jsTree, watchedTree('app/')])
+  jsTree = mergeTrees([jsTree, watchedTree('app/'), watchedTree('components/')]);
 }
 
 stylesTree = new Eyeglass([stylesTree], {

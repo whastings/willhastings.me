@@ -14,7 +14,8 @@ function startServer() {
       'es6.blockScoping',
       'es6.constants',
       'es6.templateLiterals'
-    ]
+    ],
+    ignore: /node_modules\/(?!@whastings\/js_utils)/
   });
 
   // Start server.
