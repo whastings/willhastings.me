@@ -9,14 +9,9 @@ builder.build(path.join(__dirname, 'dist'))
 
 function startServer() {
   // Process all further dependencies through Babel.
-  require('babel/register')({
-    blacklist: [
-      'regenerator',
-      'es6.blockScoping',
-      'es6.constants',
-      'es6.templateLiterals'
-    ],
+  require('babel-core/register')({
     ignore: /node_modules\/(?!@whastings\/js_utils)/,
+    presets: ['react', 'es2015-node5'],
     resolveModuleSource: babelResolver(__dirname)
   });
 

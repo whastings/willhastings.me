@@ -12,14 +12,22 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         query: {
-          blacklist: [
-            'es6.arrowFunctions',
-            'es6.forOf',
-            'es6.properties.computed',
-            'es6.properties.shorthand',
-            'es6.spread',
-            'es6.templateLiterals'
-          ]
+          plugins: [
+            'check-es2015-constants',
+            'transform-es2015-block-scoped-functions',
+            'transform-es2015-block-scoping',
+            'transform-es2015-classes',
+            'transform-es2015-destructuring',
+            'transform-es2015-literals',
+            'transform-es2015-modules-commonjs',
+            'transform-es2015-object-super',
+            'transform-es2015-parameters',
+            'transform-es2015-sticky-regex',
+            'transform-es2015-typeof-symbol',
+            'transform-es2015-unicode-regex',
+            'transform-regenerator'
+          ],
+          presets: ['react']
         }
       }
     ]
