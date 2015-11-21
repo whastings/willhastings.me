@@ -1,4 +1,5 @@
-var builder = require('./lib/builder'),
+var babelResolver = require('babel-resolver'),
+    builder = require('./lib/builder'),
     path = require('path');
 
 // Run initial build.
@@ -15,7 +16,8 @@ function startServer() {
       'es6.constants',
       'es6.templateLiterals'
     ],
-    ignore: /node_modules\/(?!@whastings\/js_utils)/
+    ignore: /node_modules\/(?!@whastings\/js_utils)/,
+    resolveModuleSource: babelResolver(__dirname)
   });
 
   // Start server.

@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import componentRouter from '../lib/componentRouter';
+import componentRouter from 'lib/componentRouter';
 import React from 'react';
 
 const IS_PROD = process.env.NODE_ENV === 'production';

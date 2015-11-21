@@ -1,6 +1,6 @@
 import co from 'co';
-import loadHtml from '../lib/loadHtml';
-import loadJson from '../lib/loadJson';
+import loadHtml from 'lib/loadHtml';
+import loadJson from 'lib/loadJson';
 import { flatten } from '@whastings/js_utils/lib/array_utils';
 
 export default function projectsRoute(app) {

@@ -10,7 +10,7 @@ export default function initialLoader() {
     addContent(data.props);
     firstLoad = false;
     next();
-  }
+  };
 }
 
 function addContent(data) {

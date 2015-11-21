@@ -1,5 +1,5 @@
 import co from 'co';
-import loadHtml from '../lib/loadHtml';
+import loadHtml from 'lib/loadHtml';
 
 export default function homeRoute(app) {
   app.get('/', co.wrap(function*(req, res, next) {

@@ -24,6 +24,7 @@
     "babel": "^5.8.21",
     "babel-core": "^5.8.29",
     "babel-loader": "^5.3.2",
+    "babel-resolver": "https://github.com/whastings/babel-resolver.git",
     "broccoli": "^0.16.7",
     "broccoli-eyeglass": "^1.2.1",
     "broccoli-md": "^0.2.0",

@@ -1,8 +1,8 @@
-import componentRouter from '../lib/componentRouter';
-import initialLoader from './utils/initialLoader';
+import componentRouter from 'lib/componentRouter';
+import initialLoader from 'app/utils/initialLoader';
 import page from 'page';
 import React from 'react';
-import router from './router';
+import router from 'app/router';
 import { render } from 'react-dom';
 
 const rootEl = document.querySelector('.site-main');

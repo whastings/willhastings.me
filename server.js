@@ -1,9 +1,9 @@
 import broccoli from 'broccoli/lib/middleware';
-import builder from './lib/builder';
+import builder from 'lib/builder';
 import express from 'express';
 import handlebars from 'express-handlebars';
-import liveReload from './lib/liveReload';
-import renderReact from './middleware/renderReact';
+import liveReload from 'lib/liveReload';
+import renderReact from 'middleware/renderReact';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -27,7 +27,7 @@ app.get('*', renderReact());
 
 // Asset rebuilding in dev.
 if (!IS_PROD) {
-  let watcher = builder.watcher()
+  let watcher = builder.watcher();
   app.use(broccoli(watcher));
   liveReload(watcher);
 }

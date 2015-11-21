@@ -22,7 +22,7 @@ export default {
         next();
       });
   }
-}
+};
 
 function loadData(route) {
   return fetch(`/api/${route}`)
