@@ -25,7 +25,7 @@ if (!IS_PROD) {
 
 stylesTree = new Eyeglass([stylesTree], {
   cssDir: 'styles',
-  includePaths: [path.join(__dirname, 'node_modules')]
+  includePaths: [path.join(__dirname, 'node_modules'), '/node_modules']
 });
 
 module.exports = mergeTrees([
