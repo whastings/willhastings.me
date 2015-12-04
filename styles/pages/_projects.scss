@@ -1,0 +1,26 @@
+.project-tabs {
+  @include el(tab-list) {
+    @include clearfix();
+    list-style: none;
+    padding: 0;
+
+    a {
+      &.active {
+        font-weight: bold;
+      }
+    }
+
+    li {
+      float: left;
+      margin-right: 25px;
+    }
+  }
+
+  @include el(list) {
+    padding: 0;
+
+    @include el(project) {
+      margin-bottom: 30px;
+    }
+  }
+}

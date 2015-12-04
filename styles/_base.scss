@@ -7,3 +7,22 @@ body {
   color: get-color(dark-gray);
   font-size: 1.6rem;
 }
+
+a {
+  &,
+  &:visited {
+    color: get-color(link);
+    text-decoration: none;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: get-color(link-hover);
+  }
+
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -8,7 +8,13 @@ export default function projectTabs({categories, currentCategory, onTabClick}) {
         {categories.map((category, i) => {
           return (
             <li key={category.name}>
-              <a href="#" onClick={onTabClick.bind(null, i)}>{category.name}</a>
+              <a
+                href="#"
+                onClick={onTabClick.bind(null, i)}
+                className={category === currentCategory ? 'active' : ''}
+              >
+                {category.name}
+              </a>
             </li>
           );
         })}
