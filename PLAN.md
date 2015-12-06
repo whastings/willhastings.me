@@ -21,8 +21,8 @@
 
 * Backend
   * Framework: Express
-  * DB: Mongo
-  * ORM: Mongoose
+  * DB: Postgres
+  * ORM: Sequelize
   * Build: Broccoli
     * Markdown to HTML
     * ES6 -> ES5
@@ -30,19 +30,19 @@
   * Rendering: React
 * Frontend
   * Rendering: React
-  * Routing: `https://github.com/rackt/react-router`
+  * Routing: page.js
   * Responsive Images (Picturefill.js)
 
 ## Project Structure
 
 * content
+  * images
   * pages
   * partials
   * posts
   * projects
 * dist
 * components
-* images
 * lib
 * models
 * styles
@@ -58,14 +58,15 @@
 * /blog
   * /blog/:post
 * /blog.json
+* /login
 * /projects
 * /contact
 * /api
   * /api/home
   * /api/blog
-    * /api/blog/:post
   * /api/projects
   * /api/contact
+  * /api/session
 
 ## Models
 
@@ -73,6 +74,8 @@
 * message
 * post
 * project
+* user
+* session
 
 ## Components
 
