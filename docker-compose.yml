@@ -1,5 +1,11 @@
+postgres:
+  env_file: .env
+  image: postgres:9.4
 app:
   build: .
+  env_file: .env
+  links:
+  - postgres
   ports:
   - "8000:8000"
   volumes:
