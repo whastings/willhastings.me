@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && broccoli build dist",
-    "sql": "/node_modules/sequelize-cli/bin/sequelize",
+    "c": "node lib/repl.js",
+    "sql": "../node_modules/sequelize-cli/bin/sequelize",
     "start": "node --harmony index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -52,7 +53,6 @@
     "webpack": "^1.12.2"
   },
   "devDependencies": {
-    "broccoli-cli": "^1.0.0",
     "broccoli-watched-tree": "^0.1.2",
     "tiny-lr": "^0.1.6"
   }

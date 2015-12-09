@@ -1,4 +1,4 @@
-var babelResolver = require('babel-resolver'),
+var babelConfig = require('./config/babel-node'),
     builder = require('./lib/builder'),
     path = require('path');
 
@@ -9,11 +9,7 @@ builder.build(path.join(__dirname, 'dist'))
 
 function startServer() {
   // Process all further dependencies through Babel.
-  require('babel-core/register')({
-    ignore: /node_modules\/(?!@whastings\/js_utils)/,
-    presets: ['react', 'es2015-node5'],
-    resolveModuleSource: babelResolver(__dirname)
-  });
+  require('babel-core/register')(babelConfig);
 
   // Start server.
   require('./server.js');
