@@ -8,4 +8,4 @@ RUN npm install
 # Start app.
 RUN mkdir /app
 WORKDIR /app
-ENTRYPOINT ["npm", "start"]
+CMD ["node", "--harmony", "index.js"]

@@ -44,4 +44,4 @@ if (!IS_PROD) {
 }
 
 console.log(`Listening on ${PORT}`);
-app.listen(PORT);
+export default app.listen(PORT);
