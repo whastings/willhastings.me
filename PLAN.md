@@ -15,7 +15,15 @@
 * Blog
   * Posts
     * Comments
+  * Search
 * Contact
+* Admin
+  * Index
+    * List of posts (each with view, edit, view comments, delete)
+  * Sign In
+    * Form redirects to index on success
+  * Create Post
+  * Edit Post
 
 ## Tech
 
