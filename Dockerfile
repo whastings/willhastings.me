@@ -2,6 +2,38 @@ FROM whastings/node_with_nvm:latest
 
 # Install dependencies.
 WORKDIR /
+# package-json-to-docker
+RUN npm install @whastings/css_utils@0.0.2
+RUN npm install @whastings/js_utils@^0.1.0
+RUN npm install babel-core@^6.2.1
+RUN npm install babel-loader@^6.2.0
+RUN npm install babel-plugin-transform-es2015-modules-commonjs@^6.2.0
+RUN npm install babel-preset-es2015@^6.1.18
+RUN npm install babel-preset-es2015-node5@^1.1.0
+RUN npm install babel-preset-react@^6.1.18
+RUN npm install babel-resolver@0.0.16
+RUN npm install broccoli@^0.16.7
+RUN npm install broccoli-eyeglass@^1.2.1
+RUN npm install broccoli-md@^0.2.0
+RUN npm install broccoli-merge-trees@^0.2.3
+RUN npm install broccoli-stew@^0.3.5
+RUN npm install broccoli-watched-tree@^0.1.2
+RUN npm install broccoli-webpack-fast@^1.0.1
+RUN npm install co@^4.6.0
+RUN npm install denodeify@^1.2.1
+RUN npm install express@^4.13.3
+RUN npm install express-handlebars@^2.0.1
+RUN npm install normalize.scss@^0.1.0
+RUN npm install page@^1.6.4
+RUN npm install pg@^4.4.3
+RUN npm install pg-hstore@^2.3.2
+RUN npm install react@^0.14.0
+RUN npm install react-dom@^0.14.0
+RUN npm install rimraf@^2.4.3
+RUN npm install sequelize@^3.14.2
+RUN npm install sequelize-cli@^2.2.1
+RUN npm install webpack@^1.12.2
+
 ADD ./package.json package.json
 RUN npm install
 
