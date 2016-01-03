@@ -2,24 +2,32 @@ import componentRouter from 'lib/componentRouter';
 import initialLoader from 'app/utils/initialLoader';
 import page from 'page';
 import React from 'react';
-import router from 'app/router';
 import { render } from 'react-dom';
 
 const rootEl = document.querySelector('.site-main');
 
+// Pre-route middleware:
 page('*', initialLoader());
+page('*', findComponent);
 
-Object.keys(router)
-  .forEach((routeName) => page(
-    routeName, findComponent.bind(null, routeName), router[routeName]
-  ));
+// Apply routes.
+import adminRoute from 'app/routes/admin';
+import homeRoute from 'app/routes/home';
+import projectsRoute from 'app/routes/projects';
+[
+  adminRoute,
+  homeRoute,
+  projectsRoute
+].forEach((route) => route(page));
 
+// Post-route middleware:
 page('*', renderComponent);
 
+// Start router.
 page();
 
-function findComponent(routeName, data, next) {
-  data.component = componentRouter(routeName);
+function findComponent(data, next) {
+  data.component = componentRouter(data.pathname);
   next();
 }
 

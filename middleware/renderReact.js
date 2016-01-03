@@ -2,6 +2,7 @@ import { renderToString } from 'react-dom/server';
 import componentRouter from 'lib/componentRouter';
 import React from 'react';
 
+// TODO: Move to middleware.
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 export default function renderReactMiddleware() {

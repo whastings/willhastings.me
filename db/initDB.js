@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
-import { production as dbConfig } from '../config/db';
-import { create as createUser } from '../models/User';
+import Session from 'models/Session';
+import User from 'models/User';
+import { production as dbConfig } from 'config/db';
 
 export default function initDb() {
   let connection = new Sequelize(
@@ -11,7 +12,10 @@ export default function initDb() {
     }
   );
 
-  [createUser].forEach((createFn) => createFn(connection));
+  [
+    User,
+    Session
+  ].forEach((model) => model.initModel(connection));
 
   return connection.sync()
     .then(() => connection);

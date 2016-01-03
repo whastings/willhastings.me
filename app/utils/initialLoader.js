@@ -6,8 +6,11 @@ export default function initialLoader() {
     }
 
     let initData = document.getElementById('init-data');
-    data.props = JSON.parse(initData.innerHTML);
-    addContent(data.props);
+    if (initData) {
+      data.props = JSON.parse(initData.innerHTML);
+      addContent(data.props);
+    }
+
     firstLoad = false;
     next();
   };

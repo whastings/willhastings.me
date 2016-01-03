@@ -1,13 +1,17 @@
+import bodyParser from 'body-parser';
 import broccoli from 'broccoli/lib/middleware';
 import builder from 'lib/builder';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import handlebars from 'express-handlebars';
 import initDB from './db/initDB';
 import liveReload from 'lib/liveReload';
 import path from 'path';
+import renderHTML from 'middleware/renderHTML';
 import renderReact from 'middleware/renderReact';
 
-const IS_PROD = process.env.NODE_ENV === 'production',
+const COOKIE_SECRET = process.env.COOKIE_SECRET,
+      IS_PROD = process.env.NODE_ENV === 'production',
       PORT = 8000,
       TEMPLATES_DIR = path.join(__dirname, 'templates');
 
@@ -15,8 +19,10 @@ const IS_PROD = process.env.NODE_ENV === 'production',
 initDB();
 
 // Load routes.
+import adminRoute from './routes/admin';
 import homeRoute from './routes/home';
 import projectsRoute from './routes/projects';
+import sessionsRoute from './routes/sessions';
 
 const app = express();
 
@@ -30,11 +36,21 @@ app.engine('.hbs', handlebars({
 }));
 app.set('view engine', '.hbs');
 
+// Apply pre-route middleware.
+app.use(cookieParser(COOKIE_SECRET));
+app.use(bodyParser.json());
+
 // Apply routes.
-[homeRoute, projectsRoute].forEach(route => route(app));
+[
+  adminRoute,
+  homeRoute,
+  projectsRoute,
+  sessionsRoute
+].forEach(route => route(app));
 
 // Apply post-routes middleware.
 app.get('*', renderReact());
+app.get('*', renderHTML());
 
 // Asset rebuilding in dev.
 if (!IS_PROD) {

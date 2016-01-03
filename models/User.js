@@ -1,29 +1,69 @@
+import bcrypt from 'bcrypt';
+import co from 'co';
+import denodeify from 'denodeify';
 import Sequelize from 'sequelize';
 
-var User = null;
+const SALT_ROUNDS = 10;
 
-export function create(sequelize) {
-  User = sequelize.define('user', {
-    username: {
-      allowNull: false,
-      type: Sequelize.STRING,
-      unique: true
-    },
-    passwordDigest: {
-      allowNull: false,
-      type: Sequelize.STRING
-    }
-  }, {
-    classMethods: {
-      associate(models) {
-        // associations can be defined here
+const compareHash = denodeify(bcrypt.compare),
+      genSalt = denodeify(bcrypt.genSalt),
+      hash = denodeify(bcrypt.hash);
+
+const schema = {
+  username: {
+    allowNull: false,
+    type: Sequelize.STRING,
+    unique: true
+  },
+  passwordDigest: {
+    allowNull: false,
+    type: Sequelize.STRING
+  }
+};
+
+const methods = {
+  classMethods: {
+    createWithPassword: co.wrap(function* createWithPassword(username, password) {
+      let newUser = this.build({username});
+      yield newUser.setPassword(password);
+      yield newUser.save();
+      return newUser;
+    }),
+
+    findByCredentials: co.wrap(function* findByCredentials(username, password) {
+      let user = yield this.findOne({where: {username}});
+
+      if (!user) {
+        return null;
       }
-    }
-  });
 
-  module.exports.default = User; // Not sure why this is necessary...
+      let isPassword = yield user.checkPassword(password);
 
-  return User;
-}
+      return isPassword ? user : null;
+    })
+  },
+
+  instanceMethods: {
+    checkPassword(password) {
+      return compareHash(password, this.passwordDigest);
+    },
+
+    setPassword: co.wrap(function* setPassword(password) {
+      let salt = yield genSalt(SALT_ROUNDS),
+          hashedPassword = yield hash(password, salt);
+
+      this.passwordDigest = hashedPassword;
+    })
+  }
+};
+
+const User = {
+  model: null,
+
+  initModel(sequelize) {
+    User.model = sequelize.define('user', schema, methods);
+    return User.model;
+  }
+};
 
 export default User;
