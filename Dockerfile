@@ -1,5 +1,12 @@
 FROM whastings/node_with_nvm:latest
 
+# Use npm 2 for now until the issue with npm 3 is resolved:
+# https://github.com/npm/npm/issues/9863
+RUN mv /usr/local/nvm/versions/node/v5.1.1/lib/node_modules/npm \
+  /usr/local/nvm/versions/node/v5.1.1/lib/node_modules/npm-3
+RUN node /usr/local/nvm/versions/node/v5.1.1/lib/node_modules/npm-3/bin/npm-cli.js \
+  install -g npm@2
+
 # Install dependencies.
 WORKDIR /
 # package-json-to-docker
@@ -36,6 +43,7 @@ RUN npm install webpack@^1.12.2
 
 ADD ./package.json package.json
 RUN npm install
+RUN cp -r /node_modules/babel-preset-es2015/node_modules/* /node_modules
 
 # Start app.
 RUN mkdir /app
