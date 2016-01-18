@@ -1,9 +1,9 @@
 var path = require('path');
 
 module.exports = {
-  entry: path.join(process.cwd(), 'app/app.js'),
+  entry: path.join(process.cwd(), 'client/scripts/main.js'),
   output: {
-    filename: 'app/app.js'
+    filename: 'scripts/main.js'
   },
   module: {
     loaders: [

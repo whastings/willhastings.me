@@ -1,15 +1,8 @@
-import { get } from 'app/utils/apiRequest';
+import HomePage from 'app/components/home/HomePage';
+import { loadPage } from 'app/actions/pageActions';
 
-export default function homeRoute(router) {
-  router('/', function homeIndex(data, next) {
-    if (data.props) {
-      return next();
-    }
-
-    get('home')
-      .then((responseData) => {
-        data.props = responseData;
-        next();
-      });
-  });
+export default function homeRoute(store, dispatchAction, render) {
+  dispatchAction(loadPage, 'home')
+    .then(() => render(HomePage, store.getState().pages.home))
+    .catch(console.log.bind(console));
 }

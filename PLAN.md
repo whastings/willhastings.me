@@ -49,15 +49,27 @@
   * partials
   * posts
   * projects
+* config
 * dist
-* components
-* lib
-* models
-* styles
-* routes
-* templates
-  * layouts
+* app
+  * actions
   * components
+  * reducers
+  * routes
+  * utils
+* client
+  * scripts
+  * styles
+* lib
+* server
+  * db
+  * middleware
+  * models
+  * styles
+  * routes
+  * templates
+    * layouts
+    * components
 
 ## Server Routes
 

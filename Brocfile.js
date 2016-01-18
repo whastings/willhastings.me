@@ -13,18 +13,18 @@ var IS_PROD = process.env.NODE_ENV === 'production';
 
 // Directories:
 var contentTree = 'content/',
-    stylesTree = 'styles/';
+    clientTree = 'client/';
 
 var htmlTree = md(find(contentTree, '**/*.md'));
 
 var jsTree = webpack(webpackConfig);
 
 if (!IS_PROD) {
-  jsTree = mergeTrees([jsTree, watchedTree('app/'), watchedTree('components/')]);
+  jsTree = mergeTrees([jsTree, watchedTree('app/')]);
 }
 
-stylesTree = new Eyeglass([stylesTree], {
-  cssDir: 'styles',
+stylesTree = new Eyeglass([clientTree], {
+  cssDir: '/',
   includePaths: [path.join(__dirname, 'node_modules'), '/node_modules']
 });
 

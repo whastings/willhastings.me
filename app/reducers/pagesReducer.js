@@ -1,10 +1,10 @@
 import createReducer from 'app/utils/createReducer';
 
 export default createReducer({
-  USER_ADD: function addUser(state, action) {
-    let newUser = action.payload;
+  PAGE_ADD: function addPage(state, action) {
+    let page = action.payload;
     return state.merge({
-      [newUser.id]: newUser
+      [page.id]: page
     });
   }
 });

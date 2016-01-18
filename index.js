@@ -2,7 +2,8 @@ var babelConfig = require('./config/babel-node'),
     builder = require('./lib/builder'),
     path = require('path');
 
-var server;
+var PORT = 8000,
+    serverManager;
 
 // Run initial build.
 builder.build(path.join(__dirname, 'dist'))
@@ -14,12 +15,14 @@ function startServer() {
   require('babel-core/register')(babelConfig);
 
   // Start server.
-  server = require('./server.js').default;
+  var ServerManager = require('./server').default;
+  serverManager = new ServerManager();
+  serverManager.startServer(PORT);
 }
 
 process.on('SIGTERM', function() {
-  if (server) {
-    server.close(() => process.exit());
+  if (serverManager) {
+    serverManager.stopServer(() => process.exit());
   } else {
     process.exit();
   }

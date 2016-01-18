@@ -1,25 +1,26 @@
-import page from 'page';
-import store from 'app/store';
-
+import AdminIndexPage from 'app/components/admin/AdminIndexPage';
+import SignInPage from 'app/components/admin/SignInPage';
 import { signIn } from 'app/actions/authActions';
 
-export default function adminRoute(router) {
-  router('/admin', function adminIndex(data, next) {
-    let users = store.getState().models.users;
-    data.props = {
-      user: users[Object.keys(users)[0]] // TODO: This is gross!
-    };
-    next();
-  });
+export default {
+  index(store, dispatchAction, render, redirect)  {
+    let users = store.getState().models.users,
+        user = users[Object.keys(users)[0]]; // TODO: This is gross!
 
-  router('/admin/sign-in', function adminSignIn(data, next) {
-    data.props = {onSubmit: submitSignIn};
-    next();
-  });
-}
+    if (user) {
+      render(AdminIndexPage, {user});
+    } else {
+      redirect('/admin/sign-in');
+    }
+  },
 
-function submitSignIn(username, password) {
-  let action = signIn(username, password);
-  store.dispatch(action);
-  action.payload.promise.then(() => page('/admin'));
-}
+  signIn(store, dispatchAction, render, redirect) {
+    render(SignInPage, {
+      onSubmit(username, password) {
+        dispatchAction(signIn, username, password)
+          .then(() => redirect('/admin'))
+          .catch(console.log.bind(console));
+      }
+    });
+  }
+};

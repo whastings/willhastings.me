@@ -1,15 +1,10 @@
-import { get } from 'app/utils/apiRequest';
+import ProjectsPage from 'app/components/projects/ProjectsPage';
+import { loadPage } from 'app/actions/pageActions';
 
-export default function projectsRoute(router) {
-  router('/projects', function projectsIndex(data, next) {
-    if (data.props) {
-      return next();
-    }
-
-    get('projects')
-      .then((responseData) => {
-        data.props = responseData;
-        next();
-      });
-  });
+export default function projectsRoute(store, dispatchAction, render) {
+  dispatchAction(loadPage, 'projects')
+    .then(() => render(
+      ProjectsPage,
+      {categories: store.getState().pages.projects}
+    )).catch(console.log.bind(console));
 }
