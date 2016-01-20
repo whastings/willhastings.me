@@ -53,7 +53,13 @@ const methods = {
           hashedPassword = yield hash(password, salt);
 
       this.passwordDigest = hashedPassword;
-    })
+    }),
+
+    withoutPassword() {
+      let plainUser = this.toJSON();
+      delete plainUser.passwordDigest;
+      return plainUser;
+    }
   }
 };
 

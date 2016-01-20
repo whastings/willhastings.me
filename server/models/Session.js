@@ -20,7 +20,7 @@ const methods = {
 
     userForToken: co.wrap(function* userForToken(token) {
       let session = yield this.findOne({where: {token}, include: [User.model]});
-      return session.user;
+      return session ? session.user : null;
     })
   }
 };

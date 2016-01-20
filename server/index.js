@@ -10,6 +10,7 @@ import initDB from 'server/db/initDB';
 import liveReload from 'server/utils/liveReload';
 import path from 'path';
 import renderHTML from 'server/middleware/renderHTML';
+import userLookup from 'server/middleware/userLookup';
 // Routes:
 import appRoutes from 'server/routes/app';
 import pagesRoutes from 'server/routes/pages';
@@ -25,7 +26,7 @@ export default class ServerManager {
 
     let app = this.app = express();
     setUpViews(app);
-    applyPreMiddleware(app);
+    applyPreMiddleware(app, this.dbConnection);
     applyRoutes(app);
     applyPostMiddleware(app);
     if (IS_DEV) {
@@ -52,9 +53,10 @@ function applyPostMiddleware(app) {
   app.get('*', renderHTML());
 }
 
-function applyPreMiddleware(app) {
+function applyPreMiddleware(app, db) {
   app.use(cookieParser(COOKIE_SECRET));
   app.use(bodyParser.json());
+  app.use(/\/(?!(?:scripts|styles))\w+/, userLookup(db));
 }
 
 function applyRoutes(app) {

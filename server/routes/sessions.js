@@ -9,7 +9,6 @@ export default function sessionsRoute(app) {
         newSession = req.body,
         sessionUser = newSession.user;
 
-    console.log(sessionUser);
     let user = yield UserModel.findByCredentials(
       sessionUser.username, sessionUser.password
     );
@@ -21,6 +20,6 @@ export default function sessionsRoute(app) {
 
     let session = yield SessionModel.createForUser(user);
     res.cookie('session-token', session.token, {httpOnly: true, signed: true});
-    res.json({user: {id: user.id, username: user.username}});
+    res.json({user: user.withoutPassword()});
   }));
 }
