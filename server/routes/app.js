@@ -18,5 +18,5 @@ function appRenderer(res, element) {
 
 function routeToApp(req, res) {
   let app = new App(appRenderer.bind(null, res), res.redirect.bind(res), api);
-  app.route(req.route.path);
+  app.route(req.route.path, req);
 }

@@ -40,13 +40,18 @@ export default class App {
     this.renderer(React.createElement(component, props));
   }
 
-  route(path) {
+  route(path, req) {
     let handler = ROUTES[path];
     if (!handler) {
       return false;
     }
 
-    handler(this.store, this.dispatchAction, this.render, this.redirect);
+    let res = {
+      dispatchAction: this.dispatchAction,
+      redirect: this.redirect,
+      render: this.render
+    };
+    handler(req, res, this.store);
 
     return true;
   }

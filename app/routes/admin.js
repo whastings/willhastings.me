@@ -3,24 +3,24 @@ import SignInPage from 'app/components/admin/SignInPage';
 import { signIn } from 'app/actions/authActions';
 
 export default {
-  index(store, dispatchAction, render, redirect) {
+  index(req, res, store) {
     let state = store.getState(),
         users = state.models.users,
         currentUserId = state.ui.currentUserId,
         currentUser = currentUserId && users[currentUserId];
 
     if (currentUser) {
-      render(AdminIndexPage, {user: currentUser});
+      res.render(AdminIndexPage, {user: currentUser});
     } else {
-      redirect('/admin/sign-in');
+      res.redirect('/admin/sign-in');
     }
   },
 
-  signIn(store, dispatchAction, render, redirect) {
-    render(SignInPage, {
+  signIn(req, res) {
+    res.render(SignInPage, {
       onSubmit(username, password) {
-        dispatchAction(signIn, username, password)
-          .then(() => redirect('/admin'))
+        res.dispatchAction(signIn, username, password)
+          .then(() => res.redirect('/admin'))
           .catch(console.log.bind(console));
       }
     });
