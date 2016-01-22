@@ -3,12 +3,14 @@ import SignInPage from 'app/components/admin/SignInPage';
 import { signIn } from 'app/actions/authActions';
 
 export default {
-  index(store, dispatchAction, render, redirect)  {
-    let users = store.getState().models.users,
-        user = users[Object.keys(users)[0]]; // TODO: This is gross!
+  index(store, dispatchAction, render, redirect) {
+    let state = store.getState(),
+        users = state.models.users,
+        currentUserId = state.ui.currentUserId,
+        currentUser = currentUserId && users[currentUserId];
 
-    if (user) {
-      render(AdminIndexPage, {user});
+    if (currentUser) {
+      render(AdminIndexPage, {user: currentUser});
     } else {
       redirect('/admin/sign-in');
     }

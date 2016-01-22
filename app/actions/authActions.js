@@ -3,8 +3,10 @@ export function signIn(api, store, username, password) {
     type: 'SIGN_IN',
     payload: {
       promise: api.createSession(username, password)
-        .then((session) => {
-          return {type: 'USER_ADD', payload: session.user};
+        .then((session) => (action, dispatch) => {
+          let { user } = session;
+          dispatch({type: 'USER_ADD', payload: user});
+          dispatch({type: 'CURRENT_USER_ID_SET', payload: user.id});
         })
     }
   };
