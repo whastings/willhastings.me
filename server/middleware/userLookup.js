@@ -13,7 +13,7 @@ export default function userLookupMiddleware(db) {
         user = yield SessionModel.userForToken(sessionCookie);
 
     if (user) {
-      req.user = user.withoutPassword();
+      req.currentUser = user.withoutPassword();
     }
 
     next();

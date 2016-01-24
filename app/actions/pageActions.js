@@ -1,4 +1,4 @@
-export function loadPage(api, store, page) {
+export function loadPage(api, store, dispatchAction, page) {
   // TODO: Check if page already in store.
 
   return {

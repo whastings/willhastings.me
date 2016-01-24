@@ -1,9 +1,15 @@
 import adminRoutes from 'app/routes/admin';
 import appApi from 'app/api';
 import createStore from 'app/createStore';
+import currentUserMiddleware from 'app/middleware/currentUser';
 import homeRoute from 'app/routes/home';
+import MiddlewareMap from 'app/utils/middlewareMap';
 import projectsRoute from 'app/routes/projects';
 import React from 'react';
+
+const PRE_MIDDLEWARE = {
+  '/admin*': currentUserMiddleware
+};
 
 const ROUTES = {
   '/': homeRoute,
@@ -18,6 +24,7 @@ export default class App {
     this.onRedirect = onRedirect;
     this.renderer = renderer;
     this.store = createStore();
+    this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
 
     this.dispatchAction = this.dispatchAction.bind(this);
     this.redirect = this.redirect.bind(this);
@@ -25,7 +32,7 @@ export default class App {
   }
 
   dispatchAction(actionCreator, ...args) {
-    let action = actionCreator(this.api, this.store, ...args),
+    let action = actionCreator(this.api, this.store, this.dispatchAction, ...args),
         actionPromise = action.payload.promise;
     this.store.dispatch(action);
 
@@ -41,19 +48,18 @@ export default class App {
   }
 
   route(path, req) {
-    let handler = ROUTES[path];
-    if (!handler) {
-      return false;
-    }
+    let preMiddleware = this.preMiddleware.match(req.path),
+        handler = ROUTES[path],
+        { store } = this;
 
     let res = {
       dispatchAction: this.dispatchAction,
       redirect: this.redirect,
       render: this.render
     };
-    handler(req, res, this.store);
 
-    return true;
+    preMiddleware && preMiddleware(req, res, this.store);
+    handler && handler(req, res, this.store);
   }
 }
 
