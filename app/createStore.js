@@ -6,7 +6,7 @@ import uiReducer from 'app/reducers/uiReducer';
 import usersReducer from 'app/reducers/usersReducer';
 import { applyMiddleware, createStore as createReduxStore } from 'redux';
 
-const INITIAL_STATE = immutable({
+const INITIAL_STATE = immutable(getInitialState() || {
   models: {
     users: {}
   },
@@ -24,6 +24,15 @@ function dataReducer(state = INITIAL_STATE, action) {
     pages: pagesReducer(state.pages, action),
     ui: uiReducer(state.ui, action)
   });
+}
+
+function getInitialState() {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  let initDataEl = document.getElementById('init-data');
+  return initDataEl ? JSON.parse(initDataEl.textContent) : null;
 }
 
 export default function createStore() {

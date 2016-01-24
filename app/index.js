@@ -33,10 +33,14 @@ export default class App {
 
   dispatchAction(actionCreator, ...args) {
     let action = actionCreator(this.api, this.store, this.dispatchAction, ...args),
-        actionPromise = action.payload.promise;
-    this.store.dispatch(action);
+        actionPromise;
 
-    return actionPromise || Promise.resolve(action.payload);
+    if (action) {
+      this.store.dispatch(action);
+      actionPromise = action.payload.promise;
+    }
+
+    return actionPromise || Promise.resolve(action && action.payload);
   }
 
   redirect(path) {

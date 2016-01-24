@@ -9,14 +9,14 @@ export default function appRoutes(serverApp) {
   App.routes.forEach((route) => serverApp.get(route, routeToApp));
 }
 
-function appRenderer(res, element) {
-  res.render('base', {
-    html: renderToString(element),
-    isDev: IS_DEV
-  });
-}
-
 function routeToApp(req, res) {
-  let app = new App(appRenderer.bind(null, res), res.redirect.bind(res), api);
+  let app = new App((element) => {
+    res.render('base', {
+      data: JSON.stringify(app.store.getState()),
+      html: renderToString(element),
+      isDev: IS_DEV
+    });
+  }, res.redirect.bind(res), api);
+
   app.route(req.route.path, req);
 }

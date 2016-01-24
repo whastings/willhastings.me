@@ -1,5 +1,7 @@
 export function loadPage(api, store, dispatchAction, page) {
-  // TODO: Check if page already in store.
+  if (store.getState().pages[page]) {
+    return null;
+  }
 
   return {
     type: 'PAGE_LOAD',
