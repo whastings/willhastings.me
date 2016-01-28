@@ -23,7 +23,7 @@ if (!IS_PROD) {
   jsTree = mergeTrees([jsTree, watchedTree('app/')]);
 }
 
-stylesTree = new Eyeglass([clientTree], {
+var stylesTree = new Eyeglass([clientTree], {
   cssDir: '/',
   includePaths: [path.join(__dirname, 'node_modules'), '/node_modules']
 });
