@@ -10,6 +10,9 @@ if (command === 'start') {
   require('./start');
 } else if (command === 'repl') {
   require('./lib/repl');
+} else if (command.startsWith('db')) {
+  command = command.split(':')[1];
+  require(`./server/db/${command}`);
 } else {
   console.log('Command not supported.');
 }

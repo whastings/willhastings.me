@@ -30,7 +30,7 @@ RUN npm install pg-hstore@^2.3.2
 RUN npm install react@^0.14.0
 RUN npm install react-dom@^0.14.0
 RUN npm install rimraf@^2.4.3
-RUN npm install sequelize@^3.14.2
+RUN npm install sequelize@^3.18.0
 RUN npm install sequelize-cli@^2.2.1
 RUN npm install webpack@^1.12.2
 RUN npm install babel-core@^6.4.0
