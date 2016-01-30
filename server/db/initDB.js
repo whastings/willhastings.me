@@ -1,3 +1,4 @@
+import Post from 'server/models/Post';
 import Sequelize from 'sequelize';
 import Session from 'server/models/Session';
 import User from 'server/models/User';
@@ -14,7 +15,8 @@ export default function initDb() {
 
   [
     User,
-    Session
+    Session,
+    Post
   ].forEach((model) => model.initModel(connection));
 
   return connection.sync()

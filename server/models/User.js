@@ -23,10 +23,10 @@ const schema = {
 
 const methods = {
   classMethods: {
-    createWithPassword: co.wrap(function* createWithPassword(username, password) {
+    createWithPassword: co.wrap(function* createWithPassword(username, password, options = {}) {
       let newUser = this.build({username});
       yield newUser.setPassword(password);
-      yield newUser.save();
+      yield newUser.save(options);
       return newUser;
     }),
 
