@@ -74,31 +74,35 @@
 ## Server Routes
 
 * /
-* /admin
+* /projects
 * /blog
   * /blog/:post
-* /blog.json
-* /login
-* /projects
 * /contact
-* /api
-  * /api/home
-  * /api/blog
-  * /api/projects
-  * /api/contact
-  * /api/session
+* /admin
+  * /admin/sign-in
+  * /admin/posts/new
+  * /admin/posts/:post/edit
+* /api/pages/:page
+* /api/posts (get for index, post to create)
+  * /api/posts/:post (get for view, patch for update, delete for removal)
+* /api/sessions (post to create)
 
 ## Models
 
 * comment
 * message
 * post
-* project
 * user
 * session
 
 ## Components
 
+* `AdminIndexPage`
+  * `PostList`
+    * `AdminPostListItem`
+* `BlogIndexPage`
+  * `PostList`
+    * `PostListItem`
 * `CommentList`
 * Comment
 * `CommentForm`
@@ -107,12 +111,13 @@
   * `ProjectTabs`
     * `ProjectList`
       * `Project`
-* Post
-  * `PostHeader`
-* `PostList`
-* `TabContainer`
-  * `TabNav`
-  * Tab
+* `PostCreatePage`
+  * `PostForm`
+* `PostEditPage`
+  * `PostForm`
+* `PostViewPage`
+  * Post
+    * `PostHeader`
 
 ## Resources
 
