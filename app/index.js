@@ -6,6 +6,7 @@ import homeRoute from 'app/routes/home';
 import MiddlewareMap from 'app/utils/middlewareMap';
 import projectsRoute from 'app/routes/projects';
 import React from 'react';
+import runRouteHandlers from 'app/utils/runRouteHandlers';
 
 const PRE_MIDDLEWARE = {
   '/admin*': currentUserMiddleware
@@ -53,7 +54,8 @@ export default class App {
 
   route(path, req) {
     let preMiddleware = this.preMiddleware.match(req.path),
-        handler = ROUTES[path],
+        routeHandler = ROUTES[path],
+        handlers = [],
         { store } = this;
 
     let res = {
@@ -62,8 +64,14 @@ export default class App {
       render: this.render
     };
 
-    preMiddleware && preMiddleware(req, res, this.store);
-    handler && handler(req, res, this.store);
+    if (preMiddleware) {
+      handlers.push(preMiddleware);
+    }
+    if (routeHandler) {
+      handlers.push(routeHandler);
+    }
+
+    runRouteHandlers(handlers, [req, res, store]);
   }
 }
 
