@@ -1,5 +1,6 @@
 import adminRoutes from 'app/routes/admin';
 import appApi from 'app/api';
+import authMiddleware from 'app/middleware/auth';
 import createStore from 'app/createStore';
 import currentUserMiddleware from 'app/middleware/currentUser';
 import homeRoute from 'app/routes/home';
@@ -9,7 +10,7 @@ import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
 
 const PRE_MIDDLEWARE = {
-  '/admin*': currentUserMiddleware
+  '/admin*': [currentUserMiddleware, authMiddleware]
 };
 
 const ROUTES = {
@@ -65,7 +66,7 @@ export default class App {
     };
 
     if (preMiddleware) {
-      handlers.push(preMiddleware);
+      handlers = handlers.concat(preMiddleware);
     }
     if (routeHandler) {
       handlers.push(routeHandler);

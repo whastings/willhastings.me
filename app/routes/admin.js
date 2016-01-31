@@ -7,13 +7,9 @@ export default {
     let state = store.getState(),
         users = state.models.users,
         currentUserId = state.ui.currentUserId,
-        currentUser = currentUserId && users[currentUserId];
+        currentUser = users[currentUserId];
 
-    if (currentUser) {
-      res.render(AdminIndexPage, {user: currentUser});
-    } else {
-      res.redirect('/admin/sign-in');
-    }
+    res.render(AdminIndexPage, {user: currentUser});
   },
 
   signIn(req, res) {
