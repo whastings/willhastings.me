@@ -14,6 +14,7 @@ import userLookup from 'server/middleware/userLookup';
 // Routes:
 import appRoutes from 'server/routes/app';
 import pagesRoutes from 'server/routes/pages';
+import postsRoute from 'server/routes/posts';
 import sessionsRoute from 'server/routes/sessions';
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET,
@@ -63,6 +64,7 @@ function applyRoutes(app) {
   [
     appRoutes,
     pagesRoutes,
+    postsRoute,
     sessionsRoute
   ].forEach(route => route(app));
 }

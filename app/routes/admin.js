@@ -1,15 +1,13 @@
 import AdminIndexPage from 'app/components/admin/AdminIndexPage';
 import SignInPage from 'app/components/admin/SignInPage';
 import { signIn } from 'app/actions/authActions';
+import { loadPosts } from 'app/actions/postActions';
 
 export default {
   index(req, res, store) {
-    let state = store.getState(),
-        users = state.models.users,
-        currentUserId = state.ui.currentUserId,
-        currentUser = users[currentUserId];
-
-    res.render(AdminIndexPage, {user: currentUser});
+    res.dispatchAction(loadPosts)
+      .then(() => res.render(AdminIndexPage, {posts: store.getPosts()}))
+      .catch(console.log.bind(console));
   },
 
   signIn(req, res) {

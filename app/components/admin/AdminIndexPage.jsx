@@ -1,9 +1,10 @@
+import PostList from 'app/components/posts/PostList';
 import React from 'react';
 
-export default function adminIndexPage({user}) {
+export default function adminIndexPage({posts}) {
   return (
     <section className="admin-index-page">
-      <h1>Welcome, {user.username}!</h1>
+      <PostList posts={posts}/>
     </section>
   );
 }

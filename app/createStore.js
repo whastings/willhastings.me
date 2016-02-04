@@ -1,5 +1,7 @@
 import immutable from 'seamless-immutable';
 import pagesReducer from 'app/reducers/pagesReducer';
+import postsReducer from 'app/reducers/postsReducer';
+import postsSelectors from 'app/selectors/posts';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import uiReducer from 'app/reducers/uiReducer';
@@ -8,6 +10,7 @@ import { applyMiddleware, createStore as createReduxStore } from 'redux';
 
 const INITIAL_STATE = immutable(getInitialState() || {
   models: {
+    posts: {},
     users: {}
   },
   pages: {},
@@ -17,9 +20,12 @@ const INITIAL_STATE = immutable(getInitialState() || {
 });
 
 function dataReducer(state = INITIAL_STATE, action) {
+  let models = state.models;
+
   return state.merge({
     models: {
-      users: usersReducer(state.models.users, action)
+      posts: postsReducer(models.posts, action),
+      users: usersReducer(models.users, action)
     },
     pages: pagesReducer(state.pages, action),
     ui: uiReducer(state.ui, action)
@@ -36,8 +42,12 @@ function getInitialState() {
 }
 
 export default function createStore() {
-  return applyMiddleware(
+  let store = applyMiddleware(
     promiseMiddleware(),
     thunk
   )(createReduxStore)(dataReducer);
+
+  postsSelectors(store);
+
+  return store;
 }

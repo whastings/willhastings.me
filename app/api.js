@@ -8,5 +8,9 @@ export default {
 
   getPage(page) {
     return getJSON(`/api/pages/${page}`);
+  },
+
+  getPosts() {
+    return getJSON('/api/posts');
   }
 };
