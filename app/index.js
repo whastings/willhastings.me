@@ -1,6 +1,7 @@
 import adminRoutes from 'app/routes/admin';
 import appApi from 'app/api';
 import authMiddleware from 'app/middleware/auth';
+import autobind from 'autobind-decorator';
 import createStore from 'app/createStore';
 import currentUserMiddleware from 'app/middleware/currentUser';
 import homeRoute from 'app/routes/home';
@@ -27,12 +28,9 @@ export default class App {
     this.renderer = renderer;
     this.store = createStore();
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
-
-    this.dispatchAction = this.dispatchAction.bind(this);
-    this.redirect = this.redirect.bind(this);
-    this.render = this.render.bind(this);
   }
 
+  @autobind
   dispatchAction(actionCreator, ...args) {
     let action = actionCreator(this.api, this.store, this.dispatchAction, ...args),
         actionPromise;
@@ -45,10 +43,12 @@ export default class App {
     return actionPromise || Promise.resolve(action && action.payload);
   }
 
+  @autobind
   redirect(path) {
     this.onRedirect(path);
   }
 
+  @autobind
   render(component, props) {
     this.renderer(React.createElement(component, props));
   }

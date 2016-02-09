@@ -14,6 +14,7 @@ module.exports = {
         query: {
           plugins: [
             'check-es2015-constants',
+            'transform-decorators-legacy',
             'transform-es2015-block-scoped-functions',
             'transform-es2015-block-scoping',
             'transform-es2015-classes',

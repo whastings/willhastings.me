@@ -1,3 +1,4 @@
+import autobind from 'autobind-decorator';
 import React from 'react';
 
 const { Component, PropTypes } = React;
@@ -10,11 +11,9 @@ export default class SignInPage extends Component {
       username: '',
       password: ''
     };
-
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  @autobind
   handleInput() {
     this.setState({
       username: this.refs.usernameInput.value,
@@ -22,6 +21,7 @@ export default class SignInPage extends Component {
     });
   }
 
+  @autobind
   handleSubmit(event) {
     let { username, password } = this.state;
     event.preventDefault();
