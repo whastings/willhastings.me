@@ -2,6 +2,12 @@ const DEFAULT_OPTIONS = {
   credentials: 'same-origin' // Allow setting cookies.
 };
 
+export function deleteResource(route) {
+  return fetch(route, createOptions({
+    method: 'DELETE'
+  }));
+}
+
 export function getJSON(route) {
   return fetch(route, DEFAULT_OPTIONS)
     .then((response) => {

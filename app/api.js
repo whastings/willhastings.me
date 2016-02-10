@@ -1,9 +1,12 @@
-import { getJSON } from 'app/utils/request';
-import { postJSON } from 'app/utils/request';
+import { deleteResource, getJSON, postJSON } from 'app/utils/request';
 
 export default {
   createSession(username, password) {
-    return postJSON('/api/sessions', {user: {username, password}});
+    return postJSON('/api/session', {user: {username, password}});
+  },
+
+  destroySession() {
+    return deleteResource('/api/session');
   },
 
   getPage(page) {

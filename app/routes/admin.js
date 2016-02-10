@@ -1,12 +1,15 @@
 import AdminIndexPage from 'app/components/admin/AdminIndexPage';
 import SignInPage from 'app/components/admin/SignInPage';
-import { signIn } from 'app/actions/authActions';
+import { signIn, signOut } from 'app/actions/authActions';
 import { loadPosts } from 'app/actions/postActions';
 
 export default {
   index(req, res, store) {
     res.dispatchAction(loadPosts)
-      .then(() => res.render(AdminIndexPage, {posts: store.getPosts()}))
+      .then(() => res.render(AdminIndexPage, {
+        onSignOut: handleSignOut.bind(null, res),
+        posts: store.getPosts()
+      }))
       .catch(console.log.bind(console));
   },
 
@@ -20,3 +23,9 @@ export default {
     });
   }
 };
+
+function handleSignOut(res) {
+  res.dispatchAction(signOut)
+    .then(() => res.redirect('/'))
+    .catch(console.log.bind(console));
+}
