@@ -2,6 +2,7 @@ import adminRoutes from 'app/routes/admin';
 import appApi from 'app/api';
 import authMiddleware from 'app/middleware/auth';
 import autobind from 'autobind-decorator';
+import blogRoutes from 'app/routes/blog';
 import createStore from 'app/createStore';
 import currentUserMiddleware from 'app/middleware/currentUser';
 import homeRoute from 'app/routes/home';
@@ -17,6 +18,8 @@ const PRE_MIDDLEWARE = {
 const ROUTES = {
   '/': homeRoute,
   '/projects': projectsRoute,
+  '/blog': blogRoutes.index,
+  '/blog/:post': blogRoutes.view,
   '/admin': adminRoutes.index,
   '/admin/sign-in': adminRoutes.signIn
 };

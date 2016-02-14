@@ -13,6 +13,10 @@ export default {
     return getJSON(`/api/pages/${page}`);
   },
 
+  getPost(permalink) {
+    return getJSON(`/api/posts/${permalink}`);
+  },
+
   getPosts() {
     return getJSON('/api/posts');
   }
