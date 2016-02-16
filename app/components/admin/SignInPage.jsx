@@ -1,54 +1,34 @@
 import autobind from 'autobind-decorator';
 import React from 'react';
+import wrapForm from 'app/components/utils/wrapForm';
 
 const { Component, PropTypes } = React;
 
-export default class SignInPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      username: '',
-      password: ''
-    };
-  }
-
-  @autobind
-  handleInput() {
-    this.setState({
-      username: this.refs.usernameInput.value,
-      password: this.refs.passwordInput.value
-    });
-  }
-
+class SignInPage extends Component {
   @autobind
   handleSubmit(event) {
-    let { username, password } = this.state;
+    let { usernameValue, passwordValue } = this.props;
     event.preventDefault();
-    this.props.onSubmit(username, password);
+    this.props.onSubmit(usernameValue, passwordValue);
   }
 
   render() {
-    let { username, password } = this.state;
+    let { WrappedInput } = this.props;
 
     return (
       <section className="sign-in-page">
         <h1>Sign In</h1>
         <form className="sign-in-form" method="post" onSubmit={this.handleSubmit}>
           <label htmlFor="username-input">Username:</label>
-          <input
+          <WrappedInput
+            valueName="username"
             id="username-input"
-            ref="usernameInput"
-            value={username}
-            onChange={this.handleInput}
           />
           <label htmlFor="password-input">Password:</label>
-          <input
+          <WrappedInput
+            valueName="password"
             type="password"
             id="password-input"
-            ref="passwordInput"
-            value={password}
-            onChange={this.handleInput}
           />
           <button className="sign-in-form__submit">Go</button>
         </form>
@@ -60,3 +40,5 @@ export default class SignInPage extends Component {
 SignInPage.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
+
+export default wrapForm(SignInPage, 'username', 'password');
