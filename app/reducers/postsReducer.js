@@ -1,19 +1,10 @@
-import createReducer from 'app/utils/createReducer';
+import { identity, prop } from '@whastings/js_utils';
+import { createReducer, mergeAllWithState, mergeWithState } from 'app/utils/reducerUtils';
+
+const getId = prop('id');
 
 export default createReducer({
-  POST_ADD: function addPost(state, action) {
-    let post = action.payload;
-    return state.merge({
-      [post.id]: post
-    });
-  },
+  POST_ADD: mergeWithState(getId, identity),
 
-  POSTS_ADD: function addPosts(state, action) {
-    return state.merge(
-      action.payload.reduce((posts, post) => {
-        posts[post.id] = post;
-        return posts;
-      }, {})
-    );
-  }
+  POSTS_ADD: mergeAllWithState(getId, identity)
 });

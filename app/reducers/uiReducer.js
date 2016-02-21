@@ -1,16 +1,8 @@
-import createReducer from 'app/utils/createReducer';
+import { always, identity, prop } from '@whastings/js_utils';
+import { createReducer, mergeWithState } from 'app/utils/reducerUtils';
 
 export default createReducer({
-  CURRENT_USER_ID_CLEAR: function clearCurrentUserId(state) {
-    return state.merge({
-      currentUserId: null
-    });
-  },
+  CURRENT_USER_ID_CLEAR: mergeWithState(always('currentUserId'), always(null)),
 
-  CURRENT_USER_ID_SET: function setCurrentUserId(state, action) {
-    let id = action.payload;
-    return state.merge({
-      currentUserId: id
-    });
-  }
+  CURRENT_USER_ID_SET: mergeWithState(always('currentUserId'), identity)
 });

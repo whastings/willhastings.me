@@ -1,10 +1,6 @@
-import createReducer from 'app/utils/createReducer';
+import { identity, prop } from '@whastings/js_utils';
+import { createReducer, mergeWithState } from 'app/utils/reducerUtils';
 
 export default createReducer({
-  PAGE_ADD: function addPage(state, action) {
-    let page = action.payload;
-    return state.merge({
-      [page.id]: page
-    });
-  }
+  PAGE_ADD: mergeWithState(prop('id'), identity)
 });
