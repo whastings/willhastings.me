@@ -14,6 +14,7 @@ export default class AdminIndexPage extends Component {
           <button type="button" className="btn-sign-out" onClick={onSignOut}>
             Sign Out
           </button>
+          <a href="/admin/posts/new">Create Post</a>
         </div>
 
         <h1>Your Posts</h1>

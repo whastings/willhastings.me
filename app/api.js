@@ -1,6 +1,10 @@
 import { deleteResource, getJSON, postJSON } from 'app/utils/request';
 
 export default {
+  createPost(postData) {
+    return postJSON('/api/posts', {post: postData});
+  },
+
   createSession(username, password) {
     return postJSON('/api/session', {user: {username, password}});
   },

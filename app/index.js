@@ -21,7 +21,8 @@ const ROUTES = {
   '/blog': blogRoutes.index,
   '/blog/:post': blogRoutes.view,
   '/admin': adminRoutes.index,
-  '/admin/sign-in': adminRoutes.signIn
+  '/admin/sign-in': adminRoutes.signIn,
+  '/admin/posts/new': adminRoutes.newPost
 };
 
 export default class App {

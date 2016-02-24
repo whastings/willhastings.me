@@ -1,7 +1,7 @@
 import autobind from 'autobind-decorator';
 import React from 'react';
 
-const { Component } = React;
+const { Component, DOM } = React;
 
 export default function wrapForm(FormComponent, ...valueNames) {
   return class WrappedForm extends Component  {
@@ -41,17 +41,17 @@ function createWrappedInput(getValue, updateValue) {
     }
 
     render() {
-      let { valueName } = this.props,
+      let { inputType, valueName } = this.props,
           value = getValue(valueName);
 
-      return (
-        <input
-          ref="input"
-          value={value}
-          onChange={this.handleChange}
-          {...this.props}
-        />
-      );
+      let createInput = DOM[inputType] || DOM.input;
+
+      return createInput({
+        ref: 'input',
+        value,
+        onChange: this.handleChange,
+        ...this.props
+      });
     }
   };
 }

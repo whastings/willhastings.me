@@ -1,3 +1,13 @@
+export function createPost(api, store, dispatchAction, postData) {
+  return {
+    type: 'POST_CREATE',
+    payload: {
+      promise: api.createPost(postData)
+        .then((post) => ({type: 'POST_ADD', payload: post}))
+    }
+  };
+}
+
 export function loadPost(api, store, dispatchAction, permalink) {
   let post = store.getPost(permalink);
   if (post && post.body) {

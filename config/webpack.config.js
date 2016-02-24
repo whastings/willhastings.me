@@ -26,6 +26,7 @@ module.exports = {
             'transform-es2015-sticky-regex',
             'transform-es2015-typeof-symbol',
             'transform-es2015-unicode-regex',
+            'transform-object-rest-spread',
             'transform-regenerator'
           ],
           presets: ['react']
