@@ -3,14 +3,14 @@ import React from 'react';
 
 const { Component, PropTypes } = React;
 
-export default function NewPostPage({onFormSubmit}) {
+export default function EditPostPage({onFormSubmit, post}) {
   return (
-    <section className="new-post-page">
-      <PostForm onSubmit={onFormSubmit}/>
+    <section className="edit-post-page">
+      <PostForm onSubmit={onFormSubmit} post={post}/>
     </section>
   );
 }
 
-NewPostPage.propTypes = {
+EditPostPage.propTypes = {
   onFormSubmit: PropTypes.func.isRequired
 };

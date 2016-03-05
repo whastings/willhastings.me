@@ -21,12 +21,12 @@ class SignInPage extends Component {
         <form className="sign-in-form" method="post" onSubmit={this.handleSubmit}>
           <label htmlFor="username-input">Username:</label>
           <WrappedInput
-            valueName="username"
+            field="username"
             id="username-input"
           />
           <label htmlFor="password-input">Password:</label>
           <WrappedInput
-            valueName="password"
+            field="password"
             type="password"
             id="password-input"
           />
@@ -41,4 +41,4 @@ SignInPage.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
 
-export default wrapForm(SignInPage, 'username', 'password');
+export default wrapForm({component: SignInPage, fields: ['username', 'password']});

@@ -3,13 +3,19 @@ import React from 'react';
 
 const { Component, DOM } = React;
 
-export default function wrapForm(FormComponent, ...valueNames) {
+export default function wrapForm({component: FormComponent, fields, initVals = {}}) {
   return class WrappedForm extends Component  {
     constructor(props) {
       super(props);
 
-      this.state = valueNames.reduce((state, valueName) => {
-        state[`${valueName}Value`] = '';
+      if (typeof initVals === 'function') {
+        initVals = initVals(props);
+      }
+      initVals = initVals || {};
+
+      this.state = fields.reduce((state, field) => {
+        let initVal = initVals[field];
+        state[`${field}Value`] = (initVal === undefined) ? '' : initVal;
         return state;
       }, {});
 
@@ -17,13 +23,13 @@ export default function wrapForm(FormComponent, ...valueNames) {
     }
 
     @autobind
-    getValue(valueName) {
-      return this.state[`${valueName}Value`];
+    getValue(field) {
+      return this.state[`${field}Value`];
     }
 
     @autobind
-    updateValue(valueName, value) {
-      this.setState({[`${valueName}Value`]: value});
+    updateValue(field, value) {
+      this.setState({[`${field}Value`]: value});
     }
 
     render() {
@@ -36,13 +42,13 @@ function createWrappedInput(getValue, updateValue) {
   return class WrappedInput extends Component {
     @autobind
     handleChange() {
-      let { valueName } = this.props;
-      updateValue(valueName, this.refs.input.value);
+      let { field } = this.props;
+      updateValue(field, this.refs.input.value);
     }
 
     render() {
-      let { inputType, valueName } = this.props,
-          value = getValue(valueName);
+      let { inputType, field } = this.props,
+          value = getValue(field);
 
       let createInput = DOM[inputType] || DOM.input;
 

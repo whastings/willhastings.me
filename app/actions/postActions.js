@@ -36,3 +36,13 @@ export function loadPosts(api, store, dispatchAction) {
     }
   };
 }
+
+export function updatePost(api, store, dispatchAction, postData) {
+  return {
+    type: 'POST_SAVE',
+    payload: {
+      promise: api.savePost(postData)
+        .then((post) => ({type: 'POST_UPDATE', payload: post}))
+    }
+  };
+}

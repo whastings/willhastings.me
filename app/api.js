@@ -1,4 +1,4 @@
-import { deleteResource, getJSON, postJSON } from 'app/utils/request';
+import { deleteResource, getJSON, postJSON, putJSON } from 'app/utils/request';
 
 export default {
   createPost(postData) {
@@ -23,5 +23,9 @@ export default {
 
   getPosts() {
     return getJSON('/api/posts');
+  },
+
+  savePost(postData) {
+    return putJSON(`/api/posts/${postData.id}`, {post: postData});
   }
 };

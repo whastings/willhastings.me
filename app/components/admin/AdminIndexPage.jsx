@@ -1,3 +1,4 @@
+import AdminPostListItem from './AdminPostListItem';
 import autobind from 'autobind-decorator';
 import PostList from 'app/components/posts/PostList';
 import React from 'react';
@@ -18,7 +19,7 @@ export default class AdminIndexPage extends Component {
         </div>
 
         <h1>Your Posts</h1>
-        <PostList posts={posts}/>
+        <PostList posts={posts} ItemComponent={AdminPostListItem}/>
       </section>
     );
   }

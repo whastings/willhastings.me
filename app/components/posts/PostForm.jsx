@@ -19,18 +19,18 @@ class PostForm extends Component {
       <form className="post-form" onSubmit={this.handleSubmit}>
         <label htmlFor="post-form__title-input">Title</label>
         <WrappedInput
-          valueName="title"
+          field="title"
           id="post-form__title-input"
         />
 
         <label htmlFor="post-form__body-input">Body</label>
         <WrappedInput
-          valueName="body"
+          field="body"
           inputType="textarea"
           id="post-form__body-input"
         />
 
-        <button>Create Post</button>
+        <button>Submit</button>
       </form>
     );
   }
@@ -40,4 +40,8 @@ PostForm.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
 
-export default wrapForm(PostForm, 'title', 'body');
+export default wrapForm({
+  component: PostForm,
+  fields: ['title', 'body'],
+  initVals: (props) => props.post
+});
