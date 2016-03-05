@@ -1,6 +1,6 @@
 import autobind from 'autobind-decorator';
 import React from 'react';
-import wrapForm from 'app/components/utils/wrapForm';
+import wrapForm from 'app/utils/components/wrapForm';
 
 const { Component, PropTypes } = React;
 

@@ -1,9 +1,9 @@
-import { addUser } from 'app/actions/userActions';
-import { setCurrentUserId } from 'app/actions/uiActions';
+import { addUser } from 'app/modules/users/actions';
+import { setCurrentUserId } from 'app/modules/admin/actions';
 
 export default function currentUserMiddleware(req, res, store, next) {
   let state = store.getState(),
-      { currentUserId } = state.ui;
+      { currentUserId } = state.admin;
 
   if (!currentUserId && req.currentUser) {
     res.dispatchAction(addUser, req.currentUser);

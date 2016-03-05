@@ -1,30 +1,10 @@
-import adminRoutes from 'app/routes/admin';
 import appApi from 'app/api';
-import authMiddleware from 'app/middleware/auth';
 import autobind from 'autobind-decorator';
-import blogRoutes from 'app/routes/blog';
 import createStore from 'app/createStore';
-import currentUserMiddleware from 'app/middleware/currentUser';
-import homeRoute from 'app/routes/home';
 import MiddlewareMap from 'app/utils/middlewareMap';
-import projectsRoute from 'app/routes/projects';
 import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
-
-const PRE_MIDDLEWARE = {
-  '/admin*': [currentUserMiddleware, authMiddleware]
-};
-
-const ROUTES = {
-  '/': homeRoute,
-  '/projects': projectsRoute,
-  '/blog': blogRoutes.index,
-  '/blog/:post': blogRoutes.view,
-  '/admin': adminRoutes.index,
-  '/admin/sign-in': adminRoutes.signIn,
-  '/admin/posts/new': adminRoutes.newPost,
-  '/admin/posts/:post/edit': adminRoutes.editPost
-};
+import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 
 export default class App {
   constructor(renderer, onRedirect, api = appApi) {

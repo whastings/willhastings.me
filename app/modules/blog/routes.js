@@ -1,6 +1,5 @@
-import BlogIndexPage from 'app/components/blog/BlogIndexPage';
-import PostPage from 'app/components/blog/PostPage';
-import { loadPost, loadPosts } from 'app/actions/postActions';
+import { BlogIndexPage, PostPage } from './components';
+import { loadPost, loadPosts } from 'app/modules/posts/actions';
 
 export default {
   index(req, res, store)  {

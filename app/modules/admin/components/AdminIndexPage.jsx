@@ -1,7 +1,7 @@
 import AdminPostListItem from './AdminPostListItem';
 import autobind from 'autobind-decorator';
-import PostList from 'app/components/posts/PostList';
 import React from 'react';
+import { PostList } from 'app/modules/posts/components';
 
 const { Component, PropTypes } = React;
 

@@ -1,4 +1,4 @@
-import { always, identity, prop } from '@whastings/js_utils';
+import { always, identity } from '@whastings/js_utils';
 import { createReducer, mergeWithState } from 'app/utils/reducerUtils';
 
 export default createReducer({

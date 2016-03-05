@@ -1,5 +1,17 @@
-import { addUser } from 'app/actions/userActions';
-import { clearCurrentUserId, setCurrentUserId } from 'app/actions/uiActions';
+import { addUser } from 'app/modules/users/actions';
+
+export function clearCurrentUserId() {
+  return {
+    type: 'CURRENT_USER_ID_CLEAR'
+  };
+}
+
+export function setCurrentUserId(api, store, dispatchAction, id) {
+  return {
+    type: 'CURRENT_USER_ID_SET',
+    payload: id
+  };
+}
 
 export function signIn(api, store, dispatchAction, username, password) {
   return {

@@ -1,5 +1,5 @@
 import React from 'react';
-import SafeOutput from 'app/components/SafeOutput';
+import SafeOutput from 'app/utils/components/SafeOutput';
 
 export default function Project({project}) {
   return (

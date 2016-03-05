@@ -1,5 +1,5 @@
-import PostForm from 'app/components/posts/PostForm';
 import React from 'react';
+import { PostForm } from 'app/modules/posts/components';
 
 const { Component, PropTypes } = React;
 

@@ -1,5 +1,5 @@
-import PostList from 'app/components/posts/PostList';
 import React from 'react';
+import { PostList } from 'app/modules/posts/components';
 
 export default function BlogIndexPage({posts}) {
   return (

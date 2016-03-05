@@ -1,9 +1,6 @@
-import AdminIndexPage from 'app/components/admin/AdminIndexPage';
-import EditPostPage from 'app/components/admin/EditPostPage';
-import NewPostPage from 'app/components/admin/NewPostPage';
-import SignInPage from 'app/components/admin/SignInPage';
-import { signIn, signOut } from 'app/actions/authActions';
-import { createPost, loadPost, loadPosts, updatePost } from 'app/actions/postActions';
+import { AdminIndexPage, EditPostPage, NewPostPage, SignInPage } from './components';
+import { signIn, signOut } from './actions';
+import { createPost, loadPost, loadPosts, updatePost } from 'app/modules/posts/actions';
 
 export default {
   index(req, res, store) {
