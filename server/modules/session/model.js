@@ -1,7 +1,7 @@
 import co from 'co';
 import Sequelize from 'sequelize';
 import uid from 'uid-safe';
-import User from 'server/models/User';
+import User from 'server/modules/users/model';
 
 const schema = {
   token: {

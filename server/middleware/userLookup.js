@@ -1,5 +1,5 @@
 import asyncRoute from 'server/utils/asyncRoute';
-import Session from 'server/models/Session';
+import Session from 'server/modules/session/model';
 
 export default function userLookupMiddleware(db) {
   return asyncRoute(function* userLookup(req, res, next) {

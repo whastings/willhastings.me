@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import slug from 'slug';
-import User from 'server/models/User';
+import User from 'server/modules/users/model';
 
 const SLUG_OPTIONS = {
   lower: true

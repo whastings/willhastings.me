@@ -3,33 +3,25 @@ import bodyParser from 'body-parser';
 import broccoli from 'broccoli/lib/middleware';
 import builder from 'lib/builder';
 import cookieParser from 'cookie-parser';
+import configViews from 'server/utils/configViews';
 import express from 'express';
-import handlebars from 'express-handlebars';
 import http from 'http';
 import initDB from 'server/db/initDB';
 import liveReload from 'server/utils/liveReload';
-import path from 'path';
-import renderHTML from 'server/middleware/renderHTML';
+import ROUTES from './routes';
 import userLookup from 'server/middleware/userLookup';
-// Routes:
-import appRoutes from 'server/routes/app';
-import pagesRoutes from 'server/routes/pages';
-import postsRoute from 'server/routes/posts';
-import sessionsRoute from 'server/routes/sessions';
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET,
-      IS_DEV = process.env.NODE_ENV === 'development',
-      TEMPLATES_DIR = path.join(__dirname, 'templates');
+      IS_DEV = process.env.NODE_ENV === 'development';
 
 export default class ServerManager {
   constructor() {
     this._connectToDb();
 
     let app = this.app = express();
-    setUpViews(app);
+    configViews(app);
     applyPreMiddleware(app, this.dbConnection);
     applyRoutes(app);
-    applyPostMiddleware(app);
     if (IS_DEV) {
       setUpDevEnv(app);
     }
@@ -50,10 +42,6 @@ export default class ServerManager {
   }
 }
 
-function applyPostMiddleware(app) {
-  app.get('*', renderHTML());
-}
-
 function applyPreMiddleware(app, db) {
   app.use(cookieParser(COOKIE_SECRET));
   app.use(bodyParser.json());
@@ -61,27 +49,11 @@ function applyPreMiddleware(app, db) {
 }
 
 function applyRoutes(app) {
-  [
-    appRoutes,
-    pagesRoutes,
-    postsRoute,
-    sessionsRoute
-  ].forEach(route => route(app));
+  Object.keys(ROUTES).forEach((route) => app.use(route, ROUTES[route]));
 }
 
 function setUpDevEnv(app) {
   let watcher = builder.watcher();
   app.use(broccoli(watcher));
   liveReload(watcher);
-}
-
-function setUpViews(app) {
-  app.set('views', TEMPLATES_DIR);
-  app.engine('.hbs', handlebars({
-    defaultLayout: 'main',
-    extname: '.hbs',
-    layoutsDir: path.join(TEMPLATES_DIR, 'layouts'),
-    partialsDir: path.join(TEMPLATES_DIR, 'partials')
-  }));
-  app.set('view engine', '.hbs');
 }

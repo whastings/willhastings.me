@@ -1,16 +1,10 @@
 import co from 'co';
 import loadHtml from 'server/utils/loadHtml';
 import loadJson from 'server/utils/loadJson';
-import { flatten } from '@whastings/js_utils/lib/array_utils';
+import { flatten } from '@whastings/js_utils';
 
-const PAGE_LOADERS = {
-  home: co.wrap(function* loadHomePage() {
-    return {
-      content: (yield loadHtml('pages/home.html')).toString()
-    };
-  }),
-
-  projects: co.wrap(function* loadProjectsPage() {
+export default {
+  getProjectsPage: co.wrap(function* loadProjectsPage() {
     let projectData = yield loadJson('projects.json');
 
     yield Promise.all(flatten(
@@ -20,13 +14,6 @@ const PAGE_LOADERS = {
       }))
     ));
 
-    return projectData;
+    return {categories: projectData, id: 'projects'};
   })
-};
-
-export default {
-  get(page) {
-    let loader = PAGE_LOADERS[page];
-    return loader ? loader() : Promise.resolve(null);
-  }
 };

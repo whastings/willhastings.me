@@ -1,12 +1,12 @@
 import { ProjectsPage } from './components';
-import { loadPage } from 'app/modules/pages/actions';
+import { loadProjectsPage } from './actions';
 
 export default {
   index(req, res, store) {
-    res.dispatchAction(loadPage, 'projects')
+    res.dispatchAction(loadProjectsPage)
       .then(() => res.render(
         ProjectsPage,
-        {categories: store.getState().pages.projects}
+        {categories: store.getState().pages.projects.categories}
       )).catch(console.log.bind(console));
   }
 };

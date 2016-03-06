@@ -1,7 +1,7 @@
-import Post from 'server/models/Post';
+import Post from 'server/modules/posts/model';
 import Sequelize from 'sequelize';
-import Session from 'server/models/Session';
-import User from 'server/models/User';
+import Session from 'server/modules/session/model';
+import User from 'server/modules/users/model';
 import { production as dbConfig } from 'config/db';
 
 export default function initDb() {

@@ -1,4 +1,4 @@
-import Post from 'server/models/Post';
+import Post from './model';
 
 export default {
   getPost(permalink) {

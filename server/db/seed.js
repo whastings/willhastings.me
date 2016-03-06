@@ -1,8 +1,8 @@
 import co from 'co';
 import faker from 'faker';
 import initDB from 'server/db/initDB';
-import Post from 'server/models/Post';
-import User from 'server/models/User';
+import Post from 'server/modules/posts/model';
+import User from 'server/modules/users/model';
 import { rand } from '@whastings/js_utils/lib/misc';
 
 const NUM_POSTS = 25;
