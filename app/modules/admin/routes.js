@@ -17,13 +17,19 @@ export default {
   },
 
   editPost(req, res, store) {
-    let permalink = req.params.post,
-        post = store.getPost(permalink);
+    let permalink = req.params.post;
+
     res.dispatchAction(loadPost, permalink)
-      .then(() => res.render(
-        EditPostPage,
-        {post, onFormSubmit: handlePostEdit.bind(null, res, post)}
-      ))
+      .then(() => {
+        let post = store.getPost(permalink);
+        res.render(
+          EditPostPage,
+          {
+            post,
+            onFormSubmit: handlePostEdit.bind(null, res, post)
+          }
+        );
+      })
       .catch(console.log.bind(console));
   },
 

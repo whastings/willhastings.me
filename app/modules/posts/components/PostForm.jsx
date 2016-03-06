@@ -43,5 +43,5 @@ PostForm.propTypes = {
 export default wrapForm({
   component: PostForm,
   fields: ['title', 'body'],
-  initVals: (props) => props.post
+  initials: (props) => props.post
 });

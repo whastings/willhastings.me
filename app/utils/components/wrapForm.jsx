@@ -3,15 +3,15 @@ import React from 'react';
 
 const { Component, DOM } = React;
 
-export default function wrapForm({component: FormComponent, fields, initVals = {}}) {
+export default function wrapForm({component: FormComponent, fields, initials = {}}) {
   return class WrappedForm extends Component  {
     constructor(props) {
       super(props);
+      let initVals = initials;
 
-      if (typeof initVals === 'function') {
-        initVals = initVals(props);
+      if (typeof initials === 'function') {
+        initVals = initials(props) || {};
       }
-      initVals = initVals || {};
 
       this.state = fields.reduce((state, field) => {
         let initVal = initVals[field];
