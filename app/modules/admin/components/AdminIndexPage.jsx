@@ -1,13 +1,15 @@
-import AdminPostListItem from './AdminPostListItem';
+import AdminPostList from './AdminPostList';
 import autobind from 'autobind-decorator';
 import React from 'react';
+import { connect } from 'react-redux';
+import { getPosts } from 'app/modules/posts/selectors';
 import { PostList } from 'app/modules/posts/components';
 
 const { Component, PropTypes } = React;
 
-export default class AdminIndexPage extends Component {
+class AdminIndexPage extends Component {
   render() {
-    let { onSignOut, posts } = this.props;
+    let { onPostDelete, onSignOut, posts } = this.props;
 
     return (
       <section className="admin-index-page admin-index">
@@ -19,12 +21,17 @@ export default class AdminIndexPage extends Component {
         </div>
 
         <h1>Your Posts</h1>
-        <PostList posts={posts} ItemComponent={AdminPostListItem}/>
+        <AdminPostList posts={posts} onPostDelete={onPostDelete}/>
       </section>
     );
   }
 }
 
 AdminIndexPage.propTypes = {
+  onPostDelete: PropTypes.func.isRequired,
   onSignOut: PropTypes.func.isRequired
 };
+
+export default connect(
+  (state) => ({posts: getPosts(state)})
+)(AdminIndexPage);

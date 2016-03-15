@@ -8,6 +8,16 @@ export function createPost(api, store, dispatchAction, postData) {
   };
 }
 
+export function deletePost(api, store, dispatchAction, post) {
+  return {
+    type: 'POST_DELETE',
+    payload: {
+      promise: api.deletePost(post.id)
+        .then(() => ({type: 'POST_REMOVE', payload: post.id}))
+    }
+  };
+}
+
 export function loadPost(api, store, dispatchAction, permalink) {
   let post = store.getPost(permalink);
   if (post && post.body) {

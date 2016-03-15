@@ -49,6 +49,13 @@ export function putJSON(route, body) {
     });
 }
 
+export function sendDelete(route) {
+  return fetch(route, createOptions({
+    method: 'DELETE'
+  }));
+  // TODO: Check response.ok
+}
+
 function createOptions(options) {
   return Object.assign({}, DEFAULT_OPTIONS, options);
 }

@@ -1,8 +1,12 @@
-import { getJSON, postJSON, putJSON } from 'app/utils/request';
+import { getJSON, postJSON, putJSON, sendDelete } from 'app/utils/request';
 
 export default {
   createPost(postData) {
     return postJSON('/api/posts', {post: postData});
+  },
+
+  deletePost(postId) {
+    return sendDelete(`/api/posts/${postId}`);
   },
 
   getPost(permalink) {

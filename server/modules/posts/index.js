@@ -38,4 +38,12 @@ app.put('/:postId', authMiddleware, asyncRoute(function* postsRouteUpdate(req, r
   res.json(post.toJSON());
 }));
 
+app.delete('/:postId', authMiddleware, asyncRoute(function* postsRouteDelete(req, res) {
+  let { postId } = req.params;
+
+  yield Post.model.destroy({where: {id: postId}});
+
+  res.end();
+}));
+
 export default app;

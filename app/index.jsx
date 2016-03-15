@@ -5,6 +5,7 @@ import MiddlewareMap from 'app/utils/middlewareMap';
 import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
 import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
+import { Provider } from 'react-redux';
 
 export default class App {
   constructor(renderer, onRedirect, api = appApi) {
@@ -34,8 +35,12 @@ export default class App {
   }
 
   @autobind
-  render(component, props) {
-    this.renderer(React.createElement(component, props));
+  render(Component, props) {
+    this.renderer(
+      <Provider store={this.store}>
+        <Component {...props}/>
+      </Provider>
+    );
   }
 
   route(path, req) {

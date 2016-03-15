@@ -1,13 +1,15 @@
 import { AdminIndexPage, EditPostPage, NewPostPage, SignInPage } from './components';
 import { signIn, signOut } from './actions';
-import { createPost, loadPost, loadPosts, updatePost } from 'app/modules/posts/actions';
+import {
+  createPost, deletePost, loadPost, loadPosts, updatePost
+} from 'app/modules/posts/actions';
 
 export default {
   index(req, res, store) {
     res.dispatchAction(loadPosts)
       .then(() => res.render(AdminIndexPage, {
-        onSignOut: handleSignOut.bind(null, res),
-        posts: store.getPosts()
+        onPostDelete: handlePostDelete.bind(null, res),
+        onSignOut: handleSignOut.bind(null, res)
       }))
       .catch(console.log.bind(console));
   },
@@ -47,6 +49,11 @@ export default {
 function handlePostCreate(res, postData) {
   res.dispatchAction(createPost, postData)
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
+    .catch(console.log.bind(console));
+}
+
+function handlePostDelete(res, post) {
+  res.dispatchAction(deletePost, post)
     .catch(console.log.bind(console));
 }
 

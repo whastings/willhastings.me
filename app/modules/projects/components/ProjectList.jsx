@@ -1,6 +1,6 @@
-import map from 'app/utils';
 import Project from './Project';
 import React from 'react';
+import { map } from 'app/utils';
 
 export default function ProjectList({projects}) {
   return (

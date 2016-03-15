@@ -1,6 +1,6 @@
-import map from 'app/utils';
 import ProjectList from './ProjectList';
 import React from 'react';
+import { map } from 'app/utils';
 
 const { Component } = React;
 

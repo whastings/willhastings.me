@@ -8,5 +8,10 @@ export default createReducer({
 
   POSTS_ADD: mergeAllWithState(getId, identity),
 
+  POST_REMOVE: function(state, action) {
+    let id = action.payload;
+    return state.without(id.toString());
+  },
+
   POST_UPDATE: mergeWithState(getId, identity)
 });
