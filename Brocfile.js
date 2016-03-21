@@ -2,6 +2,7 @@ var Eyeglass = require('broccoli-eyeglass'),
     md = require('broccoli-md'),
     mergeTrees = require('broccoli-merge-trees'),
     path = require('path'),
+    scriptsTree = require('./lib/build/scripts'),
     stew = require('broccoli-stew'),
     watchedTree = require('broccoli-watched-tree'),
     webpack = require('broccoli-webpack-fast'),
@@ -17,10 +18,10 @@ var contentTree = 'content/',
 
 var htmlTree = md(find(contentTree, '**/*.md'));
 
-var jsTree = webpack(webpackConfig);
+//var jsTree = webpack(webpackConfig);
 
 if (!IS_PROD) {
-  jsTree = mergeTrees([jsTree, watchedTree('app/')]);
+  //jsTree = mergeTrees([jsTree, watchedTree('app/')]);
 }
 
 var stylesTree = new Eyeglass([clientTree], {
@@ -30,6 +31,7 @@ var stylesTree = new Eyeglass([clientTree], {
 
 module.exports = mergeTrees([
   htmlTree,
-  jsTree,
+  //jsTree,
+  scriptsTree,
   stylesTree
 ]);

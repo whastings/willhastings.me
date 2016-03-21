@@ -9,7 +9,13 @@ var serverManager;
 // Run initial build.
 builder.build(path.join(__dirname, 'dist'))
   .then(startServer)
-  .catch(console.log.bind(console));
+  .catch((error) => {
+    console.log('BUILD ERROR:');
+    console.log(error);
+    process.nextTick(() => {
+      throw error;
+    });
+  });
 
 function startServer() {
   // Start server.
