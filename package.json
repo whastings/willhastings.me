@@ -9,6 +9,7 @@
     "sql": "../node_modules/sequelize-cli/bin/sequelize",
     "start": "node --harmony index.js",
     "start-dev": "../node_modules/nodemon/bin/nodemon.js index.js",
+    "sync-docker": "../node_modules/package-json-to-docker/bin/pj2d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -72,6 +73,7 @@
     "broccoli-watched-tree": "^0.1.2",
     "faker": "^3.0.1",
     "nodemon": "^1.8.1",
+    "package-json-to-docker": "^0.1.0",
     "tiny-lr": "^0.1.6"
   }
 }
