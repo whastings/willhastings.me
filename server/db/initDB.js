@@ -9,6 +9,7 @@ export default function initDb() {
     dbConfig.database, dbConfig.username, dbConfig.password,
     {
       host: dbConfig.host,
+      port: dbConfig.port,
       dialect: dbConfig.dialect
     }
   );

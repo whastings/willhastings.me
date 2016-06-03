@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && broccoli build dist",
-    "c": "node --harmony index.js repl",
-    "sql": "../node_modules/sequelize-cli/bin/sequelize",
-    "start": "node --harmony index.js",
-    "start-dev": "../node_modules/nodemon/bin/nodemon.js index.js",
-    "sync-docker": "../node_modules/package-json-to-docker/bin/pj2d",
+    "c": "node index.js repl",
+    "db:clear": "node index.js db:clear",
+    "db:seed": "node index.js db:seed",
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -47,6 +47,7 @@
     "cookie-parser": "^1.4.0",
     "copy-dereference": "^1.0.0",
     "denodeify": "^1.2.1",
+    "dotenv": "^2.0.0",
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
     "normalize.scss": "^0.1.0",
@@ -58,7 +59,7 @@
     "react-dom": "^0.14.0",
     "react-redux": "^4.4.1",
     "redux": "^3.0.5",
-    "redux-promise-middleware": "^2.3.2",
+    "redux-promise-middleware": "2.3.2",
     "redux-thunk": "^1.0.3",
     "reselect": "^2.0.2",
     "rimraf": "^2.4.3",

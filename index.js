@@ -1,6 +1,8 @@
 var babelConfig = require('./config/babel-node'),
+    dotenv = require('dotenv'),
     path = require('path');
 
+dotenv.config();
 // Process all further dependencies through Babel.
 require('babel-core/register')(babelConfig);
 

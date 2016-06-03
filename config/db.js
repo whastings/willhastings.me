@@ -4,8 +4,9 @@ module.exports = {
   production: {
     username: env.POSTGRES_USER,
     password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_USER,
-    host: env.POSTGRES_PORT_5432_TCP_ADDR,
+    database: env.POSTGRES_DB,
+    host: env.POSTGRES_HOST,
+    port: env.POSTGRES_PORT,
     dialect: 'postgres'
   }
 };
