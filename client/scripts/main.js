@@ -1,4 +1,4 @@
-import App from 'app';
+import App from 'app/index';
 import page from 'page';
 import ReactDOM from 'react-dom';
 

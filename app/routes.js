@@ -1,24 +1,41 @@
-// Routes:
-import adminRoutes from 'app/modules/admin/routes';
-import blogRoutes from 'app/modules/blog/routes';
-import homeRoutes from 'app/modules/home/routes';
-import projectsRoutes from 'app/modules/projects/routes';
-
 // Middleware:
 import authMiddleware from 'app/middleware/auth';
 import currentUserMiddleware from 'app/middleware/currentUser';
+
+// Fake System.import in Node.
+if (typeof global !== 'undefined' && typeof System === 'undefined') {
+  global.System = {
+    import: function(module) {
+      return Promise.resolve(require(module));
+    }
+  };
+}
 
 export const PRE_MIDDLEWARE = {
   '/admin*': [currentUserMiddleware, authMiddleware]
 };
 
 export const ROUTES = {
-  '/': homeRoutes.index,
-  '/projects': projectsRoutes.index,
-  '/blog': blogRoutes.index,
-  '/blog/:post': blogRoutes.view,
-  '/admin': adminRoutes.index,
-  '/admin/sign-in': adminRoutes.signIn,
-  '/admin/posts/new': adminRoutes.newPost,
-  '/admin/posts/:post/edit': adminRoutes.editPost
+  '/': createRunner('home', 'index'),
+  '/projects': createRunner('projects', 'index'),
+  '/blog': createRunner('blog', 'index'),
+  '/blog/:post': createRunner('blog', 'view'),
+  '/admin': createRunner('admin', 'index'),
+  '/admin/sign-in': createRunner('admin', 'signIn'),
+  '/admin/posts/new': createRunner('admin', 'newPost'),
+  '/admin/posts/:post/edit': createRunner('admin', 'editPost')
 };
+
+function createRunner(moduleName, handler) {
+  return function routeRunner() {
+    loadModule(moduleName)
+      .then((module) => module.default)
+      .then((module) => module[handler](...arguments))
+      .catch((error) => console.log(`Routing error: ${error}`));
+  };
+}
+
+function loadModule(name) {
+  // Has to be a concatenation (not a template string) or webpack won't recognize it.
+  return System.import('./modules/' + name + '/routes');
+}

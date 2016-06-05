@@ -1,21 +1,19 @@
 import App from 'app';
 import bodyParser from 'body-parser';
-import broccoli from 'broccoli/lib/middleware';
-import builder from 'lib/builder';
 import cookieParser from 'cookie-parser';
 import configViews from 'server/utils/configViews';
 import express from 'express';
 import http from 'http';
 import initDB from 'server/db/initDB';
-import liveReload from 'server/utils/liveReload';
 import ROUTES from './routes';
 import userLookup from 'server/middleware/userLookup';
 
-const COOKIE_SECRET = process.env.COOKIE_SECRET,
-      IS_DEV = process.env.NODE_ENV === 'development';
+const COOKIE_SECRET = process.env.COOKIE_SECRET;
+const IS_DEV = process.env.NODE_ENV === 'development';
 
 export default class ServerManager {
-  constructor() {
+  constructor(options) {
+    this.options = options;
     this._connectToDb();
 
     let app = this.app = express();
@@ -23,7 +21,7 @@ export default class ServerManager {
     applyPreMiddleware(app, this.dbConnection);
     applyRoutes(app);
     if (IS_DEV) {
-      setUpDevEnv(app);
+      app.use(express.static(options.staticDir));
     }
     this.server = http.createServer(app);
   }
@@ -50,10 +48,4 @@ function applyPreMiddleware(app, db) {
 
 function applyRoutes(app) {
   Object.keys(ROUTES).forEach((route) => app.use(route, ROUTES[route]));
-}
-
-function setUpDevEnv(app) {
-  let watcher = builder.watcher();
-  app.use(broccoli(watcher));
-  liveReload(watcher);
 }
