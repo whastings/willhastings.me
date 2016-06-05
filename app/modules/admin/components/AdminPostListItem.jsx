@@ -1,10 +1,9 @@
-import autobind from 'autobind-decorator';
 import React from 'react';
+import { autobindMethods } from '@whastings/js_utils';
 
 const { Component, PropTypes } = React;
 
 export default class AdminPostListItem extends Component {
-  @autobind
   handleDelete() {
     let { onDelete, post } = this.props;
     onDelete(post);
@@ -25,3 +24,5 @@ export default class AdminPostListItem extends Component {
     );
   }
 }
+
+autobindMethods(AdminPostListItem, 'handleDelete');

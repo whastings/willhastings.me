@@ -27,11 +27,9 @@
   },
   "dependencies": {
     "@whastings/css_utils": "0.0.2",
-    "@whastings/js_utils": "^0.5.0",
-    "autobind-decorator": "^1.3.3",
+    "@whastings/js_utils": "^0.5.1",
     "babel-core": "^6.4.0",
     "babel-loader": "^6.2.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.4.0",
     "babel-plugin-transform-object-rest-spread": "^6.5.0",
     "babel-plugin-transform-runtime": "^6.7.5",

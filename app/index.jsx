@@ -1,9 +1,9 @@
 import appApi from 'app/api';
-import autobind from 'autobind-decorator';
 import createStore from 'app/createStore';
 import MiddlewareMap from 'app/utils/middlewareMap';
 import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
+import { autobindMethods } from '@whastings/js_utils';
 import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 import { Provider } from 'react-redux';
 
@@ -16,7 +16,6 @@ export default class App {
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
   }
 
-  @autobind
   dispatchAction(actionCreator, ...args) {
     let action = actionCreator(this.api, this.store, this.dispatchAction, ...args),
         actionPromise;
@@ -29,12 +28,10 @@ export default class App {
     return actionPromise || Promise.resolve(action && action.payload);
   }
 
-  @autobind
   redirect(path) {
     this.onRedirect(path);
   }
 
-  @autobind
   render(Component, props) {
     this.renderer(
       <Provider store={this.store}>
@@ -65,5 +62,7 @@ export default class App {
     runRouteHandlers(handlers, [req, res, store]);
   }
 }
+
+autobindMethods(App, 'dispatchAction', 'redirect', 'render');
 
 App.routes = Object.keys(ROUTES);

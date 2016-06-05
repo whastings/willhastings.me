@@ -1,11 +1,10 @@
-import autobind from 'autobind-decorator';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
+import { autobindMethods } from '@whastings/js_utils';
 
 const { Component, PropTypes } = React;
 
 class SignInPage extends Component {
-  @autobind
   handleSubmit(event) {
     let { usernameValue, passwordValue } = this.props;
     event.preventDefault();
@@ -40,5 +39,7 @@ class SignInPage extends Component {
 SignInPage.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
+
+autobindMethods(SignInPage, 'handleSubmit');
 
 export default wrapForm({component: SignInPage, fields: ['username', 'password']});

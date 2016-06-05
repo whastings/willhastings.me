@@ -1,5 +1,4 @@
 import AdminPostList from './AdminPostList';
-import autobind from 'autobind-decorator';
 import React from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from 'app/modules/posts/selectors';

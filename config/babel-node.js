@@ -4,7 +4,6 @@ var babelResolver = require('babel-resolver'),
 module.exports = {
   ignore: /node_modules\/(?!@whastings\/js_utils)/,
   plugins: [
-    'transform-decorators-legacy',
     'transform-object-rest-spread'
   ],
   presets: ['react', 'es2015-node5'],

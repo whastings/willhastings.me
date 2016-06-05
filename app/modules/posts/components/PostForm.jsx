@@ -1,11 +1,10 @@
-import autobind from 'autobind-decorator';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
+import { autobindMethods } from '@whastings/js_utils';
 
 const { Component, PropTypes } = React;
 
 class PostForm extends Component {
-  @autobind
   handleSubmit(event) {
     event.preventDefault();
     let { titleValue: title, bodyValue: body } = this.props;
@@ -39,6 +38,8 @@ class PostForm extends Component {
 PostForm.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
+
+autobindMethods(PostForm, 'handleSubmit');
 
 export default wrapForm({
   component: PostForm,

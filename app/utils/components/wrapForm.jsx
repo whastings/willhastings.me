@@ -1,10 +1,10 @@
-import autobind from 'autobind-decorator';
 import React from 'react';
+import { autobindMethods } from '@whastings/js_utils';
 
 const { Component, DOM } = React;
 
 export default function wrapForm({component: FormComponent, fields, initials = {}}) {
-  return class WrappedForm extends Component  {
+  class WrappedForm extends Component  {
     constructor(props) {
       super(props);
       let initVals = initials;
@@ -22,12 +22,10 @@ export default function wrapForm({component: FormComponent, fields, initials = {
       this.state.WrappedInput = createWrappedInput(this.getValue, this.updateValue);
     }
 
-    @autobind
     getValue(field) {
       return this.state[`${field}Value`];
     }
 
-    @autobind
     updateValue(field, value) {
       this.setState({[`${field}Value`]: value});
     }
@@ -35,12 +33,16 @@ export default function wrapForm({component: FormComponent, fields, initials = {
     render() {
       return <FormComponent {...this.props} {...this.state}/>;
     }
-  };
+  }
+
+  autobindMethods(WrappedForm, 'getValue', 'updateValue');
+
+  return WrappedForm;
 }
 
+
 function createWrappedInput(getValue, updateValue) {
-  return class WrappedInput extends Component {
-    @autobind
+  class WrappedInput extends Component {
     handleChange() {
       let { field } = this.props;
       updateValue(field, this.refs.input.value);
@@ -59,5 +61,9 @@ function createWrappedInput(getValue, updateValue) {
         ...this.props
       });
     }
-  };
+  }
+
+  autobindMethods(WrappedInput, 'handleChange');
+
+  return WrappedInput;
 }
