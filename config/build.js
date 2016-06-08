@@ -1,3 +1,8 @@
+const glob = require('glob');
+const path = require('path');
+
+const APP_DIR = path.join(process.cwd(), 'app');
+
 // Too bad Webpack needs these listed separately.
 const RUNTIME_HELPERS = [
   'classCallCheck',
@@ -12,9 +17,8 @@ module.exports = {
 
   babelNode: require('./babel-node'),
 
-  sharedModules: [
-    // TODO
-  ],
+  sharedModules: glob.sync('utils/**/*', {cwd: APP_DIR})
+    .map((file) => path.join(APP_DIR, file)),
 
   vendorModules: [
     '@whastings/js_utils',

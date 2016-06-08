@@ -2,15 +2,6 @@
 import authMiddleware from 'app/middleware/auth';
 import currentUserMiddleware from 'app/middleware/currentUser';
 
-// Fake System.import in Node.
-if (typeof global !== 'undefined' && typeof System === 'undefined') {
-  global.System = {
-    import: function(module) {
-      return Promise.resolve(require(module));
-    }
-  };
-}
-
 export const PRE_MIDDLEWARE = {
   '/admin*': [currentUserMiddleware, authMiddleware]
 };
@@ -36,6 +27,9 @@ function createRunner(moduleName, handler) {
 }
 
 function loadModule(name) {
+  // WEBPACK SPLIT POINT:
   // Has to be a concatenation (not a template string) or webpack won't recognize it.
-  return System.import('./modules/' + name + '/routes');
+  return (typeof System !== 'undefined') ?
+    System.import('./modules/' + name + '/routes') :
+    Promise.resolve(require(`./modules/${name}/routes`));
 }

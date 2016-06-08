@@ -12,7 +12,7 @@ build()
   .then(() => console.log('Build complete!'))
   .then(startServer)
   .then(() => console.log(`Server listening on port ${PORT}`))
-  .catch(console.log.bind(console));
+  .catch((error) => console.log(`Error starting: ${error}`));
 
 function startServer() {
   // Start server.
