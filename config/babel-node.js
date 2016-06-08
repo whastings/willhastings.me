@@ -6,6 +6,6 @@ module.exports = {
   plugins: [
     'transform-object-rest-spread'
   ],
-  presets: ['react', 'es2015-node5'],
+  presets: ['react', 'es2015-node'],
   resolveModuleSource: babelResolver(path.resolve(__dirname, '../'))
 };
