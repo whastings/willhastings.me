@@ -1,7 +1,5 @@
 {
-  "execMap": {
-    "js": "node --harmony"
-  },
+  "script": "lib/startServer.js",
   "ext": "js jsx json",
   "watch": [
     "app/",

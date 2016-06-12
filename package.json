@@ -42,6 +42,7 @@
     "bcrypt": "^0.8.5",
     "body-parser": "^1.14.2",
     "broccoli": "^0.16.7",
+    "broccoli-caching-writer": "^2.2.1",
     "broccoli-eyeglass": "^1.2.1",
     "broccoli-md": "^0.2.0",
     "broccoli-merge-trees": "^0.2.3",

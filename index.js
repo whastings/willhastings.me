@@ -1,20 +1,18 @@
-var babelConfig = require('./config/babel-node'),
-    dotenv = require('dotenv'),
-    path = require('path');
+const Builder = require('./lib/build/Builder');
 
-dotenv.config();
-// Process all further dependencies through Babel.
-require('babel-core/register')(babelConfig);
+// Run initial build.
+let builder = new Builder();
+builder.run()
+  .then(() => console.log('Build complete!'))
+  .then(startServer)
+  .then(() => console.log(`Server started`))
+  .catch((error) => console.log(`Error starting: ${error}`));
 
-var command = process.argv[2] || 'start';
+function startServer() {
+  // TODO: In prod, require startServer directly.
+  const nodemon = require('nodemon');
+  const nmConfig = require('./config/nodemon.json');
 
-if (command === 'start') {
-  require('./start');
-} else if (command === 'repl') {
-  require('./lib/repl');
-} else if (command.startsWith('db')) {
-  command = command.split(':')[1];
-  require(`./server/db/${command}`);
-} else {
-  console.log('Command not supported.');
+  nodemon(nmConfig)
+    .on('restart', () => console.log('RESTARTING SERVER...'));
 }
