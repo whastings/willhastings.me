@@ -15,7 +15,7 @@ if (args['disable-webpack'] !== undefined) {
 
 let builder = new Builder(options);
 
-builder.run(options)
+builder.build()
   .then(
     () => console.log('Build complete!'),
     (error) => console.log(`Build error: ${error}`)
