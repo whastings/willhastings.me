@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "./bin/build.js",
-    "c": "node index.js repl",
-    "db:clear": "node index.js db:clear",
-    "db:seed": "node index.js db:seed",
+    "c": "./bin/repl.js",
+    "db:clear": "./bin/db.js clear",
+    "db:seed": "./bin/db.js seed",
     "debug": "node-debug index.js",
     "start": "node index.js",
-    "start-dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
