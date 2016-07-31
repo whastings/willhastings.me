@@ -1,9 +1,9 @@
-import co from 'co';
-import loadHtml from 'server/utils/loadHtml';
-import loadJson from 'server/utils/loadJson';
-import { flatten } from '@whastings/js_utils';
+const co = require('co');
+const loadHtml = require('server/utils/loadHtml');
+const loadJson = require('server/utils/loadJson');
+const { flatten } = require('@whastings/js_utils');
 
-export default {
+module.exports = {
   getProjectsPage: co.wrap(function* loadProjectsPage() {
     let projectData = yield loadJson('projects.json');
 

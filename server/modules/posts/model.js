@@ -1,6 +1,6 @@
-import Sequelize from 'sequelize';
-import slug from 'slug';
-import User from 'server/modules/users/model';
+const Sequelize = require('sequelize');
+const slug = require('slug');
+const User = require('server/modules/users/model');
 
 const SLUG_OPTIONS = {
   lower: true
@@ -54,4 +54,4 @@ const Post = {
   }
 };
 
-export default Post;
+module.exports = Post;

@@ -1,7 +1,7 @@
-import asyncRoute from 'server/utils/asyncRoute';
-import express from 'express';
-import Session from './model';
-import User from 'server/modules/users/model';
+const asyncRoute = require('server/utils/asyncRoute');
+const express = require('express');
+const Session = require('./model');
+const User = require('server/modules/users/model');
 
 const app = express();
 
@@ -40,4 +40,4 @@ app.delete('/', asyncRoute(function* (req, res) {
   res.end();
 }));
 
-export default app;
+module.exports = app;

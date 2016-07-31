@@ -1,6 +1,6 @@
-import co from 'co';
+const co = require('co');
 
-export default function asyncRoute(handler) {
+module.exports = function asyncRoute(handler) {
   handler = co.wrap(handler);
   return function runAsyncRoute(req, res, next) {
     handler(req, res, next)
@@ -10,4 +10,4 @@ export default function asyncRoute(handler) {
         res.status(500).end();
       });
   };
-}
+};

@@ -1,7 +1,7 @@
-import co from 'co';
-import loadHtml from 'server/utils/loadHtml';
+const co = require('co');
+const loadHtml = require('server/utils/loadHtml');
 
-export default {
+module.exports = {
   getHomePage: co.wrap(function* loadHomePage() {
     return {
       content: (yield loadHtml('pages/home.html')).toString(),

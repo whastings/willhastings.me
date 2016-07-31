@@ -1,32 +1,24 @@
-const config = require('./build');
+const config = require('../build');
 const path = require('path');
+const shared = require('./shared.config');
 const webpack = require('webpack');
 
 const { CommonsChunkPlugin } = webpack.optimize;
 
 module.exports = {
-  resolve: {
-    extensions: ['', '.js', '.jsx'],
-    modules: [
-      path.resolve(process.cwd()),
-      'node_modules'
-    ]
-  },
-
   entry: {
     app: [
-      // Relative to client/scripts
-      './main.js'
+      './client/scripts/main.js'
     ],
     vendor: config.vendorModules
   },
 
-  output: {
-    filename: '[name].js',
-    chunkFilename: '[id].chunk.js',
-    sourcePrefix: '  ',
+  output: Object.assign({}, shared.output, {
+    path: path.join(shared.output.path, 'client/scripts'),
     publicPath: '/scripts/'
-  },
+  }),
+
+  resolve: shared.resolve,
 
   module: {
     loaders: [

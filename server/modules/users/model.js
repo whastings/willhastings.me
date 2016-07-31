@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
-import co from 'co';
-import denodeify from 'denodeify';
-import Sequelize from 'sequelize';
+const bcrypt = require('bcrypt');
+const co = require('co');
+const denodeify = require('denodeify');
+const Sequelize = require('sequelize');
 
 const SALT_ROUNDS = 10;
 
@@ -72,4 +72,4 @@ const User = {
   }
 };
 
-export default User;
+module.exports = User;

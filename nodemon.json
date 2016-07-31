@@ -1,8 +1,7 @@
 {
-  "script": "lib/startServer.js",
+  "script": "index.js",
   "ext": "js jsx json",
   "watch": [
-    "app/",
     "server/"
   ]
 }

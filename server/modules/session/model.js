@@ -1,7 +1,7 @@
-import co from 'co';
-import Sequelize from 'sequelize';
-import uid from 'uid-safe';
-import User from 'server/modules/users/model';
+const co = require('co');
+const Sequelize = require('sequelize');
+const uid = require('uid-safe');
+const User = require('server/modules/users/model');
 
 const schema = {
   token: {
@@ -38,4 +38,4 @@ function generateToken() {
   return uid(18);
 }
 
-export default Session;
+module.exports = Session;

@@ -1,10 +1,10 @@
-import Post from 'server/modules/posts/model';
-import Sequelize from 'sequelize';
-import Session from 'server/modules/session/model';
-import User from 'server/modules/users/model';
-import { production as dbConfig } from 'config/db';
+const Post = require('server/modules/posts/model');
+const Sequelize = require('sequelize');
+const Session = require('server/modules/session/model');
+const User = require('server/modules/users/model');
+const { production: dbConfig } = require('config/db');
 
-export default function initDb() {
+module.exports = function initDb() {
   let connection = new Sequelize(
     dbConfig.database, dbConfig.username, dbConfig.password,
     {
@@ -22,4 +22,4 @@ export default function initDb() {
 
   return connection.sync()
     .then(() => connection);
-}
+};

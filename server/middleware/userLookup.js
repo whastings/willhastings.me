@@ -1,7 +1,7 @@
-import asyncRoute from 'server/utils/asyncRoute';
-import Session from 'server/modules/session/model';
+const asyncRoute = require('server/utils/asyncRoute');
+const Session = require('server/modules/session/model');
 
-export default function userLookupMiddleware(db) {
+module.exports = function userLookupMiddleware(db) {
   return asyncRoute(function* userLookup(req, res, next) {
     let sessionCookie = req.signedCookies['session-token'];
 

@@ -1,17 +1,16 @@
-import App from 'app';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import configViews from 'server/utils/configViews';
-import express from 'express';
-import http from 'http';
-import initDB from 'server/db/initDB';
-import ROUTES from './routes';
-import userLookup from 'server/middleware/userLookup';
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const configViews = require('server/utils/configViews');
+const express = require('express');
+const http = require('http');
+const initDB = require('server/db/initDB');
+const ROUTES = require('./routes');
+const userLookup = require('server/middleware/userLookup');
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const IS_DEV = process.env.NODE_ENV === 'development';
 
-export default class ServerManager {
+module.exports = class ServerManager {
   constructor(options) {
     this.options = options;
     this._connectToDb();

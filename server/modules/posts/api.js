@@ -1,6 +1,6 @@
-import Post from './model';
+const Post = require('./model');
 
-export default {
+module.exports = {
   getPost(permalink) {
     // TODO: Handle post not found.
     return Post.model.findOne({where: {permalink}})

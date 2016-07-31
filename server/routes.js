@@ -1,10 +1,10 @@
-import app from 'server/modules/appRouter';
-import home from 'server/modules/home';
-import posts from 'server/modules/posts';
-import projects from 'server/modules/projects';
-import session from 'server/modules/session';
+const app = require('server/modules/appRouter');
+const home = require('server/modules/home');
+const posts = require('server/modules/posts');
+const projects = require('server/modules/projects');
+const session = require('server/modules/session');
 
-export default {
+module.exports = {
   '/': app,
   '/api/pages/home': home,
   '/api/pages/projects': projects,

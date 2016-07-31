@@ -1,34 +1,14 @@
-const Builder = require('./lib/build/Builder');
-const liveReload = require('./lib/liveReload');
+require('dotenv').config();
 
-// Run initial build and start server.
-startBuilder()
-  .then(startServer)
-  .then(() => console.log(`Server started`))
-  .catch((error) => console.log(`Error starting: ${error}`));
+const path = require('path');
+const ServerManager = require('./server');
 
-function startBuilder() {
-  let builder = new Builder();
+const DIST_DIR = path.join(process.cwd(), 'dist/client');
+const PORT = 8000;
 
-  if (process.env.NODE_ENV === 'production') {
-    return builder.build()
-      .then(() => console.log('Build complete!'))
-  }
+let serverManager = new ServerManager({staticDir: DIST_DIR});
+serverManager.startServer(PORT);
 
-  let watcher = builder.watch();
-
-  watcher.on('change', () => console.log('REBUILDING'));
-  watcher.on('error', (error) => console.log('Watcher error ', error));
-  liveReload(watcher);
-
-  return watcher.then(() => console.log('Initial build complete!'));
-}
-
-function startServer() {
-  // TODO: In prod, require startServer directly.
-  const nodemon = require('nodemon');
-  const nmConfig = require('./config/nodemon.json');
-
-  nodemon(nmConfig)
-    .on('restart', () => console.log('RESTARTING SERVER...'));
-}
+process.on('SIGTERM', () => serverManager.stopServer(() => process.exit()));
+// For nodemon:
+process.on('SIGUSR2', () => serverManager.stopServer(() => process.kill(process.pid, 'SIGUSR2')));

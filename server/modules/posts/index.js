@@ -1,8 +1,8 @@
-import api from './api';
-import asyncRoute from 'server/utils/asyncRoute';
-import authMiddleware from 'server/middleware/auth';
-import express from 'express';
-import Post from './model';
+const api = require('./api');
+const asyncRoute = require('server/utils/asyncRoute');
+const authMiddleware = require('server/middleware/auth');
+const express = require('express');
+const Post = require('./model');
 
 const POST_UPDATE_FIELDS = ['title', 'body', 'permalink'],
       POST_CREATE_FIELDS = POST_UPDATE_FIELDS.concat(['userId']);
@@ -46,4 +46,4 @@ app.delete('/:postId', authMiddleware, asyncRoute(function* postsRouteDelete(req
   res.end();
 }));
 
-export default app;
+module.exports = app;

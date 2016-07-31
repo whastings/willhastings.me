@@ -1,9 +1,9 @@
-import co from 'co';
-import faker from 'faker';
-import initDB from 'server/db/initDB';
-import Post from 'server/modules/posts/model';
-import User from 'server/modules/users/model';
-import { rand } from '@whastings/js_utils/lib/misc';
+const co = require('co');
+const faker = require('faker');
+const initDB = require('server/db/initDB');
+const Post = require('server/modules/posts/model');
+const User = require('server/modules/users/model');
+const { rand } = require('@whastings/js_utils/lib/misc');
 
 const NUM_POSTS = 25;
 
