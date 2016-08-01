@@ -88,6 +88,7 @@
     "node-inspector": "^0.12.8",
     "nodemon": "^1.10.0",
     "package-json-to-docker": "^0.1.0",
-    "tiny-lr": "^0.1.6"
+    "tiny-lr": "^0.2.1",
+    "watch": "^0.19.1"
   }
 }
