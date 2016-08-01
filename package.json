@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "./bin/build.js && webpack --progress --color --config=config/webpack.config.js",
-    "c": "./bin/repl.js",
-    "db:clear": "./bin/db.js clear",
-    "db:seed": "./bin/db.js seed",
+    "c": "./bin/repl",
+    "db:clear": "./bin/db clear",
+    "db:seed": "./bin/db seed",
     "debug": "node-debug index.js",
     "dev": "./bin/build.js && webpack --progress --color --config=config/webpack.config.js --watch",
     "start": "./bin/start",
