@@ -1,8 +1,10 @@
 const config = require('../build');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const shared = require('./shared.config');
 const webpack = require('webpack');
 
+const CWD = process.cwd();
 const { CommonsChunkPlugin } = webpack.optimize;
 
 module.exports = {
@@ -14,8 +16,8 @@ module.exports = {
   },
 
   output: Object.assign({}, shared.output, {
-    path: path.join(shared.output.path, 'client/scripts'),
-    publicPath: '/scripts/'
+    path: path.join(shared.output.path, 'client'),
+    publicPath: '/'
   }),
 
   resolve: shared.resolve,
@@ -23,15 +25,19 @@ module.exports = {
   module: {
     loaders: [
       {
-        loader: 'babel-loader',
         test: /\.jsx?$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: config.babelBrowser
+        query: config.babelBrowser,
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
       }
     ]
   },
 
-  //devtool: 'source-map',
+  devtool: 'source-map',
 
   plugins: [
     new CommonsChunkPlugin({
@@ -44,6 +50,7 @@ module.exports = {
       filename: 'app.js',
       children: true,
       minChunks: 2
-    })
+    }),
+    new ExtractTextPlugin({filename: 'app.css', allChunks: true}),
   ]
 };

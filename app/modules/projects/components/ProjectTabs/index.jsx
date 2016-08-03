@@ -1,4 +1,5 @@
-import ProjectList from './ProjectList';
+import './styles.scss';
+import ProjectList from 'projects/components/ProjectList';
 import React from 'react';
 import { map } from 'app/utils';
 

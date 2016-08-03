@@ -13,6 +13,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx'],
     modules: [
       path.resolve(CWD),
+      path.join(CWD, 'app/modules'),
       'node_modules'
     ]
   },

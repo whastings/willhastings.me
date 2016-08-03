@@ -1,3 +1,4 @@
+import 'app/styles/app.scss';
 import appApi from 'app/api';
 import createStore from 'app/createStore';
 import MiddlewareMap from 'app/utils/middlewareMap';

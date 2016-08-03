@@ -19,10 +19,14 @@ module.exports = {
   module: {
     loaders: [
       {
-        loader: 'babel-loader',
         test: /\.jsx?$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: config.babelNode
+      },
+      {
+        test: /\.scss$/,
+        loader: 'null-loader'
       }
     ]
   },

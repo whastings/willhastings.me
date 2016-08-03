@@ -1,3 +1,6 @@
+@import "app/styles/utils";
+@import "app/styles/mixins";
+
 .project-tabs {
   @include el(tab-list) {
     @include clearfix();
