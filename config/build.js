@@ -22,7 +22,6 @@ module.exports = {
 
   vendorModules: [
     '@whastings/js_utils',
-    'autobind-decorator',
     'page',
     'path-to-regexp',
     'react',
