@@ -4,8 +4,13 @@ html {
 }
 
 body {
-  color: get-color(dark-gray);
+  color: #595959;
   font-size: 1.6rem;
+}
+
+li,
+p {
+  line-height: 2.4rem;
 }
 
 a {
@@ -25,4 +30,45 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+button {
+  $blue: get-color(blue);
+  $dark-blue: get-color(dark-blue);
+
+  @include button(
+    $border-color: $blue,
+    $border-radius: 3px,
+    $color: $blue,
+    $hover-bg-color: $dark-blue,
+    $hover-border-color: $dark-blue,
+    $hover-color: #fff
+  );
+
+  padding: 6px 12px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+textarea {
+  border: 1px solid get-color(gray);
+  border-radius: 2px;
+  box-sizing: border-box;
+  display: block;
+  margin: 5px 0 20px;
+  outline-color: get-color(light-blue);
+  width: 100%;
+}
+
+input {
+  height: 3.5rem;
+  padding: 0 10px;
+}
+
+textarea {
+  min-height: 14.4rem;
+  padding: 10px;
 }
