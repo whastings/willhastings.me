@@ -7,12 +7,21 @@ const DIST_DIR = path.join(process.cwd(), 'dist/client');
 const PORT = 8000;
 
 let serverManager = new ServerManager({staticDir: DIST_DIR});
-serverManager.startServer(PORT);
+serverManager.startServer(PORT, () => console.log(`SERVER LISTENING ON PORT ${PORT}`));
 
+let lrServer;
 if (process.env.NODE_ENV === 'development') {
-  require('./lib/liveReload');
+  lrServer = require('./lib/liveReload');
 }
 
-process.on('SIGTERM', () => serverManager.stopServer(() => process.exit()));
+function stop() {
+  if (lrServer) {
+    lrServer.close();
+  }
+
+  serverManager.stopServer(() => process.exit());
+}
+
+process.on('SIGTERM', stop);
 // For nodemon:
-process.on('SIGUSR2', () => serverManager.stopServer(() => process.kill(process.pid, 'SIGUSR2')));
+process.on('SIGUSR2', stop);

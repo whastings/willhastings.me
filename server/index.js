@@ -25,8 +25,8 @@ module.exports = class ServerManager {
     this.server = http.createServer(app);
   }
 
-  startServer(port) {
-    this.server.listen(port);
+  startServer(port, callback = undefined) {
+    this.server.listen(port, callback);
   }
 
   stopServer(callback) {
@@ -37,7 +37,7 @@ module.exports = class ServerManager {
     this.dbConnection = null;
     initDB().then((connection) => this.dbConnection = connection);
   }
-}
+};
 
 function applyPreMiddleware(app, db) {
   app.use(cookieParser(COOKIE_SECRET));
