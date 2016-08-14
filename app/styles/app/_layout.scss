@@ -49,6 +49,10 @@ body {
   flex: 1;
   margin: 0 auto;
   max-width: 1200px;
-  padding: 10px 20px;
+  padding: 10px;
   width: 100%;
+
+  @include breakpoint(desktop) {
+    padding: 25px;
+  }
 }

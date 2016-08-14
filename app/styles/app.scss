@@ -1,7 +1,5 @@
 @import "~normalize.scss/normalize";
 
-@import "utils";
-@import "variables";
-@import "base";
-@import "layout";
-@import "mixins";
+@import "lib";
+@import "app/base";
+@import "app/layout";

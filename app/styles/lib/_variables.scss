@@ -4,6 +4,7 @@ $site-colors: (
   dark-gray: #666,
   gray: #999,
   light-blue: #b0e0f8,
+  light-gray: #f1f1f1,
   link: #0791d6,
   link-hover: #055f8c
 );
@@ -17,3 +18,9 @@ $site-colors: (
 
   @return $color;
 }
+
+$breakpoints: (
+  desktop: (
+    min-width: 900px
+  )
+);

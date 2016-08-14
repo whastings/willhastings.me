@@ -1,0 +1,26 @@
+@import "app/styles/lib";
+
+.home-page {
+  @include breakpoint(desktop) {
+    display: flex;
+  }
+}
+
+.home-about-me {
+  .wrapper {
+    @extend %card;
+  }
+
+  @include breakpoint(desktop) {
+    flex: 0 0 30%;
+    margin-right: 25px;
+  }
+}
+
+.home-recent-posts {
+  @extend %card;
+
+  @include breakpoint(desktop) {
+    flex: 1;
+  }
+}

@@ -1,5 +1,4 @@
-@import "app/styles/utils";
-@import "app/styles/mixins";
+@import "app/styles/lib";
 
 .project-tabs {
   @include el(tab-list) {

@@ -1,10 +1,17 @@
 import { HomePage } from './components';
 import { loadHomePage } from './actions';
+import { loadPosts } from 'app/modules/posts/actions';
 
 export default {
   index(req, res, store) {
-    res.dispatchAction(loadHomePage)
-      .then(() => res.render(HomePage, store.getState().pages.home))
+    Promise.all([res.dispatchAction(loadHomePage), res.dispatchAction(loadPosts)])
+      .then(() => {
+        let state = store.getState();
+        res.render(HomePage, {
+          content: state.pages.home.content,
+          posts: store.getPosts()
+        });
+      })
       .catch(console.log.bind(console));
   }
 };

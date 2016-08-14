@@ -1,5 +1,6 @@
-import PostListItem from './PostListItem';
+import './styles.scss';
 import React from 'react';
+import PostListItem from 'posts/components/PostListItem';
 import { map } from 'app/utils';
 
 export default function PostList({posts}) {
