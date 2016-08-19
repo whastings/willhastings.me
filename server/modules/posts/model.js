@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const slug = require('slug');
 const User = require('server/modules/users/model');
+const { toDateOnly } = require('server/utils/dates');
 
 const SLUG_OPTIONS = {
   lower: true
@@ -28,6 +29,10 @@ const schema = {
     allowNull: false,
     defaultValue: false,
     type: Sequelize.BOOLEAN
+  },
+
+  publishDate: {
+    type: Sequelize.DATEONLY
   }
 };
 
@@ -39,6 +44,14 @@ const methods = {
   },
 
   hooks: {
+    beforeCreate(post) {
+      maybeAddPublishDate(post);
+    },
+
+    beforeUpdate(post) {
+      maybeAddPublishDate(post);
+    },
+
     beforeValidate(post) {
       post.permalink = slug(post.title, SLUG_OPTIONS);
     }
@@ -55,3 +68,9 @@ const Post = {
 };
 
 module.exports = Post;
+
+function maybeAddPublishDate(post) {
+  if (post.published && !post.publishDate) {
+    post.publishDate = toDateOnly(new Date());
+  }
+}
