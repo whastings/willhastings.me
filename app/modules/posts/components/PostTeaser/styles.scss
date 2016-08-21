@@ -1,0 +1,24 @@
+@import "app/styles/lib";
+
+.post-teaser {
+  margin-bottom: 4rem;
+
+  @include el(title) {
+    margin: 0 0 0.5rem;
+
+    a {
+      color: get-color(blue);
+
+      &:hover,
+      &:focus {
+        color: get-color(dark-blue);
+        text-decoration: none;
+      }
+    }
+  }
+
+  @include el(publish-date) {
+    font-size: 90%;
+    font-weight: bold;
+  }
+}

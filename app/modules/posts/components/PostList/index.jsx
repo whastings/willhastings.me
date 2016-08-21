@@ -1,12 +1,12 @@
 import './styles.scss';
 import React from 'react';
-import PostListItem from 'posts/components/PostListItem';
+import PostTeaser from 'posts/components/PostTeaser';
 import { map } from 'app/utils';
 
 export default function PostList({posts}) {
   return (
-    <ul className="post-list">
-      {map(posts, (post) => <PostListItem post={post} key={post.id}/>)}
-    </ul>
+    <div className="post-list">
+      {map(posts, (post) => <PostTeaser post={post} key={post.id}/>)}
+    </div>
   );
 }
