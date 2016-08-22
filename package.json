@@ -29,7 +29,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "@whastings/css_utils": "0.0.2",
+    "@whastings/css_utils": "^0.1.0",
     "@whastings/js_utils": "^0.5.1",
     "babel-loader": "^6.2.1",
     "babel-plugin-transform-object-rest-spread": "^6.5.0",

@@ -13,8 +13,29 @@ body {
 }
 
 .site-header {
+  @include breakpoint(desktop) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .wrapper {
+    @include breakpoint(desktop) {
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 0 25px;
+    }
+  }
+
   @include el(heading) {
     margin: 0 0 1rem;
+
+    @include breakpoint(desktop) {
+      margin: 0;
+    }
+
     a {
       color: #fff;
       text-decoration: none;
@@ -22,6 +43,13 @@ body {
   }
 
   @include el(nav) {
+    @include breakpoint(desktop) {
+      display: flex;
+      flex-direction: column;
+      font-size: 2rem;
+      justify-content: center;
+    }
+
     ul {
       list-style: none;
       margin: 0;
@@ -31,6 +59,9 @@ body {
     li {
       display: inline-block;
       margin-right: 10px;
+      @include breakpoint(desktop) {
+        margin-right: 20px;
+      }
 
       &:last-child {
         margin-right: 0;
@@ -40,6 +71,10 @@ body {
     a {
       color: #fff;
       text-decoration: none;
+
+      @include breakpoint(desktop) {
+        position: relative;
+      }
     }
   }
 }
