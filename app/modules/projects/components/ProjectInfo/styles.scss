@@ -1,0 +1,18 @@
+@import "app/styles/lib";
+
+.project-info {
+  @extend %card;
+
+  @include el(header) {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @include el(title) {
+    margin: 0 0 15px;
+  }
+
+  .project-link {
+    margin-left: 10px;
+  }
+}
