@@ -98,4 +98,9 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   margin: -10px -10px 2rem;
   padding: 15px 10px;
+
+  @include breakpoint(desktop) {
+    margin: -26px 0 25px;
+    text-align: center;
+  }
 }

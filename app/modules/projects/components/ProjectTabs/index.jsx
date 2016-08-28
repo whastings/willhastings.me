@@ -27,19 +27,21 @@ export default class ProjectTabs extends Component {
 
     return (
       <div className="project-tabs">
-        <ul className="project-tabs__tab-list">
-          {map(categories, (category, i) => (
-            <li key={category.name}>
-              <a
-                href="#"
-                onClick={(event) => this._changeTab(event, i)}
-                className={category === currentCategory ? 'active' : ''}
-              >
-                {category.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="wrapper">
+          <ul className="project-tabs__tab-list">
+            {map(categories, (category, i) => (
+              <li key={category.name}>
+                <a
+                  href="#"
+                  onClick={(event) => this._changeTab(event, i)}
+                  className={category === currentCategory ? 'active' : ''}
+                >
+                  {category.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
         <ProjectList projects={currentCategory.projects}/>
       </div>
     );
