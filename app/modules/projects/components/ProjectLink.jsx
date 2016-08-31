@@ -26,11 +26,12 @@ const OPEN_ICON = (
 );
 
 export default function ProjectLink({href, projectName, type = 'code'}) {
+  let isCodeLink = type === 'code';
   return (
-    <a className="project-link" href={href} target="_blank">
-      {(type === 'code') ? CODE_ICON : OPEN_ICON}
+    <a className="project-link" href={href} target="_blank" title={isCodeLink ? 'View code' : 'Open project'}>
+      {isCodeLink ? CODE_ICON : OPEN_ICON}
       <span className="sr-only">
-        {(type === 'code') ? `Open code for ${projectName}` : `Open ${projectName}`}
+        {isCodeLink ? `Open code for ${projectName}` : `Open ${projectName}`}
       </span>
     </a>
   );
