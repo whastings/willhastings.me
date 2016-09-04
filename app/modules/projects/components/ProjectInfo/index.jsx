@@ -7,7 +7,7 @@ export default function Project({project}) {
   let projectName = project.name;
 
   return (
-    <article className="project-info">
+    <article className="project-info card">
       <header className="project-info__header">
         <h3 className="project-info__title">{projectName}</h3>
         <div className="project-info__links">

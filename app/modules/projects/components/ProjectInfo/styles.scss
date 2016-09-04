@@ -1,8 +1,6 @@
 @import "app/styles/lib";
 
 .project-info {
-  @extend %card;
-
   @include el(header) {
     display: flex;
     justify-content: space-between;

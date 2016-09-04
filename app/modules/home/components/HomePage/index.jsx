@@ -8,12 +8,12 @@ export default function homePage({content, posts}) {
   return (
     <div className="home-page" id="home-page-content">
       <section className="home-about-me">
-        <div className="wrapper">
+        <div className="card">
           <div className="content" dangerouslySetInnerHTML={content}></div>
           <SocialLinks/>
         </div>
       </section>
-      <section className="home-recent-posts">
+      <section className="home-recent-posts card">
         <h2>Recent Posts</h2>
         <PostList posts={posts}/>
       </section>
