@@ -1,8 +1,9 @@
-import AdminPostList from './AdminPostList';
+import './styles.scss';
+import AdminPostList from 'admin/components/AdminPostList';
+import AdminNav from 'admin/components/AdminNav';
 import React from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from 'app/modules/posts/selectors';
-import { PostList } from 'app/modules/posts/components';
 
 const { Component, PropTypes } = React;
 
@@ -11,17 +12,15 @@ class AdminIndexPage extends Component {
     let { onPostDelete, onSignOut, posts } = this.props;
 
     return (
-      <section className="admin-index-page admin-index">
-        <div className="admin-index__actions">
-          <button type="button" className="btn-sign-out" onClick={onSignOut}>
-            Sign Out
-          </button>
-          <a href="/admin/posts/new">Create Post</a>
+      <div className="admin-index-page admin-index">
+        <div className="admin-sidebar">
+          <AdminNav onSignOut={onSignOut}/>
         </div>
-
-        <h1>Your Posts</h1>
-        <AdminPostList posts={posts} onPostDelete={onPostDelete}/>
-      </section>
+        <section className="admin-post-index card">
+          <h2>Your Posts</h2>
+          <AdminPostList posts={posts} onPostDelete={onPostDelete}/>
+        </section>
+      </div>
     );
   }
 }
