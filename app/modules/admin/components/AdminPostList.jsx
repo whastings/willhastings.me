@@ -1,17 +1,20 @@
-import AdminPostListItem from './AdminPostListItem';
+import AdminPostControls from 'admin/components/AdminPostControls';
+import PostTeaser from 'posts/components/PostTeaser';
 import React from 'react';
 import { map } from 'app/utils';
 
 export default function AdminPostList({posts, onPostDelete}) {
   return (
-    <ul className="post-list admin-post-list">
+    <div className="post-list admin-post-list">
       {map(posts, (post) =>
-        <AdminPostListItem
+        <PostTeaser
           post={post}
+          showPreview={false}
           key={post.id}
-          onDelete={onPostDelete}
-        />
+        >
+          <AdminPostControls post={post} onDelete={onPostDelete}/>
+        </PostTeaser>
       )}
-    </ul>
+    </div>
   );
 }

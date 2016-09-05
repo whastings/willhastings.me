@@ -1,0 +1,15 @@
+@import "app/styles/lib";
+
+.admin-post-controls {
+  @include unstyled-list();
+
+  display: flex;
+
+  @include el(edit-link) {
+    display: block;
+  }
+
+  li {
+    @include list-margin(15px);
+  }
+}

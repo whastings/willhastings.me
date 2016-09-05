@@ -16,8 +16,8 @@ class AdminIndexPage extends Component {
         <div className="admin-sidebar">
           <AdminNav onSignOut={onSignOut}/>
         </div>
-        <section className="admin-post-index card">
-          <h2>Your Posts</h2>
+        <section className="admin-post-index">
+          <h2 className="section-title">Your Posts</h2>
           <AdminPostList posts={posts} onPostDelete={onPostDelete}/>
         </section>
       </div>

@@ -5,3 +5,19 @@
     display: table;
   }
 }
+
+@mixin list-margin($margin, $direction: right, $skip-last-child: true) {
+  margin-#{$direction}: $margin;
+
+  @if $skip-last-child {
+    &:last-child {
+      margin-#{$direction}: 0;
+    }
+  }
+}
+
+@mixin unstyled-list() {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

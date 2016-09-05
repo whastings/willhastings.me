@@ -41,7 +41,8 @@ a {
   }
 }
 
-button {
+button,
+.btn {
   $blue: get-color(blue);
   $dark-blue: get-color(dark-blue);
 

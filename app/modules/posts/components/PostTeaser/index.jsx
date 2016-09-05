@@ -2,7 +2,7 @@ import './styles.scss';
 import React from 'react';
 import { toFriendlyDate } from 'app/utils/dates';
 
-export default function PostTeaser({post}) {
+export default function PostTeaser({post, children, showPreview = true}) {
   let preview = {__html: post.preview};
   let publishDate = toFriendlyDate(post.publishDate);
 
@@ -12,7 +12,12 @@ export default function PostTeaser({post}) {
         <a href={`/blog/${post.permalink}`}>{post.title}</a>
       </h3>
       <p className="post-teaser__publish-date">{publishDate}</p>
-      <p className="post-teaser__preview" dangerouslySetInnerHTML={preview}></p>
+      {showPreview &&
+        <p
+          className="post-teaser__preview"
+          dangerouslySetInnerHTML={preview}>
+        </p>}
+        {children}
     </article>
   );
 }
