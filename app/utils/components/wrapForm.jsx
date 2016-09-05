@@ -49,7 +49,7 @@ function createWrappedInput(getValue, updateValue) {
     }
 
     render() {
-      let { inputType, field } = this.props,
+      let { inputType, field, ...inputProps } = this.props,
           value = getValue(field);
 
       let createInput = DOM[inputType] || DOM.input;
@@ -58,7 +58,7 @@ function createWrappedInput(getValue, updateValue) {
         ref: 'input',
         value,
         onChange: this.handleChange,
-        ...this.props
+        ...inputProps
       });
     }
   }

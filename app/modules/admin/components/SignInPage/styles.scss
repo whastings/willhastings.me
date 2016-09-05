@@ -1,0 +1,19 @@
+@import "app/styles/lib";
+
+.sign-in-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.sign-in-form {
+  margin-top: -20%;
+  width: 75%;
+
+  @include breakpoint(desktop) {
+    margin-top: -10%;
+    max-width: 400px;
+  }
+}

@@ -1,3 +1,4 @@
+import './styles.scss';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
@@ -16,8 +17,8 @@ class SignInPage extends Component {
 
     return (
       <section className="sign-in-page">
-        <h1>Sign In</h1>
-        <form className="sign-in-form" method="post" onSubmit={this.handleSubmit}>
+        <form className="sign-in-form card-primary" method="post" onSubmit={this.handleSubmit}>
+          <h2>Sign In</h2>
           <label htmlFor="username-input">Username:</label>
           <WrappedInput
             field="username"

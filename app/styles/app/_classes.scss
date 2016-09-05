@@ -21,6 +21,13 @@
   }
 }
 
+.card-primary {
+  @extend .card;
+
+  border: 1px get-color(blue) solid;
+  box-shadow: none;
+}
+
 .sr-only {
   @include sr-only();
 }
