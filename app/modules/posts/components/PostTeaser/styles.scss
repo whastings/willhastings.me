@@ -1,8 +1,6 @@
 @import "app/styles/lib";
 
 .post-teaser {
-  margin-bottom: 4rem;
-
   @include el(title) {
     margin: 0 0 0.5rem;
 

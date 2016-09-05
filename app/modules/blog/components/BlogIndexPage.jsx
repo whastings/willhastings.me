@@ -4,7 +4,7 @@ import { PostList } from 'app/modules/posts/components';
 export default function BlogIndexPage({posts}) {
   return (
     <section className="blog-index-page">
-      <h1>Blog</h1>
+      <h2 className="page-title">Blog</h2>
       <PostList posts={posts}/>
     </section>
   );

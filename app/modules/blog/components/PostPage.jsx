@@ -1,12 +1,12 @@
 import React from 'react';
+import SafeOutput from 'app/utils/components/SafeOutput';
 
 export default function PostPage({post}) {
-  let body = {__html: post.body};
   return (
     <section className="post-view-page post">
-      <h1>{post.title}</h1>
+      <h2 className="page-title">{post.title}</h2>
 
-      <div className="post__body" dangerouslySetInnerHTML={body}></div>
+      <SafeOutput className="post__body card" content={post.body}/>
     </section>
   );
 }

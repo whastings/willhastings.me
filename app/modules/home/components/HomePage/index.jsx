@@ -13,8 +13,7 @@ export default function homePage({content, posts}) {
           <SocialLinks/>
         </div>
       </section>
-      <section className="home-recent-posts card">
-        <h2>Recent Posts</h2>
+      <section className="home-recent-posts">
         <PostList posts={posts}/>
       </section>
     </div>

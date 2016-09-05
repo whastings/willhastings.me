@@ -7,7 +7,7 @@ export default function PostTeaser({post}) {
   let publishDate = toFriendlyDate(post.publishDate);
 
   return (
-    <article className="post-teaser">
+    <article className="post-teaser card">
       <h3 className="post-teaser__title">
         <a href={`/blog/${post.permalink}`}>{post.title}</a>
       </h3>
