@@ -7,6 +7,8 @@
 }
 
 .home-about-me {
+  margin-bottom: 30px;
+
   @include breakpoint(desktop) {
     flex: 0 0 30%;
     margin-right: 25px;
