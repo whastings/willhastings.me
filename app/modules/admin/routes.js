@@ -5,7 +5,7 @@ import {
 } from 'app/modules/posts/actions';
 
 export default {
-  index(req, res, store) {
+  index(req, res) {
     res.dispatchAction(loadPosts)
       .then(() => res.render(AdminIndexPage, {
         onPostDelete: handlePostDelete.bind(null, res),
@@ -14,8 +14,11 @@ export default {
       .catch(console.log.bind(console));
   },
 
-  newPost(req, res, store) {
-    res.render(NewPostPage, {onFormSubmit: handlePostCreate.bind(null, res)});
+  newPost(req, res) {
+    res.render(NewPostPage, {
+      onFormSubmit: handlePostCreate.bind(null, res),
+      onSignOut: handleSignOut.bind(null, res)
+    });
   },
 
   editPost(req, res, store) {

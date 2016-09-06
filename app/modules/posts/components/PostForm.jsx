@@ -29,7 +29,9 @@ class PostForm extends Component {
           id="post-form__body-input"
         />
 
-        <button>Submit</button>
+        <div className="post-form__actions">
+          <button>Submit</button>
+        </div>
       </form>
     );
   }

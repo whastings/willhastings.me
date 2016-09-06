@@ -1,0 +1,24 @@
+@import "app/styles/lib";
+
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @include breakpoint(desktop) {
+    flex-direction: row;
+  }
+}
+
+.admin-sidebar {
+  @include breakpoint(desktop) {
+    flex: 0 0 20%;
+    margin-right: 25px;
+  }
+}
+
+.admin-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}

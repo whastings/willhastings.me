@@ -1,6 +1,5 @@
-import './styles.scss';
+import AdminPageLayout from 'admin/components/AdminPageLayout';
 import AdminPostList from 'admin/components/AdminPostList';
-import AdminNav from 'admin/components/AdminNav';
 import React from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from 'app/modules/posts/selectors';
@@ -12,15 +11,12 @@ class AdminIndexPage extends Component {
     let { onPostDelete, onSignOut, posts } = this.props;
 
     return (
-      <div className="admin-index-page admin-index">
-        <div className="admin-sidebar">
-          <AdminNav onSignOut={onSignOut}/>
-        </div>
+      <AdminPageLayout onSignOut={onSignOut}>
         <section className="admin-post-index">
           <h2 className="section-title">Your Posts</h2>
           <AdminPostList posts={posts} onPostDelete={onPostDelete}/>
         </section>
-      </div>
+      </AdminPageLayout>
     );
   }
 }
