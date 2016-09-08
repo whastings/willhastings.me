@@ -1,13 +1,16 @@
+import AdminPageLayout from 'admin/components/AdminPageLayout';
 import React from 'react';
 import { PostForm } from 'app/modules/posts/components';
 
-const { Component, PropTypes } = React;
+const { PropTypes } = React;
 
-export default function EditPostPage({onFormSubmit, post}) {
+export default function EditPostPage({onFormSubmit, onSignOut, post}) {
   return (
-    <section className="edit-post-page">
-      <PostForm onSubmit={onFormSubmit} post={post}/>
-    </section>
+    <AdminPageLayout onSignOut={onSignOut}>
+      <section className="edit-post-page post-form-page">
+        <PostForm onSubmit={onFormSubmit} post={post}/>
+      </section>
+    </AdminPageLayout>
   );
 }
 

@@ -1,3 +1,4 @@
+import './styles.scss';
 import { AdminIndexPage, EditPostPage, NewPostPage, SignInPage } from './components';
 import { signIn, signOut } from './actions';
 import {
@@ -31,7 +32,8 @@ export default {
           EditPostPage,
           {
             post,
-            onFormSubmit: handlePostEdit.bind(null, res, post)
+            onFormSubmit: handlePostEdit.bind(null, res, post),
+            onSignOut: handleSignOut.bind(null, res)
           }
         );
       })

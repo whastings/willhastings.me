@@ -33,7 +33,7 @@ export function loadPost(api, store, dispatchAction, permalink) {
   };
 }
 
-export function loadPosts(api, store, dispatchAction) {
+export function loadPosts(api, store) {
   if (store.getPosts().length) {
     return null;
   }
