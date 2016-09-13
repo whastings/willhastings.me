@@ -2,6 +2,7 @@ const api = require('./api');
 const asyncRoute = require('server/utils/asyncRoute');
 const authMiddleware = require('server/middleware/auth');
 const express = require('express');
+const formatters = require('./formatters');
 const Post = require('./model');
 
 const POST_UPDATE_FIELDS = ['title', 'body', 'permalink'],
@@ -15,7 +16,8 @@ app.get('/', asyncRoute(function* postsRouteIndex(req, res) {
 
 app.get('/:post', asyncRoute(function* postsRouteView(req, res) {
   let permalink = req.params.post;
-  res.json(yield api.getPost(permalink));
+  let options = {editable: !!req.query.editable};
+  res.json(yield api.getPost(permalink, options));
 }));
 
 app.post('/', authMiddleware, asyncRoute(function* postsRouteCreate(req, res) {
@@ -35,7 +37,7 @@ app.put('/:postId', authMiddleware, asyncRoute(function* postsRouteUpdate(req, r
 
   yield post.update(postData, {fields: POST_UPDATE_FIELDS});
 
-  res.json(post.toJSON());
+  res.json(formatters.post(post));
 }));
 
 app.delete('/:postId', authMiddleware, asyncRoute(function* postsRouteDelete(req, res) {

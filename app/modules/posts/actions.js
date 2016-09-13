@@ -18,26 +18,24 @@ export function deletePost(api, store, dispatchAction, post) {
   };
 }
 
-export function loadPost(api, store, dispatchAction, permalink) {
+export function loadPost(api, store, dispatchAction, permalink, options = {}) {
   let post = store.getPost(permalink);
-  if (post && post.body) {
+  let isEditable = options.editable;
+  if (post && post.body && (!isEditable || post.bodyRaw)) {
     return null;
   }
+  let queryParams = isEditable ? {editable: isEditable} : null;
 
   return {
     type: 'POST_LOAD',
     payload: {
-      promise: api.getPost(permalink)
+      promise: api.getPost(permalink, queryParams)
         .then((post) => ({type: 'POST_ADD', payload: post}))
     }
   };
 }
 
-export function loadPosts(api, store) {
-  if (store.getPosts().length) {
-    return null;
-  }
-
+export function loadPosts(api) {
   return {
     type: 'POSTS_LOAD',
     payload: {

@@ -56,6 +56,12 @@ export function sendDelete(route) {
   // TODO: Check response.ok
 }
 
+export function stringifyQueryParams(queryParams) {
+  return '?' + Object.keys(queryParams)
+    .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key]))
+    .join('&');
+}
+
 function createOptions(options) {
   return Object.assign({}, DEFAULT_OPTIONS, options);
 }

@@ -1,4 +1,10 @@
-import { getJSON, postJSON, putJSON, sendDelete } from 'app/utils/request';
+import {
+  getJSON,
+  postJSON,
+  putJSON,
+  sendDelete,
+  stringifyQueryParams
+} from 'app/utils/request';
 
 export default {
   createPost(postData) {
@@ -9,8 +15,10 @@ export default {
     return sendDelete(`/api/posts/${postId}`);
   },
 
-  getPost(permalink) {
-    return getJSON(`/api/posts/${permalink}`);
+  getPost(permalink, queryParams) {
+    let url = `/api/posts/${permalink}`;
+    url = queryParams ? url + stringifyQueryParams(queryParams) : url;
+    return getJSON(url);
   },
 
   getPosts() {

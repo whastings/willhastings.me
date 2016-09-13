@@ -7,8 +7,9 @@ const { Component, PropTypes } = React;
 class PostForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
+    let { id } = this.props.post;
     let { titleValue: title, bodyValue: body } = this.props;
-    this.props.onSubmit({title, body});
+    this.props.onSubmit({id, title, body});
   }
 
   render() {
@@ -46,5 +47,11 @@ autobindMethods(PostForm, 'handleSubmit');
 export default wrapForm({
   component: PostForm,
   fields: ['title', 'body'],
-  initials: (props) => props.post
+  initials: (props) => {
+    if (!props.post) {
+      return null;
+    }
+    let { bodyRaw, ...postData } = props.post;
+    return {...postData, body: bodyRaw};
+  }
 });

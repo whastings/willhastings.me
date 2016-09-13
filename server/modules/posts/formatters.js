@@ -2,13 +2,17 @@ const marked = require('marked');
 const { toISODate } = require('server/utils/dates');
 
 const formatters = module.exports = {
-  post(model, includeBody = true) {
+  post(model, {editable = false, includeBody = true} = {}) {
     let data = model.toJSON();
     data.publishDate = toISODate(model.publishDate);
-    data.body = marked(data.body);
+    if (editable) {
+      data.bodyRaw = data.body;
+    }
     data.preview = data.preview || getPreviewFromBody(data.body);
 
-    if (!includeBody) {
+    if (includeBody) {
+      data.body = marked(data.body);
+    } else {
       delete data.body;
     }
 
@@ -16,7 +20,7 @@ const formatters = module.exports = {
   },
 
   postList(models) {
-    let data = models.map((model) => formatters.post(model, false));
+    let data = models.map((model) => formatters.post(model, {includeBody: false}));
 
     return data;
   }

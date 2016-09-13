@@ -25,14 +25,14 @@ export default {
   editPost(req, res, store) {
     let permalink = req.params.post;
 
-    res.dispatchAction(loadPost, permalink)
+    res.dispatchAction(loadPost, permalink, {editable: true})
       .then(() => {
         let post = store.getPost(permalink);
         res.render(
           EditPostPage,
           {
             post,
-            onFormSubmit: handlePostEdit.bind(null, res, post),
+            onFormSubmit: handlePostEdit.bind(null, res),
             onSignOut: handleSignOut.bind(null, res)
           }
         );
@@ -62,9 +62,8 @@ function handlePostDelete(res, post) {
     .catch(console.log.bind(console));
 }
 
-function handlePostEdit(res, post, postData) {
-  post = post.merge(postData);
-  res.dispatchAction(updatePost, post)
+function handlePostEdit(res, postData) {
+  res.dispatchAction(updatePost, postData)
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
     .catch(console.log.bind(console));
 }
