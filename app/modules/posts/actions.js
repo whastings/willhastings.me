@@ -24,7 +24,7 @@ export function loadPost(api, store, dispatchAction, permalink, options = {}) {
   if (post && post.body && (!isEditable || post.bodyRaw)) {
     return null;
   }
-  let queryParams = isEditable ? {editable: isEditable} : null;
+  let queryParams = isEditable ? {editable: isEditable} : undefined;
 
   return {
     type: 'POST_LOAD',
