@@ -4,7 +4,7 @@ import { toFriendlyDate } from 'app/utils/dates';
 
 export default function PostTeaser({post, children, showPreview = true}) {
   let preview = {__html: post.preview};
-  let publishDate = toFriendlyDate(post.publishDate);
+  let publishDate = post.publishDate ? toFriendlyDate(post.publishDate) : 'Unpublished';
 
   return (
     <article className="post-teaser card">

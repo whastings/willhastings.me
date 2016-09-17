@@ -11,7 +11,14 @@ const POST_UPDATE_FIELDS = ['title', 'body', 'permalink'],
 const app = express();
 
 app.get('/', asyncRoute(function* postsRouteIndex(req, res) {
-  res.json(yield api.getPosts());
+  let options = {includeUnpublished: !!req.query.includeUnpublished};
+
+  if (options.includeUnpublished && !req.currentUser) {
+    res.status(401).end();
+    return;
+  }
+
+  res.json(yield api.getPosts(options));
 }));
 
 app.get('/:post', asyncRoute(function* postsRouteView(req, res) {
@@ -27,7 +34,7 @@ app.post('/', authMiddleware, asyncRoute(function* postsRouteCreate(req, res) {
   postData = Object.assign({}, postData, {userId: user.id});
   let post = yield Post.model.create(postData, {fields: POST_CREATE_FIELDS});
 
-  res.json(post.toJSON());
+  res.json(formatters.post(post));
 }));
 
 app.put('/:postId', authMiddleware, asyncRoute(function* postsRouteUpdate(req, res) {

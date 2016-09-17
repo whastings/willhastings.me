@@ -15,14 +15,16 @@ export default {
     return sendDelete(`/api/posts/${postId}`);
   },
 
-  getPost(permalink, queryParams) {
+  getPost(permalink, queryParams = null) {
     let url = `/api/posts/${permalink}`;
     url = queryParams ? url + stringifyQueryParams(queryParams) : url;
     return getJSON(url);
   },
 
-  getPosts() {
-    return getJSON('/api/posts');
+  getPosts(queryParams = null) {
+    let url = '/api/posts';
+    url = queryParams ? url + stringifyQueryParams(queryParams) : url;
+    return getJSON(url);
   },
 
   savePost(postData) {

@@ -4,10 +4,15 @@ const { toISODate } = require('server/utils/dates');
 const formatters = module.exports = {
   post(model, {editable = false, includeBody = true} = {}) {
     let data = model.toJSON();
-    data.publishDate = toISODate(model.publishDate);
+
+    if (data.publishDate) {
+      data.publishDate = toISODate(model.publishDate);
+    }
+
     if (editable) {
       data.bodyRaw = data.body;
     }
+
     data.preview = data.preview || getPreviewFromBody(data.body);
 
     if (includeBody) {

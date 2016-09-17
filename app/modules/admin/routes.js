@@ -7,7 +7,7 @@ import {
 
 export default {
   index(req, res) {
-    res.dispatchAction(loadPosts)
+    res.dispatchAction(loadPosts, {includeUnpublished: true})
       .then(() => res.render(AdminIndexPage, {
         onPostDelete: handlePostDelete.bind(null, res),
         onSignOut: handleSignOut.bind(null, res)

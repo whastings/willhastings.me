@@ -8,8 +8,9 @@ module.exports = {
       .then((post) => formatters.post(post, options));
   },
 
-  getPosts() {
-    return Post.model.findAll()
+  getPosts({includeUnpublished = false} = {}) {
+    let conditions = includeUnpublished ? {} : {published: true};
+    return Post.model.findAll({where: conditions})
       .then(formatters.postList);
   }
 };

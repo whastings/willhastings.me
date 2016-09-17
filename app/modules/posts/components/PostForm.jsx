@@ -7,8 +7,8 @@ const { Component, PropTypes } = React;
 class PostForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
-    let { id } = this.props.post;
-    let { titleValue: title, bodyValue: body } = this.props;
+    let { post, titleValue: title, bodyValue: body } = this.props;
+    let id = post && post.id;
     this.props.onSubmit({id, title, body});
   }
 

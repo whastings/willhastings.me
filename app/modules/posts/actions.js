@@ -35,11 +35,11 @@ export function loadPost(api, store, dispatchAction, permalink, options = {}) {
   };
 }
 
-export function loadPosts(api) {
+export function loadPosts(api, store, dispatchAction, options) {
   return {
     type: 'POSTS_LOAD',
     payload: {
-      promise: api.getPosts()
+      promise: api.getPosts(options)
         .then((posts) => ({type: 'POSTS_ADD', payload: posts}))
     }
   };
