@@ -30,7 +30,13 @@ export function loadPost(api, store, dispatchAction, permalink, options = {}) {
     type: 'POST_LOAD',
     payload: {
       promise: api.getPost(permalink, queryParams)
-        .then((post) => ({type: 'POST_ADD', payload: post}))
+        .then((post) => {
+          if (!post.published && !store.getState().admin.currentUserId) {
+            return null;
+          }
+
+          return {type: 'POST_ADD', payload: post};
+        })
     }
   };
 }

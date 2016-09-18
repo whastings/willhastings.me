@@ -11,6 +11,7 @@ export default {
   view(req, res, store) {
     let permalink = req.params.post;
     res.dispatchAction(loadPost, permalink)
+      // TODO: Handle post not found.
       .then(() => res.render(PostPage, {post: store.getPost(permalink)}))
       .catch(console.log.bind(console));
   }

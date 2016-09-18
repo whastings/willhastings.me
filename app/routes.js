@@ -3,7 +3,8 @@ import authMiddleware from 'app/middleware/auth';
 import currentUserMiddleware from 'app/middleware/currentUser';
 
 export const PRE_MIDDLEWARE = {
-  '/admin*': [currentUserMiddleware, authMiddleware]
+  '/admin*': [currentUserMiddleware, authMiddleware],
+  '/blog/:post': [currentUserMiddleware]
 };
 
 export const ROUTES = {

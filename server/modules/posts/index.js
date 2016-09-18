@@ -24,7 +24,13 @@ app.get('/', asyncRoute(function* postsRouteIndex(req, res) {
 app.get('/:post', asyncRoute(function* postsRouteView(req, res) {
   let permalink = req.params.post;
   let options = {editable: !!req.query.editable};
-  res.json(yield api.getPost(permalink, options));
+  let post = yield api.getPost(permalink, options);
+
+  if (!post || (!post.published && !req.currentUser)) {
+    res.status(404).end();
+  }
+
+  res.json(post);
 }));
 
 app.post('/', authMiddleware, asyncRoute(function* postsRouteCreate(req, res) {
