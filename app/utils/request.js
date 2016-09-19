@@ -1,5 +1,7 @@
 const DEFAULT_OPTIONS = {
-  credentials: 'same-origin' // Allow setting cookies.
+  credentials: 'same-origin', // Allow setting cookies.
+  headers: {},
+  method: 'GET'
 };
 
 const JSON_HEADERS = {
@@ -8,13 +10,13 @@ const JSON_HEADERS = {
 };
 
 export function deleteResource(route) {
-  return fetch(route, createOptions({
+  return fetch(route, getOptions({
     method: 'DELETE'
   }));
 }
 
 export function getJSON(route) {
-  return fetch(route, DEFAULT_OPTIONS)
+  return fetch(route, getOptions())
     .then((response) => {
       // TODO: Check response.ok
       return response.json();
@@ -24,7 +26,7 @@ export function getJSON(route) {
 export function postJSON(route, body = null) {
   body = body ? JSON.stringify(body) : undefined;
 
-  return fetch(route, createOptions({
+  return fetch(route, getOptions({
     body,
     headers: JSON_HEADERS,
     method: 'POST',
@@ -38,7 +40,7 @@ export function postJSON(route, body = null) {
 export function putJSON(route, body) {
   body = JSON.stringify(body);
 
-  return fetch(route, createOptions({
+  return fetch(route, getOptions({
     body,
     headers: JSON_HEADERS,
     method: 'PUT'
@@ -50,7 +52,7 @@ export function putJSON(route, body) {
 }
 
 export function sendDelete(route) {
-  return fetch(route, createOptions({
+  return fetch(route, getOptions({
     method: 'DELETE'
   }));
   // TODO: Check response.ok
@@ -62,6 +64,24 @@ export function stringifyQueryParams(queryParams) {
     .join('&');
 }
 
-function createOptions(options) {
-  return Object.assign({}, DEFAULT_OPTIONS, options);
+function getCsrfToken() {
+  let tokenMetaTag = document.querySelector('meta[name=csrf-token]');
+
+  if (!tokenMetaTag) {
+    throw new Error('CSRF token metatag not present');
+  }
+
+  return tokenMetaTag.getAttribute('content');
+}
+
+function getOptions(custom = {}) {
+  let options = Object.assign({}, DEFAULT_OPTIONS, custom);
+
+  if (options.method !== 'GET') {
+    options.headers = Object.assign({}, options.headers, {
+      'X-CSRF-Token': getCsrfToken()
+    });
+  }
+
+  return options;
 }

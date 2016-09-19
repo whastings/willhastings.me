@@ -16,6 +16,7 @@ function routeToApp(req, res) {
   App = loadApp(); // In dev, this will hot-reload the app.
   let app = new App((element) => {
     res.render('base', {
+      csrfToken: req.csrfToken(),
       data: JSON.stringify(app.store.getState()),
       html: renderToString(element),
       isDev: IS_DEV

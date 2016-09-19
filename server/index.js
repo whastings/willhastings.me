@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const configViews = require('server/utils/configViews');
+const csrf = require('csurf');
 const express = require('express');
 const http = require('http');
 const initDB = require('server/db/initDB');
@@ -42,6 +43,10 @@ module.exports = class ServerManager {
 function applyPreMiddleware(app, db) {
   app.use(cookieParser(COOKIE_SECRET));
   app.use(bodyParser.json());
+  app.use(csrf({
+    cookie: {httpOnly: true},
+    value: (req) => req.headers['x-csrf-token']
+  }));
   app.use(/\/(?!(?:scripts|styles))\w+/, userLookup(db));
 }
 

@@ -44,6 +44,7 @@
     "co": "^4.6.0",
     "cookie-parser": "^1.4.0",
     "css-loader": "^0.23.1",
+    "csurf": "^1.9.0",
     "denodeify": "^1.2.1",
     "dotenv": "^2.0.0",
     "express": "^4.13.3",
