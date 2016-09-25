@@ -1,19 +1,19 @@
-export default function memoizeStateLookup(getState, lookupFn) {
-  let currentState,
-      argCache = Object.create(null);
+export default function memoizeStateLookup(sourceFromState, lookupFn) {
+  let currentSource;
+  let argCache = Object.create(null);
 
-  return function(arg) {
-    let state = getState();
+  return function(state, arg) {
+    let source = sourceFromState(state);
 
-    if (state !== currentState) {
+    if (source !== currentSource) {
       argCache = Object.create(null);
-      currentState = state;
+      currentSource = source;
     }
 
     let result = argCache[arg];
 
     if (result === undefined) {
-      result = argCache[arg] = lookupFn(state, arg);
+      result = argCache[arg] = lookupFn(source, arg);
     }
 
     return result;

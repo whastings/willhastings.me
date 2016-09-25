@@ -1,18 +1,20 @@
 import { BlogIndexPage, PostPage } from './components';
-import { loadPost, loadPosts } from 'app/modules/posts/actions';
+import { loadPost, loadPosts } from 'posts/actions';
+import { getPost, getPosts } from 'posts/selectors';
 
 export default {
-  index(req, res, store)  {
+  index(req, res, getState)  {
     res.dispatch(loadPosts())
-      .then(() => res.render(BlogIndexPage, {posts: store.getPosts()}))
+      .then(() => res.render(BlogIndexPage, {posts: getPosts(getState())}))
       .catch(console.log.bind(console));
   },
 
-  view(req, res, store) {
+  view(req, res, getState) {
     let permalink = req.params.post;
+
     res.dispatch(loadPost(permalink))
       // TODO: Handle post not found.
-      .then(() => res.render(PostPage, {post: store.getPost(permalink)}))
+      .then(() => res.render(PostPage, {post: getPost(getState(), permalink)}))
       .catch(console.log.bind(console));
   }
 };

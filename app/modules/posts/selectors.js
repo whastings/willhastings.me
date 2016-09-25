@@ -8,20 +8,10 @@ export const getPosts = createSelector(
     .sort(comparePosts)
 );
 
-export function getPost(state, permalink) {
-  // TODO: Memoize.
-  return getPosts(state)
-    .find((post) => post.permalink === permalink);
-}
-
-export default function postsSelectors(store) {
-  store.getPosts = () => getPosts(store.getState()),
-
-  store.getPost = memoizeStateLookup(
-    store.getPosts,
-    (posts, permalink) => posts.find((post) => post.permalink === permalink)
-  );
-}
+export const getPost = memoizeStateLookup(
+  getPosts,
+  (posts, permalink) => posts.find((post) => post.permalink === permalink)
+);
 
 function comparePosts(post1, post2) {
   if (!post1.published && !post2.published) {

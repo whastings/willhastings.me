@@ -2,7 +2,7 @@ import AdminPageLayout from 'admin/components/AdminPageLayout';
 import AdminPostList from 'admin/components/AdminPostList';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPosts } from 'app/modules/posts/selectors';
+import { getPosts } from 'posts/selectors';
 
 const { Component, PropTypes } = React;
 

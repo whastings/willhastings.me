@@ -1,9 +1,8 @@
 import { addUser } from 'app/modules/users/actions';
 import { setCurrentUserId } from 'app/modules/admin/actions';
 
-export default function currentUserMiddleware(req, res, store, next) {
-  let state = store.getState(),
-      { currentUserId } = state.admin;
+export default function currentUserMiddleware(req, res, getState, next) {
+  let { currentUserId } = getState().admin;
 
   if (!currentUserId && req.currentUser) {
     res.dispatch(addUser(req.currentUser));

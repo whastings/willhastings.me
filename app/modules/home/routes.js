@@ -1,15 +1,17 @@
 import { HomePage } from './components';
 import { loadHomePage } from './actions';
-import { loadPosts } from 'app/modules/posts/actions';
+import { getPage } from 'pages/selectors';
+import { loadPosts } from 'posts/actions';
+import { getPosts } from 'posts/selectors';
 
 export default {
-  index(req, res, store) {
+  index(req, res, getState) {
     Promise.all([res.dispatch(loadHomePage()), res.dispatch(loadPosts())])
       .then(() => {
-        let state = store.getState();
+        let state = getState();
         res.render(HomePage, {
-          content: state.pages.home.content,
-          posts: store.getPosts()
+          content: getPage(state, 'home').content,
+          posts: getPosts(state)
         });
       })
       .catch(console.log.bind(console));

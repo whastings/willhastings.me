@@ -3,7 +3,8 @@ import { AdminIndexPage, EditPostPage, NewPostPage, SignInPage } from './compone
 import { signIn, signOut } from './actions';
 import {
   createPost, deletePost, loadPost, loadPosts, updatePost
-} from 'app/modules/posts/actions';
+} from 'posts/actions';
+import { getPost } from 'posts/selectors';
 
 export default {
   index(req, res) {
@@ -22,12 +23,12 @@ export default {
     });
   },
 
-  editPost(req, res, store) {
+  editPost(req, res, getState) {
     let permalink = req.params.post;
 
     res.dispatch(loadPost(permalink, {editable: true}))
       .then(() => {
-        let post = store.getPost(permalink);
+        let post = getPost(getState(), permalink);
         res.render(
           EditPostPage,
           {

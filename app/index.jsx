@@ -48,7 +48,7 @@ export default class App {
       handlers.push(routeHandler);
     }
 
-    runRouteHandlers(handlers, [req, res, store]);
+    runRouteHandlers(handlers, [req, res, store.getState]);
   }
 }
 

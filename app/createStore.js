@@ -8,9 +8,6 @@ import pagesReducer from 'app/modules/pages/reducer';
 import postsReducer from 'app/modules/posts/reducer';
 import usersReducer from 'app/modules/users/reducer';
 
-// Selectors:
-import postsSelectors from 'app/modules/posts/selectors';
-
 const INITIAL_STATE = immutable(getInitialState() || {
   admin: {
     currentUserId: null
@@ -45,11 +42,7 @@ function getInitialState() {
 }
 
 export default function createStore(api) {
-  let store = applyMiddleware(
+  return applyMiddleware(
     asyncActionMiddleware(api)
   )(createReduxStore)(dataReducer);
-
-  postsSelectors(store);
-
-  return store;
 }
