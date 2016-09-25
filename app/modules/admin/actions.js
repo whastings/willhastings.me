@@ -6,33 +6,25 @@ export function clearCurrentUserId() {
   };
 }
 
-export function setCurrentUserId(api, store, dispatchAction, id) {
+export function setCurrentUserId(id) {
   return {
     type: 'CURRENT_USER_ID_SET',
     payload: id
   };
 }
 
-export function signIn(api, store, dispatchAction, username, password) {
-  return {
-    type: 'SIGN_IN',
-    payload: {
-      promise: api.createSession(username, password)
-        .then((session) => (action, dispatch) => {
-          let { user } = session;
-          dispatchAction(addUser, user);
-          dispatchAction(setCurrentUserId, user.id);
-        })
-    }
-  };
+export function signIn(username, password) {
+  return (api, getState, dispatch) =>
+    api.createSession(username, password)
+      .then((session) => {
+        let { user } = session;
+        dispatch(addUser(user));
+        return setCurrentUserId(user.id);
+      });
 }
 
-export function signOut(api, store, dispatchAction) {
-  return {
-    type: 'SIGN_OUT',
-    payload: {
-      promise: api.destroySession()
-        .then(() => dispatchAction(clearCurrentUserId))
-    }
-  };
+export function signOut() {
+  return (api) =>
+    api.destroySession()
+      .then(clearCurrentUserId);
 }

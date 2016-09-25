@@ -1,6 +1,5 @@
+import asyncActionMiddleware from 'app/utils/asyncActionMiddleware';
 import immutable from 'seamless-immutable';
-import promiseMiddleware from 'redux-promise-middleware';
-import thunk from 'redux-thunk';
 import { applyMiddleware, createStore as createReduxStore } from 'redux';
 
 // Reducers:
@@ -45,10 +44,9 @@ function getInitialState() {
   return initDataEl ? JSON.parse(initDataEl.textContent) : null;
 }
 
-export default function createStore() {
+export default function createStore(api) {
   let store = applyMiddleware(
-    promiseMiddleware(),
-    thunk
+    asyncActionMiddleware(api)
   )(createReduxStore)(dataReducer);
 
   postsSelectors(store);

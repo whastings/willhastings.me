@@ -6,8 +6,8 @@ export default function currentUserMiddleware(req, res, store, next) {
       { currentUserId } = state.admin;
 
   if (!currentUserId && req.currentUser) {
-    res.dispatchAction(addUser, req.currentUser);
-    res.dispatchAction(setCurrentUserId, req.currentUser.id);
+    res.dispatch(addUser(req.currentUser));
+    res.dispatch(setCurrentUserId(req.currentUser.id));
   }
 
   next();

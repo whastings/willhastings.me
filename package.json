@@ -64,8 +64,6 @@
     "react-dom": "^15.0.0",
     "react-redux": "^4.4.1",
     "redux": "^3.0.5",
-    "redux-promise-middleware": "2.3.2",
-    "redux-thunk": "^1.0.3",
     "require-reload": "^0.2.2",
     "reselect": "^2.0.2",
     "sass-loader": "^4.0.0",

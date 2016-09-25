@@ -7,7 +7,7 @@ import {
 
 export default {
   index(req, res) {
-    res.dispatchAction(loadPosts, {includeUnpublished: true})
+    res.dispatch(loadPosts({includeUnpublished: true}))
       .then(() => res.render(AdminIndexPage, {
         onPostDelete: handlePostDelete.bind(null, res),
         onSignOut: handleSignOut.bind(null, res)
@@ -25,7 +25,7 @@ export default {
   editPost(req, res, store) {
     let permalink = req.params.post;
 
-    res.dispatchAction(loadPost, permalink, {editable: true})
+    res.dispatch(loadPost(permalink, {editable: true}))
       .then(() => {
         let post = store.getPost(permalink);
         res.render(
@@ -43,7 +43,7 @@ export default {
   signIn(req, res) {
     res.render(SignInPage, {
       onSubmit(username, password) {
-        res.dispatchAction(signIn, username, password)
+        res.dispatch(signIn(username, password))
           .then(() => res.redirect('/admin'))
           .catch(console.log.bind(console));
       }
@@ -52,24 +52,24 @@ export default {
 };
 
 function handlePostCreate(res, postData) {
-  res.dispatchAction(createPost, postData)
+  res.dispatch(createPost(postData))
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
     .catch(console.log.bind(console));
 }
 
 function handlePostDelete(res, post) {
-  res.dispatchAction(deletePost, post)
+  res.dispatch(deletePost(post))
     .catch(console.log.bind(console));
 }
 
 function handlePostEdit(res, postData) {
-  res.dispatchAction(updatePost, postData)
+  res.dispatch(updatePost(postData))
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
     .catch(console.log.bind(console));
 }
 
 function handleSignOut(res) {
-  res.dispatchAction(signOut)
+  res.dispatch(signOut())
     .then(() => res.redirect('/'))
     .catch(console.log.bind(console));
 }

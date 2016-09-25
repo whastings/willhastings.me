@@ -3,7 +3,7 @@ import { loadProjectsPage } from './actions';
 
 export default {
   index(req, res, store) {
-    res.dispatchAction(loadProjectsPage)
+    res.dispatch(loadProjectsPage())
       .then(() => res.render(
         ProjectsPage,
         {categories: store.getState().pages.projects.categories}

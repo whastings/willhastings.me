@@ -1,4 +1,4 @@
-export function addUser(api, store, dispatchAction, user) {
+export function addUser(user) {
   return {
     type: 'USER_ADD',
     payload: user

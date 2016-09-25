@@ -4,7 +4,7 @@ import { loadPosts } from 'app/modules/posts/actions';
 
 export default {
   index(req, res, store) {
-    Promise.all([res.dispatchAction(loadHomePage), res.dispatchAction(loadPosts)])
+    Promise.all([res.dispatch(loadHomePage()), res.dispatch(loadPosts())])
       .then(() => {
         let state = store.getState();
         res.render(HomePage, {

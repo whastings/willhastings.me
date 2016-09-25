@@ -13,20 +13,8 @@ export default class App {
     this.api = api;
     this.onRedirect = onRedirect;
     this.renderer = renderer;
-    this.store = createStore();
+    this.store = createStore(api);
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
-  }
-
-  dispatchAction(actionCreator, ...args) {
-    let action = actionCreator(this.api, this.store, this.dispatchAction, ...args),
-        actionPromise;
-
-    if (action) {
-      this.store.dispatch(action);
-      actionPromise = action.payload.promise;
-    }
-
-    return actionPromise || Promise.resolve(action && action.payload);
   }
 
   redirect(path) {
@@ -48,7 +36,7 @@ export default class App {
         { store } = this;
 
     let res = {
-      dispatchAction: this.dispatchAction,
+      dispatch: store.dispatch,
       redirect: this.redirect,
       render: this.render
     };
@@ -64,6 +52,6 @@ export default class App {
   }
 }
 
-autobindMethods(App, 'dispatchAction', 'redirect', 'render');
+autobindMethods(App, 'redirect', 'render');
 
 App.routes = Object.keys(ROUTES);
