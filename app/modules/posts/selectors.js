@@ -2,7 +2,7 @@ import memoizeStateLookup from 'app/utils/memoizeStateLookup';
 import { createSelector } from 'reselect';
 
 export const getPosts = createSelector(
-  (state) => state.models.posts,
+  (state) => state.posts,
   (posts) => Object.keys(posts)
     .map((postId) => posts[postId])
     .sort(comparePosts)

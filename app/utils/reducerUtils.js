@@ -1,8 +1,11 @@
 /* eslint no-use-before-define:0 */
+import immutable from 'seamless-immutable';
 import { curryN } from '@whastings/js_utils';
 
-export function createReducer(handlers) {
-  return function(state, action) {
+export function createReducer(handlers, initialState = {}) {
+  let frozenInitialState = immutable(initialState);
+
+  return function(state = frozenInitialState, action) {
     let handler = handlers[action.type];
 
     if (handler) {

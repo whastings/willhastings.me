@@ -1,6 +1,6 @@
 import asyncActionMiddleware from 'app/utils/asyncActionMiddleware';
 import immutable from 'seamless-immutable';
-import { applyMiddleware, createStore as createReduxStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore as createReduxStore } from 'redux';
 
 // Reducers:
 import adminReducer from 'app/modules/admin/reducer';
@@ -8,28 +8,21 @@ import pagesReducer from 'app/modules/pages/reducer';
 import postsReducer from 'app/modules/posts/reducer';
 import usersReducer from 'app/modules/users/reducer';
 
-const INITIAL_STATE = immutable(getInitialState() || {
-  admin: {
-    currentUserId: null
-  },
-  models: {
-    posts: {},
-    users: {}
-  },
-  pages: {}
+const rootReducer = combineReducers({
+  admin: adminReducer,
+  pages: pagesReducer,
+  posts: postsReducer,
+  users: usersReducer
 });
 
-function dataReducer(state = INITIAL_STATE, action) {
-  let models = state.models;
+export default function createStore(api) {
+  let createStoreWithMiddleware = applyMiddleware(
+    asyncActionMiddleware(api)
+  )(createReduxStore);
+  let initialState = getInitialState();
 
-  return state.merge({
-    admin: adminReducer(state.admin, action),
-    models: {
-      posts: postsReducer(models.posts, action),
-      users: usersReducer(models.users, action)
-    },
-    pages: pagesReducer(state.pages, action)
-  });
+  return initialState ? createStoreWithMiddleware(rootReducer, initialState) :
+    createStoreWithMiddleware(rootReducer);
 }
 
 function getInitialState() {
@@ -38,11 +31,5 @@ function getInitialState() {
   }
 
   let initDataEl = document.getElementById('init-data');
-  return initDataEl ? JSON.parse(initDataEl.textContent) : null;
-}
-
-export default function createStore(api) {
-  return applyMiddleware(
-    asyncActionMiddleware(api)
-  )(createReduxStore)(dataReducer);
+  return initDataEl ? immutable(JSON.parse(initDataEl.textContent)) : null;
 }
