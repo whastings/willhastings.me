@@ -76,9 +76,25 @@ textarea {
 input {
   height: 3.5rem;
   padding: 0 10px;
+
+  &[type=radio] {
+    display: inline-block;
+    margin-right: 5px;
+    height: auto;
+    width: auto;
+  }
 }
 
 textarea {
   min-height: 14.4rem;
   padding: 10px;
+}
+
+fieldset {
+  background: #fff;
+  margin-bottom: 20px;
+}
+
+legend {
+  font-weight: bold;
 }

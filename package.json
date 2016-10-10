@@ -68,7 +68,7 @@
     "reselect": "^2.0.2",
     "sass-loader": "^4.0.0",
     "seamless-immutable": "^4.1.1",
-    "sequelize": "^3.18.0",
+    "sequelize": "^3.24.3",
     "slug": "^0.9.1",
     "uid-safe": "^2.0.0",
     "webpack": "^2.1.0-beta.20"

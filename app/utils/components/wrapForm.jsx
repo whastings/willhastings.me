@@ -14,8 +14,10 @@ export default function wrapForm({component: FormComponent, fields, initials = {
       }
 
       this.state = fields.reduce((state, field) => {
-        let initVal = initVals[field];
-        state[`${field}Value`] = (initVal === undefined) ? '' : initVal;
+        let fieldName = (typeof field === 'string') ? field : field.name;
+        let FieldType = field.type || String;
+        let initVal = initVals[fieldName];
+        state[`${fieldName}Value`] = (initVal === undefined) ? new FieldType() : initVal;
         return state;
       }, {});
 
@@ -44,15 +46,22 @@ export default function wrapForm({component: FormComponent, fields, initials = {
 function createWrappedInput(getValue, updateValue) {
   class WrappedInput extends Component {
     handleChange() {
-      let { field } = this.props;
-      updateValue(field, this.refs.input.value);
+      let { props } = this;
+      let { field } = props;
+      let newValue = this._isRadio() ? props.value : this.refs.input.value;
+      updateValue(field, newValue);
     }
 
     render() {
-      let { inputType, field, ...inputProps } = this.props,
-          value = getValue(field);
+      let { props } = this;
+      let { inputType, field, ...inputProps } = props;
+      let value = props.hasOwnProperty('value') ? props.value : getValue(field);
 
       let createInput = DOM[inputType] || DOM.input;
+
+      if (this._isRadio()) {
+        inputProps.checked = (value === getValue(field));
+      }
 
       return createInput({
         ref: 'input',
@@ -60,6 +69,10 @@ function createWrappedInput(getValue, updateValue) {
         onChange: this.handleChange,
         ...inputProps
       });
+    }
+
+    _isRadio() {
+      return this.props.type === 'radio';
     }
   }
 

@@ -44,16 +44,9 @@ const methods = {
   },
 
   hooks: {
-    beforeCreate(post) {
-      maybeAddPublishDate(post);
-    },
-
-    beforeUpdate(post) {
-      maybeAddPublishDate(post);
-    },
-
     beforeValidate(post) {
       post.permalink = slug(post.title, SLUG_OPTIONS);
+      maybeAddPublishDate(post);
     }
   }
 };

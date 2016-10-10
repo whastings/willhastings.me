@@ -5,8 +5,8 @@ const express = require('express');
 const formatters = require('./formatters');
 const Post = require('./model');
 
-const POST_UPDATE_FIELDS = ['title', 'body', 'permalink'],
-      POST_CREATE_FIELDS = POST_UPDATE_FIELDS.concat(['userId']);
+const POST_UPDATE_FIELDS = ['title', 'body', 'permalink', 'published', 'publishDate'];
+const POST_CREATE_FIELDS = POST_UPDATE_FIELDS.concat(['userId']);
 
 const app = express();
 
