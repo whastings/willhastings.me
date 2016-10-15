@@ -13,7 +13,7 @@ export default {
         onPostDelete: handlePostDelete.bind(null, res),
         onSignOut: handleSignOut.bind(null, res)
       }))
-      .catch(console.log.bind(console));
+      .catch(res.handleError);
   },
 
   newPost(req, res) {
@@ -38,7 +38,7 @@ export default {
           }
         );
       })
-      .catch(console.log.bind(console));
+      .catch(res.handleError);
   },
 
   signIn(req, res) {
@@ -46,7 +46,7 @@ export default {
       onSubmit(username, password) {
         res.dispatch(signIn(username, password))
           .then(() => res.redirect('/admin'))
-          .catch(console.log.bind(console));
+          .catch(res.handleError);
       }
     });
   }
@@ -55,22 +55,22 @@ export default {
 function handlePostCreate(res, postData) {
   res.dispatch(createPost(postData))
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
-    .catch(console.log.bind(console));
+    .catch(res.handleError);
 }
 
 function handlePostDelete(res, post) {
   res.dispatch(deletePost(post))
-    .catch(console.log.bind(console));
+    .catch(res.handleError);
 }
 
 function handlePostEdit(res, postData) {
   res.dispatch(updatePost(postData))
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
-    .catch(console.log.bind(console));
+    .catch(res.handleError);
 }
 
 function handleSignOut(res) {
   res.dispatch(signOut())
     .then(() => res.redirect('/'))
-    .catch(console.log.bind(console));
+    .catch(res.handleError);
 }

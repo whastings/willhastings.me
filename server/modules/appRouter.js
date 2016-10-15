@@ -12,7 +12,7 @@ let App = loadApp();
 configViews(app);
 App.routes.forEach((route) => app.get(route, routeToApp));
 
-function routeToApp(req, res) {
+function routeToApp(req, res, next) {
   App = loadApp(); // In dev, this will hot-reload the app.
   let app = new App((element) => {
     res.render('base', {
@@ -21,7 +21,7 @@ function routeToApp(req, res) {
       html: renderToString(element),
       isDev: IS_DEV
     });
-  }, res.redirect.bind(res), api);
+  }, res.redirect.bind(res), next, api);
 
   app.route(req.route.path, req);
 }

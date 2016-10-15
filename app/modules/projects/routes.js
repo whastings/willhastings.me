@@ -8,6 +8,7 @@ export default {
       .then(() => res.render(
         ProjectsPage,
         {categories: getPage(getState(), 'projects').categories}
-      )).catch(console.log.bind(console));
+      ))
+      .catch(res.handleError);
   }
 };

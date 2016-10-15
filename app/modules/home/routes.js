@@ -14,6 +14,6 @@ export default {
           posts: getPosts(state)
         });
       })
-      .catch(console.log.bind(console));
+      .catch(res.handleError);
   }
 };

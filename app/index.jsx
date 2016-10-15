@@ -9,12 +9,17 @@ import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 import { Provider } from 'react-redux';
 
 export default class App {
-  constructor(renderer, onRedirect, api = appApi) {
+  constructor(renderer, onRedirect, onError, api = appApi) {
     this.api = api;
     this.onRedirect = onRedirect;
+    this.onError = onError;
     this.renderer = renderer;
     this.store = createStore(api);
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
+  }
+
+  handleError(error) {
+    this.onError(error);
   }
 
   redirect(path) {
@@ -33,10 +38,11 @@ export default class App {
     let preMiddleware = this.preMiddleware.match(req.path),
         routeHandler = ROUTES[path],
         handlers = [],
-        { store } = this;
+        { handleError, store } = this;
 
     let res = {
       dispatch: store.dispatch,
+      handleError,
       redirect: this.redirect,
       render: this.render
     };
@@ -48,10 +54,10 @@ export default class App {
       handlers.push(routeHandler);
     }
 
-    runRouteHandlers(handlers, [req, res, store.getState]);
+    runRouteHandlers(handlers, handleError, [req, res, store.getState]);
   }
 }
 
-autobindMethods(App, 'redirect', 'render');
+autobindMethods(App, 'handleError', 'redirect', 'render');
 
 App.routes = Object.keys(ROUTES);

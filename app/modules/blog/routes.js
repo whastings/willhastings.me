@@ -6,7 +6,7 @@ export default {
   index(req, res, getState)  {
     res.dispatch(loadPosts())
       .then(() => res.render(BlogIndexPage, {posts: getPosts(getState())}))
-      .catch(console.log.bind(console));
+      .catch(res.handleError);
   },
 
   view(req, res, getState) {
@@ -15,6 +15,6 @@ export default {
     res.dispatch(loadPost(permalink))
       // TODO: Handle post not found.
       .then(() => res.render(PostPage, {post: getPost(getState(), permalink)}))
-      .catch(console.log.bind(console));
+      .catch(res.handleError);
   }
 };

@@ -20,10 +20,9 @@ export const ROUTES = {
 
 function createRunner(moduleName, handler) {
   return function routeRunner() {
-    loadModule(moduleName)
+    return loadModule(moduleName)
       .then((module) => module.default)
-      .then((module) => module[handler](...arguments))
-      .catch((error) => console.log(`Routing error: ${error}`));
+      .then((module) => module[handler](...arguments));
   };
 }
 

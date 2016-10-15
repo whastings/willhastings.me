@@ -11,7 +11,7 @@ const userLookup = require('server/middleware/userLookup');
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const IS_DEV = process.env.NODE_ENV === 'development';
 
-module.exports = class ServerManager {
+exports = module.exports = class ServerManager {
   constructor(options) {
     this.options = options;
     this._connectToDb();
@@ -23,6 +23,7 @@ module.exports = class ServerManager {
     if (IS_DEV) {
       app.use(express.static(options.staticDir));
     }
+    app.use(this._handleError.bind(this));
     this.server = http.createServer(app);
   }
 
@@ -37,6 +38,14 @@ module.exports = class ServerManager {
   _connectToDb() {
     this.dbConnection = null;
     initDB().then((connection) => this.dbConnection = connection);
+  }
+
+  _handleError(error, req, res, next) {
+    let errorMessage = `ERROR: ${error.stack}`;
+    console.error(errorMessage);
+
+    res.status(500).end(IS_DEV ? errorMessage : '');
+    next();
   }
 };
 
