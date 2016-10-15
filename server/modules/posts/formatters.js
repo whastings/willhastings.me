@@ -1,5 +1,12 @@
+const highlightJS = require('highlight.js');
 const marked = require('marked');
 const { toISODate } = require('server/utils/dates');
+
+marked.setOptions({
+  highlight(code) {
+    return highlightJS.highlightAuto(code).value;
+  }
+});
 
 const formatters = module.exports = {
   post(model, {editable = false, includeBody = true} = {}) {
@@ -13,10 +20,11 @@ const formatters = module.exports = {
       data.bodyRaw = data.body;
     }
 
-    data.preview = data.preview || getPreviewFromBody(data.body);
+    let processedBody = marked(data.body);
+    data.preview = data.preview || getPreviewFromBody(processedBody);
 
     if (includeBody) {
-      data.body = marked(data.body);
+      data.body = processedBody;
     } else {
       delete data.body;
     }

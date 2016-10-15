@@ -1,3 +1,15 @@
+@import "app/styles/lib";
+
 .post-view-page {
   width: 100%;
+}
+
+.post {
+  @include el(body) {
+    pre {
+      background: #1d1f21;
+      color: #c5c8c6;
+      padding: 15px;
+    }
+  }
 }
