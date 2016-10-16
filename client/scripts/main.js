@@ -1,12 +1,22 @@
+import polyfillLoader from './polyfillLoader';
 import App from 'app/index';
 import page from 'page';
 import ReactDOM from 'react-dom';
 
-const rootEl = document.querySelector('.site-main'),
-      app = new App(appRenderer, page, errorHandler);
+const rootEl = document.querySelector('.site-main');
+let app;
 
-App.routes.forEach((route) => page(route, routeToApp.bind(null, route)));
-page();
+if (process.env.NODE_ENV === 'production') {
+  polyfillLoader(start);
+} else {
+  start();
+}
+
+function start() {
+  app = new App(appRenderer, page, errorHandler);
+  App.routes.forEach((route) => page(route, routeToApp.bind(null, route)));
+  page();
+}
 
 function appRenderer(element) {
   ReactDOM.render(element, rootEl);

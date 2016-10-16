@@ -4,10 +4,10 @@ const path = require('path');
 const shared = require('./shared.config');
 const webpack = require('webpack');
 
-const CWD = process.cwd();
 const { CommonsChunkPlugin } = webpack.optimize;
+const IS_PROD = process.env.NODE_ENV === 'production';
 
-module.exports = {
+exports = module.exports = {
   entry: {
     app: [
       './client/scripts/main.js'
@@ -32,7 +32,10 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
+        loader: ExtractTextPlugin.extract([
+          `css-loader?${IS_PROD ? 'minimize' : '-minimize'}`,
+          'sass-loader'
+        ]),
       }
     ]
   },
@@ -54,3 +57,14 @@ module.exports = {
     new ExtractTextPlugin({filename: 'app.css', allChunks: true}),
   ]
 };
+
+if (IS_PROD) {
+  exports.entry.polyfills = './client/scripts/polyfills.js';
+
+  exports.plugins = exports.plugins.concat(
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  );
+}
