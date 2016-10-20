@@ -1,5 +1,4 @@
 import polyfillLoader from './polyfillLoader';
-import App from 'app/index';
 import page from 'page';
 import ReactDOM from 'react-dom';
 
@@ -13,6 +12,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function start() {
+  // Using require to delay evaluation in case we need to load polyfills first.
+  const App = require('app/index').default;
   app = new App(appRenderer, page, errorHandler);
   App.routes.forEach((route) => page(route, routeToApp.bind(null, route)));
   page();

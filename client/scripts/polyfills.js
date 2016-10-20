@@ -1,4 +1,4 @@
-import 'core-js/fn/array/find';
-import 'core-js/fn/object/assign';
-import 'core-js/fn/promise';
-import 'whatwg-fetch';
+require('core-js/fn/array/find');
+require('core-js/fn/object/assign');
+window.Promise = require('native-promise-only');
+require('whatwg-fetch');

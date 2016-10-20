@@ -59,8 +59,6 @@ exports = module.exports = {
 };
 
 if (IS_PROD) {
-  exports.entry.polyfills = './client/scripts/polyfills.js';
-
   exports.plugins = exports.plugins.concat(
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')

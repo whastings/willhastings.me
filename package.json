@@ -55,6 +55,7 @@
     "gulp-markdown": "^1.2.0",
     "highlight.js": "^9.7.0",
     "marked": "^0.3.6",
+    "native-promise-only": "^0.8.1",
     "node-sass": "^3.8.0",
     "normalize.scss": "^0.1.0",
     "null-loader": "^0.1.1",
