@@ -2,8 +2,7 @@ const FEATURES = [
   Array.prototype.find,
   Object.assign,
   window.fetch,
-  window.Promise,
-  window.foobar
+  window.Promise
 ];
 
 export default function polyfillLoader(done) {

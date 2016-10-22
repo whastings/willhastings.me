@@ -17,16 +17,22 @@ module.exports = {
   target: 'node',
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: config.babelNode
+        use: [
+          {
+            loader: 'babel-loader',
+            options: config.babelNode
+          }
+        ]
       },
       {
         test: /\.scss$/,
-        loader: 'null-loader'
+        use: [
+          'null-loader'
+        ]
       }
     ]
   },

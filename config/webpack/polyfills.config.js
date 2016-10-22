@@ -8,6 +8,9 @@ module.exports = {
     path: path.join(shared.output.path, 'client'),
     filename: 'polyfills.js'
   },
+  resolve: {
+    extensions: ['.js']
+  },
   plugins: [
     new webpack.optimize.UglifyJsPlugin()
   ],

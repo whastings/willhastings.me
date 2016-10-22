@@ -23,19 +23,28 @@ exports = module.exports = {
   resolve: shared.resolve,
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: config.babelBrowser,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: config.babelBrowser
+          }
+        ]
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract([
-          `css-loader?${IS_PROD ? 'minimize' : '-minimize'}`,
-          'sass-loader'
-        ]),
+        loader: ExtractTextPlugin.extract(
+          [
+            `css-loader?${IS_PROD ? 'minimize' : '-minimize'}&importLoaders=1`,
+          ].concat(IS_PROD ? [
+            'postcss-loader'
+          ] : [], [
+            'sass-loader'
+          ])
+        ),
       }
     ]
   },
