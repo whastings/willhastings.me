@@ -9,7 +9,12 @@ module.exports = function configViews(app) {
     defaultLayout: 'main',
     extname: '.hbs',
     layoutsDir: path.join(TEMPLATES_DIR, 'layouts'),
-    partialsDir: path.join(TEMPLATES_DIR, 'partials')
+    partialsDir: path.join(TEMPLATES_DIR, 'partials'),
+    helpers: {
+      get(object, key) {
+        return object[key];
+      }
+    }
   }));
   app.set('view engine', '.hbs');
 };

@@ -1,3 +1,4 @@
+const assetsMiddleware = require('server/middleware/assets');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const configViews = require('server/utils/configViews');
@@ -56,6 +57,7 @@ function applyPreMiddleware(app, db) {
     cookie: {httpOnly: true},
     value: (req) => req.headers['x-csrf-token']
   }));
+  app.use(assetsMiddleware);
   app.use(/\/(?!(?:scripts|styles))\w+/, userLookup(db));
 }
 

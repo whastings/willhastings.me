@@ -5,7 +5,7 @@ module.exports = {
   output: {
     path: path.join(CWD, 'dist'),
     filename: '[name].js',
-    chunkFilename: '[id].chunk.js',
+    chunkFilename: '[name].chunk.js',
     sourcePrefix: '  ',
   },
 

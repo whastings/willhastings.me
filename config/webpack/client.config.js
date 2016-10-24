@@ -15,10 +15,18 @@ exports = module.exports = {
     vendor: config.vendorModules
   },
 
-  output: Object.assign({}, shared.output, {
-    path: path.join(shared.output.path, 'client'),
-    publicPath: '/'
-  }),
+  output: Object.assign(
+    {},
+    shared.output,
+    {
+      path: path.join(shared.output.path, 'client'),
+      publicPath: '/'
+    },
+    IS_PROD ? {
+      filename: '[name]-[chunkhash].js',
+      chunkFilename: '[name]-[chunkhash].chunk.js'
+    } : {}
+  ),
 
   resolve: shared.resolve,
 
@@ -54,24 +62,23 @@ exports = module.exports = {
   plugins: [
     new CommonsChunkPlugin({
       name: 'vendor',
-      filename: 'vendor.js',
+      filename: IS_PROD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     }),
     new CommonsChunkPlugin({
       name: 'app',
-      filename: 'app.js',
+      filename: IS_PROD ? 'app-[chunkhash].js' : 'app.js',
       children: true,
       minChunks: 2
     }),
-    new ExtractTextPlugin({filename: 'app.css', allChunks: true}),
-  ]
-};
-
-if (IS_PROD) {
-  exports.plugins = exports.plugins.concat(
+    new ExtractTextPlugin({
+      filename: IS_PROD ? 'app-[chunkhash].css' : 'app.css',
+      allChunks: true
+    }),
+  ].concat(IS_PROD ? [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.UglifyJsPlugin()
-  );
-}
+  ] : [])
+};
