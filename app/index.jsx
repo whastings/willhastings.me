@@ -4,6 +4,7 @@ import createStore from 'app/createStore';
 import MiddlewareMap from 'app/utils/middlewareMap';
 import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
+import UI from 'ui/components/UI';
 import { autobindMethods } from '@whastings/js_utils';
 import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 import { Provider } from 'react-redux';
@@ -29,7 +30,9 @@ export default class App {
   render(Component, props) {
     this.renderer(
       <Provider store={this.store}>
-        <Component {...props}/>
+        <UI>
+          <Component {...props}/>
+        </UI>
       </Provider>
     );
   }

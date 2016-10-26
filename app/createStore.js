@@ -6,12 +6,14 @@ import { applyMiddleware, combineReducers, createStore as createReduxStore } fro
 import adminReducer from 'app/modules/admin/reducer';
 import pagesReducer from 'app/modules/pages/reducer';
 import postsReducer from 'app/modules/posts/reducer';
+import uiReducer from 'app/modules/ui/reducer';
 import usersReducer from 'app/modules/users/reducer';
 
 const rootReducer = combineReducers({
   admin: adminReducer,
   pages: pagesReducer,
   posts: postsReducer,
+  ui: uiReducer,
   users: usersReducer
 });
 

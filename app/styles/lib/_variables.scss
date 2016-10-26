@@ -6,7 +6,8 @@ $site-colors: (
   light-blue: #b0e0f8,
   light-gray: #f1f1f1,
   link: #0791d6,
-  link-hover: #055f8c
+  link-hover: #055f8c,
+  shadow: rgba(0, 0, 0, 0.35)
 );
 
 @function get-color($name) {

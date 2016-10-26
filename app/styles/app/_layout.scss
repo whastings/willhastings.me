@@ -105,7 +105,7 @@ body {
 .page-title {
   background: #fff;
   border-top: 1px get-color(gray) solid;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 3px get-color(shadow);
   margin: -10px -10px 2rem;
   padding: 15px 10px;
 
