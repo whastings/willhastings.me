@@ -1,6 +1,7 @@
 // Middleware:
 import authMiddleware from 'app/middleware/auth';
 import currentUserMiddleware from 'app/middleware/currentUser';
+import { withLoader } from 'app/utils/routeUtils';
 
 export const PRE_MIDDLEWARE = {
   '/admin*': [currentUserMiddleware, authMiddleware],
@@ -19,11 +20,11 @@ export const ROUTES = {
 };
 
 function createRunner(moduleName, handler) {
-  return function routeRunner() {
+  return withLoader(function routeRunner() {
     return loadModule(moduleName)
       .then((module) => module.default)
       .then((module) => module[handler](...arguments));
-  };
+  });
 }
 
 function loadModule(name) {

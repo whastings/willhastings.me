@@ -1,9 +1,8 @@
 import LoadingIndicator from 'ui/components/LoadingIndicator';
 import React from 'react';
 import { connect } from 'react-redux';
-import { autobindMethods } from '@whastings/js_utils';
 
-const LOADER_ANIM_TIME = 900;
+const LOADER_ANIM_TIME = 700;
 const LOADER_DELAY = 300;
 
 class UI extends React.Component {
@@ -66,8 +65,6 @@ class UI extends React.Component {
     );
   }
 }
-
-autobindMethods(UI, '_hideLoader');
 
 export default connect(
   (state) => ({isLoading: state.ui.isLoading})

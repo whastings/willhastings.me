@@ -22,10 +22,19 @@
   right: 0;
   text-align: center;
   transform: translateY(100%);
-  transition: transform .5s ease-out;
+  transition: transform .3s ease-out;
 
   &.visible {
     transform: translateY(0);
+  }
+
+  @include breakpoint(desktop) {
+    $width: 200px;
+    bottom: auto;
+    left: calc(50% - #{$width / 2});
+    top: 0;
+    transform: translateY(-100%);
+    width: $width;
   }
 
   @include el(icon) {
