@@ -1,3 +1,4 @@
+import './styles.scss';
 import LoadingIndicator from 'ui/components/LoadingIndicator';
 import React from 'react';
 import { connect } from 'react-redux';

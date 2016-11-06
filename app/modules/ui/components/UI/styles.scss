@@ -1,0 +1,9 @@
+.ui-shell {
+  display: flex;
+  width: 100%;
+
+  > div,
+  > section {
+    width: 100%;
+  }
+}

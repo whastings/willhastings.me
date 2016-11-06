@@ -95,11 +95,6 @@ body {
   @include breakpoint(desktop) {
     padding: 25px;
   }
-
-  > div,
-  > section {
-    width: 100%;
-  }
 }
 
 .page-title {
