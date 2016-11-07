@@ -1,18 +1,22 @@
-Protomatter.js is a simple tool for managing prototypal inheritance in
-JavaScript without the use of constructor functions and the `new` keyword. Since
-becoming a JavaScript developer, I've worked hard to discovered JS's true
-prototypal nature, which its implementation of constructor functions tends to
-obscure. I wanted a mechanism that enabled me to work easily and directly
-with JavaScript prototypes. This is available in the ES5 version of JavaScript
-via `Object.create()`. I created Protomatter to be a small wrapper around this
-and other native JS object methods to make it easy to work with JavaScript
-prototypes and embrace prototypal inheritance. I have made it conveniently
-available from [NPM][protomatter_npm] and Bower.
+Protomatter.js is an object creation and inheritance library for JavaScript,
+featuring private instance properties and private methods. It is my exploration
+of how to achieve privacy for objects in JavaScript, a feature that the language
+is sorely missing.  Protomatter allows you to define object types with private
+methods. When creating an instance from a type, no code outside that instance's
+own public methods can invoke its private methods. Additionally, no outside code
+can access the instance's properties. For more on what Protomatter can do and
+how privacy is implemented, see its [README][readme].
+
+Protomatter is more of a realization of a thought experiment than a really
+practical invention, as these days I prefer ES6 classes for their
+standardization. But I've still made it available via [npm][npm] for those who
+want true object privacy for their JS codebases.
 
 **Key Features:**
 
-* Replace object initialization via constructors with `initialize()` methods.
-* Easily link parent and child prototypes via `Protomatter.create()`.
-* Call parent prototype's version of an overridden method via `callSuper()`.
+* Protect instance properties and private methods from outside access.
+* Invoke super class methods with `callSuper()`.
+* Support for mixins.
 
-[protomatter_npm]: https://www.npmjs.org/package/protomatter
+[npm]: https://www.npmjs.org/package/protomatter
+[readme]: https://github.com/whastings/protomatter.js/blob/master/README.md

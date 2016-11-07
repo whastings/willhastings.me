@@ -9,9 +9,21 @@
         "key": "protomatter"
       },
       {
-        "name": "closureType",
-        "repo": "https://github.com/whastings/closure-type",
-        "key": "closureType"
+        "name": "ember-component-focus",
+        "repo": "https://github.com/ember-a11y/ember-component-focus",
+        "key": "ember-component-focus"
+      }
+    ]
+  },
+  {
+    "name": "Personal",
+    "key": "personal",
+    "projects": [
+      {
+        "name": "objectdotcreate.net",
+        "link": "http://objectdotcreate.net",
+        "repo": "https://github.com/whastings/objectdotcreate.net-v2",
+        "key": "objectdotcreate"
       }
     ]
   },
@@ -20,15 +32,49 @@
     "key": "learning",
     "projects": [
       {
+        "name": "UI Components",
+        "link": "http://objectdotcreate.net/ui-components/",
+        "repo": "https://github.com/whastings/ui-components",
+        "key": "ui-components"
+      },
+      {
+        "name": "Accessible To Do App",
+        "link": "http://objectdotcreate.net/ember-todo-app/",
+        "repo": "https://github.com/whastings/ember-todo-app",
+        "key": "accessible-todo-app"
+      },
+      {
+        "name": "Unbreakable.js",
+        "repo": "https://github.com/whastings/unbreakable.js",
+        "key": "unbreakable"
+      },
+      {
         "name": "Zasteroids",
         "link": "http://objectdotcreate.net/zasteroids",
         "repo": "https://github.com/whastings/zasteroids",
         "key": "zasteroids"
       },
       {
-        "name": "App Academy Projects",
-        "repo": "https://github.com/whastings/app-academy-projects",
-        "key": "aa"
+        "name": "Heapsort.io",
+        "link": "http://heapsort.io",
+        "repo": "https://github.com/whastings/heapsort.io",
+        "key": "heapsort"
+      }
+    ]
+  },
+  {
+    "name": "Presentations",
+    "key": "presentations",
+    "projects": [
+      {
+        "name": "Performant Animations with Layers",
+        "link": "http://objectdotcreate.net/performant_animations_w_layers",
+        "key": "performant-animations-layers"
+      },
+      {
+        "name": "Creating & Designing Objects in Modern JS",
+        "link": "http://objectdotcreate.net/creating_designing_objects_js/",
+        "key": "creating-designing-objects-js"
       }
     ]
   }
