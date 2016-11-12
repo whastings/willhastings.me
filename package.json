@@ -57,6 +57,7 @@
     "highlight.js": "^9.7.0",
     "loader-utils": "^0.2.16",
     "marked": "^0.3.6",
+    "morgan": "^1.7.0",
     "native-promise-only": "^0.8.1",
     "node-sass": "^3.8.0",
     "normalize.scss": "^0.1.0",

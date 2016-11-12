@@ -6,11 +6,14 @@ const csrf = require('csurf');
 const express = require('express');
 const http = require('http');
 const initDB = require('server/db/initDB');
+const morgan = require('morgan');
 const ROUTES = require('./routes');
 const userLookup = require('server/middleware/userLookup');
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const IS_DEV = process.env.NODE_ENV === 'development';
+const REQUEST_LOG_FORMAT = IS_DEV ? 'dev' :
+  ':remote-addr [:date[clf]] ":method :url" :status :res[content-length]';
 
 exports = module.exports = class ServerManager {
   constructor(options) {
@@ -51,6 +54,7 @@ exports = module.exports = class ServerManager {
 };
 
 function applyPreMiddleware(app, db) {
+  app.use(morgan(REQUEST_LOG_FORMAT));
   app.use(cookieParser(COOKIE_SECRET));
   app.use(bodyParser.json());
   app.use(csrf({

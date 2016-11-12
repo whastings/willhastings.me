@@ -4,13 +4,18 @@ const Session = require('server/modules/session/model');
 const User = require('server/modules/users/model');
 const { production: dbConfig } = require('config/db');
 
+const REDACTED_PATTERNS = [
+  /sess-token-[^'",\s]+/
+];
+
 module.exports = function initDb() {
   let connection = new Sequelize(
     dbConfig.database, dbConfig.username, dbConfig.password,
     {
       host: dbConfig.host,
       port: dbConfig.port,
-      dialect: dbConfig.dialect
+      dialect: dbConfig.dialect,
+      logging: logQuery
     }
   );
 
@@ -23,3 +28,8 @@ module.exports = function initDb() {
   return connection.sync()
     .then(() => connection);
 };
+
+function logQuery(query) {
+  let redactedQuery = REDACTED_PATTERNS.reduce((query, pattern) => query.replace(pattern, '[REDACTED]'), query);
+  console.log(redactedQuery);
+}

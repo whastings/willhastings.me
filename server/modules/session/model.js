@@ -35,7 +35,8 @@ const Session = {
 };
 
 function generateToken() {
-  return uid(18);
+  return uid(18)
+    .then((token) => `sess-token-${token}`);
 }
 
 module.exports = Session;
