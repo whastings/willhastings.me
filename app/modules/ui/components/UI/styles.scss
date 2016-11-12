@@ -2,8 +2,8 @@
   display: flex;
   width: 100%;
 
-  > div,
-  > section {
+  > div:first-child,
+  > section:first-child {
     width: 100%;
   }
 }
