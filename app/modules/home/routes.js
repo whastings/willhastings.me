@@ -13,7 +13,6 @@ export default {
           content: getPage(state, 'home').content,
           posts: getPosts(state)
         });
-      })
-      .catch(res.handleError);
+      });
   }
 };

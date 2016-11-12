@@ -8,12 +8,11 @@ import { getPost } from 'posts/selectors';
 
 export default {
   index(req, res) {
-    res.dispatch(loadPosts({includeUnpublished: true}))
+    return res.dispatch(loadPosts({includeUnpublished: true}))
       .then(() => res.render(AdminIndexPage, {
         onPostDelete: handlePostDelete.bind(null, res),
         onSignOut: handleSignOut.bind(null, res)
-      }))
-      .catch(res.handleError);
+      }));
   },
 
   newPost(req, res) {
@@ -26,7 +25,7 @@ export default {
   editPost(req, res, getState) {
     let permalink = req.params.post;
 
-    res.dispatch(loadPost(permalink, {editable: true}))
+    return res.dispatch(loadPost(permalink, {editable: true}))
       .then(() => {
         let post = getPost(getState(), permalink);
         res.render(
@@ -37,8 +36,7 @@ export default {
             onSignOut: handleSignOut.bind(null, res)
           }
         );
-      })
-      .catch(res.handleError);
+      });
   },
 
   signIn(req, res) {

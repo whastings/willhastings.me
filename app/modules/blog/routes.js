@@ -5,8 +5,7 @@ import { getPost, getPosts } from 'posts/selectors';
 export default {
   index(req, res, getState) {
     return res.dispatch(loadPosts())
-      .then(() => res.render(BlogIndexPage, {posts: getPosts(getState())}))
-      .catch(res.handleError);
+      .then(() => res.render(BlogIndexPage, {posts: getPosts(getState())}));
   },
 
   view(req, res, getState) {
@@ -14,7 +13,6 @@ export default {
 
     return res.dispatch(loadPost(permalink))
       // TODO: Handle post not found.
-      .then(() => res.render(PostPage, {post: getPost(getState(), permalink)}))
-      .catch(res.handleError);
+      .then(() => res.render(PostPage, {post: getPost(getState(), permalink)}));
   }
 };
