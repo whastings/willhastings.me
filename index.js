@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('lib/env');
 
 const path = require('path');
 const ServerManager = require('./server');
