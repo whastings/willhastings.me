@@ -14,16 +14,21 @@ App.routes.forEach((route) => app.get(route, routeToApp));
 
 function routeToApp(req, res, next) {
   App = loadApp(); // In dev, this will hot-reload the app.
-  let on404 = () => res.status(404);
-  let app = new App((element) => {
-    res.render('base', {
-      assets: res.assets,
-      csrfToken: req.csrfToken(),
-      data: JSON.stringify(app.store.getState()),
-      html: renderToString(element),
-      isDev: IS_DEV
-    });
-  }, res.redirect.bind(res), next, on404, api);
+  let app = new App({
+    renderer: (element) => {
+      res.render('base', {
+        assets: res.assets,
+        csrfToken: req.csrfToken(),
+        data: JSON.stringify(app.store.getState()),
+        html: renderToString(element),
+        isDev: IS_DEV
+      });
+    },
+    onRedirect: res.redirect.bind(res),
+    onError: next,
+    on404: () => res.status(404),
+    api
+  });
 
   app.route(req.route.path, req);
 }

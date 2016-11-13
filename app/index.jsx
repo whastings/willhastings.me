@@ -11,26 +11,27 @@ import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 import { Provider } from 'react-redux';
 
 export default class App {
-  constructor(renderer, onRedirect, onError, on404, api = appApi) {
-    this.api = api;
-    this.onRedirect = onRedirect;
-    this.onError = onError;
-    this.on404 = on404;
-    this.renderer = renderer;
-    this.store = createStore(api);
+  constructor(options) {
+    this.options = options;
+    options.api = options.api || appApi;
+    this.store = createStore(options.api);
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
   }
 
   handleError(error) {
-    this.onError(error);
+    let { onError } = this.options;
+
+    if (onError) {
+      onError(error);
+    }
   }
 
   redirect(path) {
-    this.onRedirect(path);
+    this.options.onRedirect(path);
   }
 
   render(Component, props = {}) {
-    this.renderer(
+    this.options.renderer(
       <Provider store={this.store}>
         <UI>
           <Component {...props}/>
@@ -40,7 +41,12 @@ export default class App {
   }
 
   render404() {
-    this.on404();
+    let { on404 } = this.options;
+
+    if (on404) {
+      on404();
+    }
+
     this.render(Page404);
   }
 
