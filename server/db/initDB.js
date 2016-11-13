@@ -2,7 +2,7 @@ const Post = require('server/modules/posts/model');
 const Sequelize = require('sequelize');
 const Session = require('server/modules/session/model');
 const User = require('server/modules/users/model');
-const { production: dbConfig } = require('config/db');
+const dbConfig = require('config/db');
 
 const REDACTED_PATTERNS = [
   /sess-token-[^'",\s]+/
@@ -10,10 +10,8 @@ const REDACTED_PATTERNS = [
 
 module.exports = function initDb() {
   let connection = new Sequelize(
-    dbConfig.database, dbConfig.username, dbConfig.password,
+    dbConfig.url,
     {
-      host: dbConfig.host,
-      port: dbConfig.port,
       dialect: dbConfig.dialect,
       logging: logQuery
     }
