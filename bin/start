@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NODE_PATH="$(pwd)/:$NODE_PATH"
+export NODE_PATH="$(pwd)/:$NODE_PATH"
 
 if [ "$NODE_ENV" == "production" ]; then
   node index.js
