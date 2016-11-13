@@ -16,7 +16,8 @@ export const ROUTES = {
   '/admin': createRunner('admin', 'index'),
   '/admin/sign-in': createRunner('admin', 'signIn'),
   '/admin/posts/new': createRunner('admin', 'newPost'),
-  '/admin/posts/:post/edit': createRunner('admin', 'editPost')
+  '/admin/posts/:post/edit': createRunner('admin', 'editPost'),
+  '/*': render404
 };
 
 function createRunner(moduleName, handler) {
@@ -33,4 +34,8 @@ function loadModule(name) {
   return (typeof System !== 'undefined') ?
     System.import('./modules/' + name + '/routes') :
     Promise.resolve(require(`./modules/${name}/routes`));
+}
+
+function render404(req, res) {
+  res.render404();
 }

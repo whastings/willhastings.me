@@ -2,6 +2,7 @@ import 'app/styles/app.scss';
 import appApi from 'app/api';
 import createStore from 'app/createStore';
 import MiddlewareMap from 'app/utils/middlewareMap';
+import Page404 from 'ui/components/Page404';
 import React from 'react';
 import runRouteHandlers from 'app/utils/runRouteHandlers';
 import UI from 'ui/components/UI';
@@ -10,10 +11,11 @@ import { PRE_MIDDLEWARE, ROUTES } from 'app/routes';
 import { Provider } from 'react-redux';
 
 export default class App {
-  constructor(renderer, onRedirect, onError, api = appApi) {
+  constructor(renderer, onRedirect, onError, on404, api = appApi) {
     this.api = api;
     this.onRedirect = onRedirect;
     this.onError = onError;
+    this.on404 = on404;
     this.renderer = renderer;
     this.store = createStore(api);
     this.preMiddleware = new MiddlewareMap(PRE_MIDDLEWARE);
@@ -27,7 +29,7 @@ export default class App {
     this.onRedirect(path);
   }
 
-  render(Component, props) {
+  render(Component, props = {}) {
     this.renderer(
       <Provider store={this.store}>
         <UI>
@@ -35,6 +37,11 @@ export default class App {
         </UI>
       </Provider>
     );
+  }
+
+  render404() {
+    this.on404();
+    this.render(Page404);
   }
 
   route(path, req) {
@@ -47,7 +54,8 @@ export default class App {
       dispatch: store.dispatch,
       handleError,
       redirect: this.redirect,
-      render: this.render
+      render: this.render,
+      render404: this.render404
     };
 
     if (preMiddleware) {
@@ -61,6 +69,6 @@ export default class App {
   }
 }
 
-autobindMethods(App, 'handleError', 'redirect', 'render');
+autobindMethods(App, 'handleError', 'redirect', 'render', 'render404');
 
 App.routes = Object.keys(ROUTES);

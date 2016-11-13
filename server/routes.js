@@ -5,9 +5,9 @@ const projects = require('server/modules/projects');
 const session = require('server/modules/session');
 
 module.exports = {
-  '/': app,
   '/api/pages/home': home,
   '/api/pages/projects': projects,
   '/api/posts': posts,
-  '/api/session': session
+  '/api/session': session,
+  '/': app
 };

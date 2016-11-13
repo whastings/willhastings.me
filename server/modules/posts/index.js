@@ -22,7 +22,8 @@ app.get('/:post', asyncRoute(function* postsRouteView(req, res) {
   let post = yield api.getPost(permalink, options);
 
   if (!post || (!post.published && !req.currentUser)) {
-    res.status(404).end();
+    res.status(404).json({error: 404});
+    return;
   }
 
   res.json(post);

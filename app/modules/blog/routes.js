@@ -12,7 +12,13 @@ export default {
     let permalink = req.params.post;
 
     return res.dispatch(loadPost(permalink))
-      // TODO: Handle post not found.
-      .then(() => res.render(PostPage, {post: getPost(getState(), permalink)}));
+      .then(() => {
+        let post = getPost(getState(), permalink);
+        if (post) {
+          res.render(PostPage, {post});
+        } else {
+          res.render404();
+        }
+      });
   }
 };

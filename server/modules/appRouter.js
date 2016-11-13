@@ -14,6 +14,7 @@ App.routes.forEach((route) => app.get(route, routeToApp));
 
 function routeToApp(req, res, next) {
   App = loadApp(); // In dev, this will hot-reload the app.
+  let on404 = () => res.status(404);
   let app = new App((element) => {
     res.render('base', {
       assets: res.assets,
@@ -22,7 +23,7 @@ function routeToApp(req, res, next) {
       html: renderToString(element),
       isDev: IS_DEV
     });
-  }, res.redirect.bind(res), next, api);
+  }, res.redirect.bind(res), next, on404, api);
 
   app.route(req.route.path, req);
 }

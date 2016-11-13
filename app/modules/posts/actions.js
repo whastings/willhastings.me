@@ -23,7 +23,7 @@ export function loadPost(permalink, options = {}) {
 
     return api.getPost(permalink, queryParams)
       .then((post) => {
-        if (!post.published && !getState().admin.currentUserId) {
+        if (!post || (!post.published && !getState().admin.currentUserId)) {
           return null;
         }
 

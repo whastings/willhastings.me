@@ -25,13 +25,12 @@ module.exports = {
   }),
 
   getPost(permalink, options = {}) {
-    // TODO: Handle post not found.
     let cacheKey = postCacheKeys(permalink)[options.editable ? 1 : 0];
 
     return cacheOrQuery(
       cacheKey,
       () => Post.model.findOne({where: {permalink}})
-        .then((post) => formatters.post(post, options))
+        .then((post) => post ? formatters.post(post, options) : null)
     );
   },
 

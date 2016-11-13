@@ -22,11 +22,9 @@ exports = module.exports = class ServerManager {
 
     let app = this.app = express();
     configViews(app);
+    app.use(express.static(options.staticDir));
     applyPreMiddleware(app, this.dbConnection);
     applyRoutes(app);
-    if (IS_DEV) {
-      app.use(express.static(options.staticDir));
-    }
     app.use(this._handleError.bind(this));
     this.server = http.createServer(app);
   }
