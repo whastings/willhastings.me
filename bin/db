@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 COMMAND=$1
-NODE_PATH="$(pwd)/:$NODE_PATH"
+export NODE_PATH="$(pwd)/:$NODE_PATH"
 node "lib/db/$COMMAND.js"
