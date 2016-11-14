@@ -28,8 +28,6 @@ module.exports = {
     'react-dom',
     'react-redux',
     'redux',
-    'redux-promise-middleware',
-    'redux-thunk',
     'reselect',
     'seamless-immutable'
   ].concat(RUNTIME_HELPERS)
