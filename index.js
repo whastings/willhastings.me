@@ -4,7 +4,7 @@ const path = require('path');
 const ServerManager = require('./server');
 
 const DIST_DIR = path.join(process.cwd(), 'dist/client');
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 let serverManager = new ServerManager({staticDir: DIST_DIR});
 serverManager.startServer(PORT, () => console.log(`SERVER LISTENING ON PORT ${PORT}`));
