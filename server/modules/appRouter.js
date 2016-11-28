@@ -5,6 +5,7 @@ const loadApp = require('server/utils/loadApp');
 const { renderToString } = require('react-dom/server');
 
 const IS_DEV = process.env.NODE_ENV === 'development';
+const DEFAULT_PAGE_TITLE = 'Will Hastings';
 
 const app = express();
 let App = loadApp();
@@ -15,13 +16,14 @@ App.routes.forEach((route) => app.get(route, routeToApp));
 function routeToApp(req, res, next) {
   App = loadApp(); // In dev, this will hot-reload the app.
   let app = new App({
-    renderer: (element) => {
+    renderer: (element, options = {}) => {
       res.render('base', {
         assets: res.assets,
         csrfToken: req.csrfToken(),
         data: JSON.stringify(app.store.getState()),
         html: renderToString(element),
-        isDev: IS_DEV
+        isDev: IS_DEV,
+        title: options.title ? `${options.title} - ${DEFAULT_PAGE_TITLE}` : DEFAULT_PAGE_TITLE
       });
     },
     onRedirect: res.redirect.bind(res),

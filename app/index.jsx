@@ -30,13 +30,14 @@ export default class App {
     this.options.onRedirect(path);
   }
 
-  render(Component, props = {}) {
+  render(Component, props = {}, options = {}) {
     this.options.renderer(
       <Provider store={this.store}>
         <UI>
           <Component {...props}/>
         </UI>
-      </Provider>
+      </Provider>,
+      options
     );
   }
 

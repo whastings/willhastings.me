@@ -2,6 +2,7 @@ import polyfillLoader from './polyfillLoader';
 import page from 'page';
 import ReactDOM from 'react-dom';
 
+const DEFAULT_PAGE_TITLE = 'Will Hastings';
 const rootEl = document.querySelector('.site-main');
 let app;
 
@@ -23,8 +24,9 @@ function start() {
   page();
 }
 
-function appRenderer(element) {
+function appRenderer(element, options = {}) {
   ReactDOM.render(element, rootEl);
+  document.title = options.title ? `${options.title} - ${DEFAULT_PAGE_TITLE}` : DEFAULT_PAGE_TITLE;
 }
 
 function errorHandler(error) {

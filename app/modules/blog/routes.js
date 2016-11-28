@@ -15,7 +15,7 @@ export default {
       .then(() => {
         let post = getPost(getState(), permalink);
         if (post) {
-          res.render(PostPage, {post});
+          res.render(PostPage, {post}, {title: post.title});
         } else {
           res.render404();
         }
