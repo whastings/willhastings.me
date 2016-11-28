@@ -20,11 +20,11 @@ const formatters = module.exports = {
       data.bodyRaw = data.body;
     }
 
-    let processedBody = marked(data.body);
-    data.preview = data.preview || getPreviewFromBody(processedBody);
+    let processedBody = processBody(data.body);
+    data.preview = marked(processedBody.preview);
 
     if (includeBody) {
-      data.body = processedBody;
+      data.body = marked(processedBody.content);
     } else {
       delete data.body;
     }
@@ -39,7 +39,17 @@ const formatters = module.exports = {
   }
 };
 
-function getPreviewFromBody(body) {
-  let firstParagraphMatch = body.match(/<p>(.*?)<\/p>/);
-  return firstParagraphMatch && firstParagraphMatch[1] || body;
+function processBody(body) {
+  let preview;
+  let content = body;
+
+  if (body.indexOf('[PREVIEW]') > -1) {
+    let [ beforePreviewStart, afterPreviewStart ] = body.split('[PREVIEW]');
+    let [ previewContent, afterPreview ] = afterPreviewStart.split('[/PREVIEW]');
+    preview = previewContent;
+    content = beforePreviewStart + preview + afterPreview;
+  }
+
+  preview = preview || content;
+  return {content, preview};
 }
