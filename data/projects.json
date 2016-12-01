@@ -20,10 +20,10 @@
     "key": "personal",
     "projects": [
       {
-        "name": "objectdotcreate.net",
-        "link": "http://objectdotcreate.net",
-        "repo": "https://github.com/whastings/objectdotcreate.net-v2",
-        "key": "objectdotcreate"
+        "name": "willhastings.me",
+        "link": "http://www.willhastings.me",
+        "repo": "https://github.com/whastings/willhastings.me",
+        "key": "willhastings-me"
       }
     ]
   },
@@ -33,13 +33,13 @@
     "projects": [
       {
         "name": "UI Components",
-        "link": "http://objectdotcreate.net/ui-components/",
+        "link": "https://whastings.github.io/ui-components/",
         "repo": "https://github.com/whastings/ui-components",
         "key": "ui-components"
       },
       {
         "name": "Accessible To Do App",
-        "link": "http://objectdotcreate.net/ember-todo-app/",
+        "link": "https://whastings.github.io/ember-todo-app/",
         "repo": "https://github.com/whastings/ember-todo-app",
         "key": "accessible-todo-app"
       },
@@ -50,7 +50,7 @@
       },
       {
         "name": "Zasteroids",
-        "link": "http://objectdotcreate.net/zasteroids",
+        "link": "http://whastings.github.io/zasteroids/",
         "repo": "https://github.com/whastings/zasteroids",
         "key": "zasteroids"
       },
@@ -68,12 +68,12 @@
     "projects": [
       {
         "name": "Performant Animations with Layers",
-        "link": "http://objectdotcreate.net/performant_animations_w_layers",
+        "link": "https://whastings.github.io/performant_animations_w_layers/",
         "key": "performant-animations-layers"
       },
       {
         "name": "Creating & Designing Objects in Modern JS",
-        "link": "http://objectdotcreate.net/creating_designing_objects_js/",
+        "link": "https://whastings.github.io/creating_designing_objects_js/",
         "key": "creating-designing-objects-js"
       }
     ]
