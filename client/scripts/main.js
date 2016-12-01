@@ -1,13 +1,16 @@
+import analytics from './analytics';
 import polyfillLoader from './polyfillLoader';
-import page from 'page';
 import ReactDOM from 'react-dom';
 
+const page = require('page'); // TODO: Why does importing page fail?
 const DEFAULT_PAGE_TITLE = 'Will Hastings';
 const rootEl = document.querySelector('.site-main');
 let app;
 
 if (process.env.NODE_ENV === 'production') {
+  page(trackRouteTransition);
   polyfillLoader(start);
+  analytics.init();
 } else {
   start();
 }
@@ -35,4 +38,9 @@ function errorHandler(error) {
 
 function routeToApp(path, data) {
   app.route(path, data);
+}
+
+function trackRouteTransition(context, next) {
+  analytics.track(context.path);
+  next();
 }
