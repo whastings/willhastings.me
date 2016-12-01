@@ -1,7 +1,7 @@
 {
-  "name": "objectdotcreate.net",
+  "name": "willhastings.me",
   "version": "0.0.1",
-  "description": "The portfolio website of Will Hastings.",
+  "description": "The blog and portfolio website of Will Hastings.",
   "main": "index.js",
   "scripts": {
     "build-app": "webpack --progress --color --config=config/webpack.config.js",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/whastings/objectdotcreate.net-v2.git"
+    "url": "git+https://github.com/whastings/willhastings.me.git"
   },
   "author": "Will Hastings",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/whastings/objectdotcreate.net-v2/issues"
+    "url": "https://github.com/whastings/willhastings.me/issues"
   },
-  "homepage": "https://github.com/whastings/objectdotcreate.net-v2#readme",
+  "homepage": "https://github.com/whastings/willhastings.me#readme",
   "engines": {
     "node": ">=6.0.0"
   },
