@@ -5,7 +5,11 @@ import { getPost, getPosts } from 'posts/selectors';
 export default {
   index(req, res, getState) {
     return res.dispatch(loadPosts())
-      .then(() => res.render(BlogIndexPage, {posts: getPosts(getState())}));
+      .then(() => res.render(
+        BlogIndexPage,
+        {posts: getPosts(getState())},
+        {title: 'Blog'}
+      ));
   },
 
   view(req, res, getState) {

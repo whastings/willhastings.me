@@ -7,7 +7,8 @@ export default {
     return res.dispatch(loadProjectsPage())
       .then(() => res.render(
         ProjectsPage,
-        {categories: getPage(getState(), 'projects').categories}
+        {categories: getPage(getState(), 'projects').categories},
+        {title: 'Projects'}
       ));
   }
 };
