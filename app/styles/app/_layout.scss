@@ -12,6 +12,7 @@ body {
 .site-footer {
   background: get-color(blue);
   color: #fff;
+  flex-shrink: 0;
   padding: 15px;
   text-align: center;
 }
