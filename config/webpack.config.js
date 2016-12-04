@@ -5,4 +5,6 @@ exports = module.exports = [
 
 if (process.env.NODE_ENV === 'production') {
   exports.push(require('./webpack/polyfills.config'));
+} else {
+  exports.push(require('./webpack/tests.config'));
 }
