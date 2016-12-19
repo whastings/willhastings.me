@@ -3,6 +3,9 @@ import React from 'react';
 import SafeOutput from 'app/utils/components/SafeOutput';
 import SocialLinks from 'home/components/SocialLinks';
 import { PostList } from 'posts/components';
+import { PostType } from 'posts/propTypes';
+
+const { PropTypes } = React;
 
 export default function homePage({content, posts}) {
   return (
@@ -20,3 +23,8 @@ export default function homePage({content, posts}) {
     </div>
   );
 }
+
+homePage.propTypes = {
+  content: PropTypes.string.isRequired,
+  posts: PropTypes.arrayOf(PostType)
+};

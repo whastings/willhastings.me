@@ -1,6 +1,9 @@
 {
   "framework": "mocha",
   "src_files": [
+    "lib/killFetch.js",
+    "node_modules/whatwg-fetch/fetch.js",
+    "node_modules/sinon/pkg/sinon.js",
     "dist/tests/index.js"
   ]
 }
