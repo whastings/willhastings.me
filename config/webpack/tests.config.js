@@ -4,7 +4,8 @@ const path = require('path');
 const shared = require('./shared.config');
 
 module.exports = {
-  entry: glob.sync('./app/**/*test.@(js|jsx)'),
+  entry: glob.sync('app/**/__tests__.js')
+    .concat(glob.sync('app/**/__tests__/*-test.js')),
 
   output: Object.assign({}, shared.output, {
     filename: 'index.js',

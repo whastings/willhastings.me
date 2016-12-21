@@ -1,5 +1,5 @@
 import React from 'react';
-import SocialLinks from '../index';
+import SocialLinks from './';
 import { assert } from 'chai';
 import { shallow } from 'enzyme';
 
