@@ -87,8 +87,10 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "@whastings/eslint-config-whastings": "^1.0.0",
     "chai": "^3.5.0",
     "enzyme": "^2.6.0",
+    "eslint": "^3.12.2",
     "faker": "^3.0.1",
     "node-inspector": "^0.12.8",
     "nodemon": "^1.10.0",
