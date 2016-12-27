@@ -1,6 +1,7 @@
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
+import { PostType } from 'posts/propTypes';
 
 const { Component, PropTypes } = React;
 
@@ -66,7 +67,12 @@ class PostForm extends Component {
 }
 
 PostForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  bodyValue: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+  post: PostType,
+  publishedValue: PropTypes.bool,
+  titleValue: PropTypes.string,
+  WrappedInput: PropTypes.func.isRequired
 };
 
 autobindMethods(PostForm, 'handleSubmit');

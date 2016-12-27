@@ -1,10 +1,15 @@
 import './styles.scss';
 import React from 'react';
+import { PostType } from 'posts/propTypes';
 import { toFriendlyDate } from 'app/utils/dates';
+
+const { PropTypes } = React;
 
 export default function PostTeaser({post, children, showPreview = true}) {
   let preview = {__html: post.preview};
-  let publishDate = post.published && post.publishDate ? toFriendlyDate(post.publishDate) : 'Unpublished';
+  let publishDate = post.published && post.publishDate ?
+    toFriendlyDate(post.publishDate) :
+    'Unpublished';
 
   return (
     <article className="post-teaser card">
@@ -21,3 +26,9 @@ export default function PostTeaser({post, children, showPreview = true}) {
     </article>
   );
 }
+
+PostTeaser.propTypes = {
+  children: PropTypes.any,
+  post: PostType,
+  showPreview: PropTypes.bool
+};

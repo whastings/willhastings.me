@@ -17,7 +17,9 @@ export default function wrapForm({component: FormComponent, fields, initials = {
         let fieldName = (typeof field === 'string') ? field : field.name;
         let FieldType = field.type || String;
         let initVal = initVals[fieldName];
-        state[`${fieldName}Value`] = (initVal === undefined) ? new FieldType() : initVal;
+        state[`${fieldName}Value`] = (initVal === undefined) ?
+          (new FieldType()).valueOf() :
+          initVal;
         return state;
       }, {});
 
@@ -45,10 +47,10 @@ export default function wrapForm({component: FormComponent, fields, initials = {
 
 function createWrappedInput(getValue, updateValue) {
   class WrappedInput extends Component {
-    handleChange() {
+    handleChange(event) {
       let { props } = this;
       let { field } = props;
-      let newValue = this._isRadio() ? props.value : this.refs.input.value;
+      let newValue = this._isRadio() ? props.value : event.target.value;
       updateValue(field, newValue);
     }
 
@@ -64,7 +66,6 @@ function createWrappedInput(getValue, updateValue) {
       }
 
       return createInput({
-        ref: 'input',
         value,
         onChange: this.handleChange,
         ...inputProps
