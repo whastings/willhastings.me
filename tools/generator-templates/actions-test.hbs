@@ -1,0 +1,14 @@
+import * as actions from '{{module}}/actions';
+import asyncActionMiddleware from 'app/utils/asyncActionMiddleware';
+import configureStore from 'redux-mock-store';
+import { assert } from 'chai';
+
+describe('{{titleCase module}} - Action creators', function() {
+  let api;
+  let mockStore;
+
+  beforeEach(function() {
+    api = {};
+    mockStore = configureStore([asyncActionMiddleware(api)]);
+  });
+});

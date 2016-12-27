@@ -1,6 +1,24 @@
 module.exports = function(plop) {
-  plop.setGenerator('component-test', {
-    description: 'Create a test for a component',
+  plop.setGenerator('actions-tests', {
+    description: 'Create tests for a module\'s actions',
+    prompts: [
+      {
+        type: 'input',
+        name: 'module',
+        message: 'Module?'
+      }
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'app/modules/{{module}}/__tests__/actions-test.js',
+        templateFile: 'tools/generator-templates/actions-test.hbs'
+      }
+    ]
+  }),
+
+  plop.setGenerator('component-tests', {
+    description: 'Create tests for a component',
     prompts: [
       {
         type: 'input',
