@@ -2,6 +2,7 @@ const api = require('server/api');
 const configViews = require('server/utils/configViews');
 const express = require('express');
 const loadApp = require('server/utils/loadApp');
+const serialize = require('serialize-javascript');
 const { renderToString } = require('react-dom/server');
 
 const IS_DEV = process.env.NODE_ENV === 'development';
@@ -20,7 +21,7 @@ function routeToApp(req, res, next) {
       res.render('base', {
         assets: res.assets,
         csrfToken: req.csrfToken(),
-        data: JSON.stringify(app.store.getState()),
+        data: serialize(app.store.getState()),
         html: renderToString(element),
         isDev: IS_DEV,
         title: options.title ? `${options.title} - ${DEFAULT_PAGE_TITLE}` : DEFAULT_PAGE_TITLE
