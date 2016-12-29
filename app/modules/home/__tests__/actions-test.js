@@ -1,7 +1,6 @@
 import * as actions from 'home/actions';
-import asyncActionMiddleware from 'app/utils/asyncActionMiddleware';
-import configureStore from 'redux-mock-store';
 import { assert } from 'chai';
+import { createMockStore } from 'app/__tests__/utils';
 
 describe('Home - Action creators', function() {
   let api;
@@ -9,7 +8,7 @@ describe('Home - Action creators', function() {
 
   beforeEach(function() {
     api = {};
-    mockStore = configureStore([asyncActionMiddleware(api)]);
+    mockStore = createMockStore(api);
   });
 
   describe('loadHomePage()', function() {
