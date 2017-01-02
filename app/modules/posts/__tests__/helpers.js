@@ -7,6 +7,7 @@ export function createPost(props = {}) {
     permalink: 'post-title',
     body: 'Post body.',
     bodyRaw: 'Post body.',
+    imageUrl: 'http://foo.com/post.jpg',
     preview: 'Post body. <strong>Foo!</strong>',
     published: true,
     publishDate: '2016-1-1'

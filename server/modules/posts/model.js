@@ -25,6 +25,10 @@ const schema = {
     unique: true
   },
 
+  imageUrl: {
+    type: Sequelize.STRING
+  },
+
   published: {
     allowNull: false,
     defaultValue: false,

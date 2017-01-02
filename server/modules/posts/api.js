@@ -4,7 +4,7 @@ const Post = require('./model');
 
 const CACHE_KEY_POSTS_ALL = 'posts-all';
 const CACHE_KEY_POSTS = 'posts';
-const POST_UPDATE_FIELDS = ['title', 'body', 'permalink', 'published', 'publishDate'];
+const POST_UPDATE_FIELDS = ['title', 'body', 'imageUrl', 'permalink', 'published', 'publishDate'];
 const POST_CREATE_FIELDS = POST_UPDATE_FIELDS.concat(['userId']);
 
 // TODO: Replace with something more robust like Redis.

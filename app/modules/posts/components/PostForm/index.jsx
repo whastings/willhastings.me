@@ -12,10 +12,11 @@ class PostForm extends Component {
       post,
       titleValue: title,
       bodyValue: body,
+      imageUrlValue: imageUrl,
       publishedValue: published
     } = this.props;
     let id = post && post.id;
-    this.props.onSubmit({id, title, body, published});
+    this.props.onSubmit({id, title, body, imageUrl, published});
   }
 
   render() {
@@ -34,6 +35,12 @@ class PostForm extends Component {
           field="body"
           inputType="textarea"
           id="post-form__body-input"
+        />
+
+        <label htmlFor="post-form__image-url-input">Image URL</label>
+        <WrappedInput
+          field="imageUrl"
+          id="post-form__image-url-input"
         />
 
         <fieldset>
@@ -68,6 +75,7 @@ class PostForm extends Component {
 
 PostForm.propTypes = {
   bodyValue: PropTypes.string,
+  imageUrlValue: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   post: PostType,
   publishedValue: PropTypes.bool,
@@ -82,6 +90,7 @@ export default wrapForm({
   fields: [
     'title',
     'body',
+    'imageUrl',
     {name: 'published', type: Boolean}
   ],
   initials: (props) => {

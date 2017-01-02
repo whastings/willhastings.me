@@ -1,6 +1,8 @@
 @import "app/styles/lib";
 
 .post-teaser {
+  @include clearfix();
+
   @include el(title) {
     margin: 0 0 0.5rem;
 
@@ -18,5 +20,10 @@
   @include el(publish-date) {
     font-size: 90%;
     font-weight: bold;
+  }
+
+  @include el(image-thumbnail) {
+    float: left;
+    margin-right: 10px;
   }
 }

@@ -17,7 +17,7 @@ describe('Posts - PostForm component', function() {
     pageObject = new PostFormPageObject(postForm);
   }
 
-  it('renders a form with title, body, and published fields', function() {
+  it('renders a form with title, body, image URL, and published fields', function() {
     render();
 
     let { publishedRadioNo, publishedRadioYes } = pageObject;
@@ -29,6 +29,9 @@ describe('Posts - PostForm component', function() {
 
     assert.isOk(pageObject.hasOne('bodyInput', {type: 'textarea'}), 'renders body input');
     assert.isOk(pageObject.hasLabelFor('bodyInput'), 'body input has label');
+
+    assert.isOk(pageObject.hasOne('imageUrlInput', {type: 'input'}), 'renders image URL input');
+    assert.isOk(pageObject.hasLabelFor('imageUrlInput'), 'image url input has label');
 
     assert.isOk(
       pageObject.hasOne('publishedRadioNo', {type: 'input'}),
@@ -49,9 +52,11 @@ describe('Posts - PostForm component', function() {
 
   it('invokes onSubmit callback with new post data on form submit', function() {
     render();
+    let imageUrl = 'http://foo.com/image.jpg';
 
     pageObject.fillIn('titleInput', 'Foo');
     pageObject.fillIn('bodyInput', 'Bar');
+    pageObject.fillIn('imageUrlInput', imageUrl);
     pageObject.publishedRadioYes.simulate('change');
     pageObject.form.simulate('submit');
 
@@ -60,6 +65,7 @@ describe('Posts - PostForm component', function() {
       id: undefined,
       title: 'Foo',
       body: 'Bar',
+      imageUrl,
       published: true
     });
   });
@@ -70,6 +76,7 @@ describe('Posts - PostForm component', function() {
 
     assert.equal(pageObject.getValueFor('titleInput'), post.title, 'title is correct');
     assert.equal(pageObject.getValueFor('bodyInput'), post.body, 'body is correct');
+    assert.equal(pageObject.getValueFor('imageUrlInput'), post.imageUrl, 'image URL is correct');
     assert.isOk(
       post.published ? pageObject.isPublishedCheckedYes() :
         pageObject.isPublishedCheckedNo(),
@@ -90,6 +97,7 @@ describe('Posts - PostForm component', function() {
       id: post.id,
       title: post.title,
       body: post.body + ' baz qux',
+      imageUrl: post.imageUrl,
       published: false
     });
   });

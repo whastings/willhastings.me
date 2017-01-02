@@ -7,7 +7,11 @@ export default function PostPage({post}) {
     <section className="post-view-page post">
       <h2 className="page-title">{post.title}</h2>
 
-      <SafeOutput className="post__body card" content={post.body}/>
+      <div className="post__body card">
+        {post.imageUrl &&
+          <img className="post__image" src={post.imageUrl} alt=""/>}
+        <SafeOutput className="post__content" content={post.body}/>
+      </div>
     </section>
   );
 }

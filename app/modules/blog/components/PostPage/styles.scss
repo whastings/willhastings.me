@@ -5,6 +5,11 @@
 }
 
 .post {
+  @include el(image) {
+    display: block;
+    margin: 0 auto 10px;
+  }
+
   @include el(body) {
     pre {
       background: #1d1f21;
