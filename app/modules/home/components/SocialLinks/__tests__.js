@@ -12,10 +12,10 @@ describe('Home - SocialLinks component', function() {
     links = socialLinks.find('li').find('a');
   });
 
-  it('renders a list of three links', function() {
+  it('renders a list of four links', function() {
     assert.isOk(socialLinks.is('ul'), 'tag name is UL');
-    assert.equal(socialLinks.find('li').length, 3, 'UL has three LIs');
-    assert.equal(links.length, 3, 'has three links');
+    assert.equal(socialLinks.find('li').length, 4, 'UL has four LIs');
+    assert.equal(links.length, 4, 'has four links');
   });
 
   it('renders each link with an accessible title and icon', function() {
