@@ -8,6 +8,7 @@
   @include el(image) {
     display: block;
     margin: 0 auto 10px;
+    max-width: 100%;
   }
 
   @include el(body) {
