@@ -21,7 +21,7 @@ app.get('/', asyncRoute(function* rssRouteIndex(req, res) {
     .forEach((post) => feed.item({
       title: post.title,
       description: post.preview,
-      url: `http://www.willhastings.me/${post.permalink}`,
+      url: `http://www.willhastings.me/blog/${post.permalink}`,
       date: post.publishDate,
       author: 'Will Hastings'
     }));
