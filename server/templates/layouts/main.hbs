@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{csrfToken}}">
-    <link rel="stylesheet" href="/{{get assets 'app.css'}}">
+    <link rel="stylesheet" href="{{get assets 'app.css'}}">
     <link rel="alternate" type="application/rss+xml" href="http://www.willhastings.me/rss">
   </head>
   <body>
@@ -35,11 +35,7 @@
       <script type="text/json" id="init-data">{{{data}}}</script>
     {{/if}}
 
-    {{#if isDev}}
-      <script src="//localhost:35729/livereload.js"></script>
-    {{/if}}
-
-    <script src="/{{get assets 'vendor.js'}}"></script>
-    <script src="/{{get assets 'app.js'}}"></script>
+    <script src="{{get assets 'vendor.js'}}"></script>
+    <script src="{{get assets 'app.js'}}"></script>
   </body>
 </html>

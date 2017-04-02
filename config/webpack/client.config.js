@@ -20,12 +20,14 @@ exports = module.exports = {
     shared.output,
     {
       path: path.join(shared.output.path, 'client'),
-      publicPath: '/'
     },
     IS_PROD ? {
       filename: '[name]-[chunkhash].js',
-      chunkFilename: '[name]-[chunkhash].chunk.js'
-    } : {}
+      chunkFilename: '[name]-[chunkhash].chunk.js',
+      publicPath: '/',
+    } : {
+      publicPath: 'http://localhost:8080/',
+    }
   ),
 
   resolve: shared.resolve,

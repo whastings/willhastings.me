@@ -1,10 +1,10 @@
-exports = module.exports = [
-  require('./webpack/client.config'),
-  require('./webpack/server.config')
-];
+const IS_PROD = process.env.NODE_ENV === 'production';
 
-if (process.env.NODE_ENV === 'production') {
-  exports.push(require('./webpack/polyfills.config'));
-} else {
-  exports.push(require('./webpack/tests.config'));
-}
+module.exports = [
+  require('./webpack/server.config'),
+].concat(IS_PROD ? [
+  require('./webpack/client.config'),
+  require('./webpack/polyfills.config'),
+] : [
+  require('./webpack/tests.config'),
+]);
