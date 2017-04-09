@@ -1,3 +1,5 @@
+// @flow
+
 const MONTHS = [
   'January',
   'February',
@@ -13,7 +15,7 @@ const MONTHS = [
   'December'
 ];
 
-export function toFriendlyDate(dateString) {
+export function toFriendlyDate(dateString: string): string {
   let [ year, month, day ] = dateString.split('-');
   month = MONTHS[parseInt(month, 10) - 1];
   day = day.replace(/^0/, '');

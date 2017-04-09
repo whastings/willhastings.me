@@ -94,11 +94,13 @@
   },
   "devDependencies": {
     "@whastings/eslint-config-whastings": "^1.0.0",
+    "babel-preset-flow": "^6.23.0",
     "chai": "^3.5.0",
     "concurrently": "^3.4.0",
     "enzyme": "^2.6.0",
     "eslint": "^3.12.2",
     "faker": "^3.0.1",
+    "flow-bin": "^0.43.1",
     "node-inspector": "^0.12.8",
     "nodemon": "^1.10.0",
     "plop": "^1.7.3",

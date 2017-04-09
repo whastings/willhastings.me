@@ -2,7 +2,8 @@ export default function initialLoader() {
   var firstLoad = true;
   return function initialLoad(data, next) {
     if (!firstLoad) {
-      return next();
+      next();
+      return;
     }
 
     let initData = document.getElementById('init-data');

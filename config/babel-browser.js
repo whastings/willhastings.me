@@ -26,6 +26,7 @@ module.exports = {
     ['transform-runtime', {polyfill: false, regenerator: false}]
   ]),
   presets: BASE_PRESETS.concat(
+    'flow',
     'react'
   )
 };
