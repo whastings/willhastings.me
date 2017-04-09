@@ -19,7 +19,6 @@ function routeToApp(req, res, next) {
   let app = new App({
     renderer: (element, options = {}) => {
       res.render('base', {
-        assets: res.assets,
         csrfToken: req.csrfToken(),
         data: serialize(app.store.getState()),
         html: renderToString(element),
