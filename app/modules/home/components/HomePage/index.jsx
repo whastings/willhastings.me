@@ -1,4 +1,5 @@
 // @flow
+
 import type { Post } from 'posts/types';
 import './styles.scss';
 import React from 'react';

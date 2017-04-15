@@ -1,3 +1,8 @@
+// @flow
+
+type QueryParamMap = { [string]: number | string | boolean };
+type URL = string;
+
 const DEFAULT_OPTIONS = {
   credentials: 'same-origin', // Allow setting cookies.
   headers: {},
@@ -9,13 +14,13 @@ const JSON_HEADERS = {
   'Content-Type': 'application/json'
 };
 
-export function deleteResource(route) {
+export function deleteResource(route: URL): Promise<Response> {
   return fetch(route, getOptions({
     method: 'DELETE'
   }));
 }
 
-export function getJSON(route) {
+export function getJSON(route: URL): Promise<Object> {
   return fetch(route, getOptions())
     .then((response) => {
       // TODO: Check response.ok
@@ -23,11 +28,11 @@ export function getJSON(route) {
     });
 }
 
-export function postJSON(route, body = null) {
-  body = body ? JSON.stringify(body) : undefined;
+export function postJSON(route: URL, body: ?Object = null): Promise<Object> {
+  const postBody = body ? JSON.stringify(body) : undefined;
 
   return fetch(route, getOptions({
-    body,
+    body: postBody,
     headers: JSON_HEADERS,
     method: 'POST',
   }))
@@ -37,11 +42,11 @@ export function postJSON(route, body = null) {
     });
 }
 
-export function putJSON(route, body) {
-  body = JSON.stringify(body);
+export function putJSON(route: URL, body: Object): Promise<Object> {
+  const putBody = JSON.stringify(body);
 
   return fetch(route, getOptions({
-    body,
+    putBody,
     headers: JSON_HEADERS,
     method: 'PUT'
   }))
@@ -51,30 +56,30 @@ export function putJSON(route, body) {
     });
 }
 
-export function sendDelete(route) {
-  return fetch(route, getOptions({
-    method: 'DELETE'
-  }));
-  // TODO: Check response.ok
-}
-
-export function stringifyQueryParams(queryParams) {
+export function stringifyQueryParams(queryParams: QueryParamMap) {
   return '?' + Object.keys(queryParams)
-    .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key]))
+    .map((key) => encodeURIComponent(key.toString()) + '=' +
+      encodeURIComponent(queryParams[key].toString()))
     .join('&');
 }
 
-function getCsrfToken() {
-  let tokenMetaTag = document.querySelector('meta[name=csrf-token]');
+function getCsrfToken(): string {
+  const tokenMetaTag = document.querySelector('meta[name=csrf-token]');
 
   if (!tokenMetaTag) {
     throw new Error('CSRF token metatag not present');
   }
 
-  return tokenMetaTag.getAttribute('content');
+  const token = tokenMetaTag.getAttribute('content');
+
+  if (typeof token !== 'string') {
+    throw new Error('Token not present on CSRF metatag');
+  }
+
+  return token;
 }
 
-function getOptions(custom = {}) {
+function getOptions(custom? = {}): Object {
   let options = Object.assign({}, DEFAULT_OPTIONS, custom);
 
   if (options.method !== 'GET') {

@@ -1,4 +1,8 @@
-export function loadHomePage() {
+// @flow
+
+import type { AsyncAction } from 'app/types';
+
+export function loadHomePage(): AsyncAction {
   return (api, getState) => {
     if (getState().pages.home) {
       return null;

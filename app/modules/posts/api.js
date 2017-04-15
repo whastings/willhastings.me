@@ -1,8 +1,8 @@
 import {
+  deleteResource,
   getJSON,
   postJSON,
   putJSON,
-  sendDelete,
   stringifyQueryParams
 } from 'app/utils/request';
 
@@ -12,7 +12,7 @@ export default {
   },
 
   deletePost(postId) {
-    return sendDelete(`/api/posts/${postId}`);
+    return deleteResource(`/api/posts/${postId}`);
   },
 
   getPost(permalink, queryParams = null) {
