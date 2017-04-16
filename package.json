@@ -105,6 +105,7 @@
     "eslint": "^3.12.2",
     "faker": "^3.0.1",
     "flow-bin": "^0.43.1",
+    "flow-typed": "^2.0.0",
     "node-inspector": "^0.12.8",
     "nodemon": "^1.10.0",
     "plop": "^1.7.3",
