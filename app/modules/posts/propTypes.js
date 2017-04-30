@@ -1,6 +1,5 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-
-const { PropTypes } = React;
 
 export const PostType = PropTypes.shape({
   title: PropTypes.string.isRequired,

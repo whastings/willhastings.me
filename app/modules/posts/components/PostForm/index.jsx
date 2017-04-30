@@ -1,9 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
 import { PostType } from 'posts/propTypes';
 
-const { Component, PropTypes } = React;
+const {
+  Component
+} = React;
 
 class PostForm extends Component {
   handleSubmit(event) {

@@ -1,9 +1,8 @@
 import './styles.scss';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { PostType } from 'posts/propTypes';
 import { toFriendlyDate } from 'app/utils/dates';
-
-const { PropTypes } = React;
 
 export default function PostTeaser({post, children, showPreview = true}) {
   let preview = {__html: post.preview};

@@ -1,10 +1,9 @@
 import './styles.scss';
+import PropTypes from 'prop-types';
 import React from 'react';
 import PostTeaser from 'posts/components/PostTeaser';
 import { map } from 'app/utils';
 import { PostType } from 'posts/propTypes';
-
-const { PropTypes } = React;
 
 export default function PostList({posts}) {
   return (

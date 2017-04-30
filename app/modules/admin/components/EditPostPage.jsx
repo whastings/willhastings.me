@@ -1,8 +1,7 @@
 import AdminPageLayout from 'admin/components/AdminPageLayout';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { PostForm } from 'app/modules/posts/components';
-
-const { PropTypes } = React;
 
 export default function EditPostPage({onFormSubmit, onSignOut, post}) {
   return (

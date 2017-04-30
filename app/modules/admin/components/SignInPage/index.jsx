@@ -1,9 +1,12 @@
 import './styles.scss';
+import PropTypes from 'prop-types';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
 
-const { Component, PropTypes } = React;
+const {
+  Component
+} = React;
 
 class SignInPage extends Component {
   handleSubmit(event) {
