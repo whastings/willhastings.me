@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+NODE_ENV=production
+webpack --config=config/webpack/client.config.js --profile --json > dist/client/stats.json
+webpack-bundle-analyzer dist/client/stats.json

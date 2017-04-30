@@ -4,6 +4,7 @@
   "description": "The blog and portfolio website of Will Hastings.",
   "main": "index.js",
   "scripts": {
+    "analyze": "./bin/analyze-client-build",
     "build-app": "webpack --progress --color --config=config/webpack.config.js",
     "build-content": "gulp",
     "build": "npm run build-content && npm run build-app",
@@ -110,6 +111,7 @@
     "redux-mock-store": "^1.2.1",
     "sinon": "^1.17.6",
     "testem": "^1.13.0",
+    "webpack-bundle-analyzer": "^2.4.0",
     "webpack-dev-server": "^2.4.2"
   }
 }
