@@ -12,7 +12,6 @@ exports = module.exports = {
     app: [
       './client/scripts/main.js'
     ],
-    vendor: config.vendorModules
   },
 
   output: Object.assign(
@@ -65,6 +64,9 @@ exports = module.exports = {
     new CommonsChunkPlugin({
       name: 'vendor',
       filename: IS_PROD ? 'vendor-[chunkhash].js' : 'vendor.js',
+      minChunks(module) {
+        return module.context && module.context.includes('node_modules');
+      }
     }),
     new CommonsChunkPlugin({
       name: 'app',
