@@ -65,13 +65,15 @@ exports = module.exports = {
     new CommonsChunkPlugin({
       name: 'vendor',
       filename: IS_PROD ? 'vendor-[chunkhash].js' : 'vendor.js',
-      minChunks: Infinity
     }),
     new CommonsChunkPlugin({
       name: 'app',
       filename: IS_PROD ? 'app-[chunkhash].js' : 'app.js',
       children: true,
       minChunks: 2
+    }),
+    new CommonsChunkPlugin({
+      name: 'manifest',
     }),
     new ExtractTextPlugin({
       filename: IS_PROD ? 'app-[chunkhash].css' : 'app.css',
