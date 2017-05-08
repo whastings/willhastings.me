@@ -2,10 +2,11 @@ const config = require('../build');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const shared = require('./shared.config');
-const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const webpack = require('webpack');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const { CommonsChunkPlugin } = webpack.optimize;
+const CWD = process.cwd();
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 exports = module.exports = {
@@ -87,27 +88,10 @@ exports = module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.UglifyJsPlugin(),
-    new StatsWriterPlugin({
-      filename: 'stats.json',
-      transform({ assetsByChunkName }) {
-        return JSON.stringify(formatStatsObject(assetsByChunkName), null, 2);
-      },
+    new AssetsPlugin({
+      filename: 'assets.json',
+      path: `${CWD}/dist/client`,
+      prettyPrint: true,
     }),
   ] : [])
 };
-
-function addChunkToMap(chunkValue, map) {
-  const chunkName = chunkValue.replace(/^(\w+)-\w+\.([\w.]+)$/, '$1.$2');
-  map[chunkName] = chunkValue;
-}
-
-function formatStatsObject(assetsByChunkName) {
-  return Object.keys(assetsByChunkName).reduce((map, chunkName) => {
-    let chunkValue = assetsByChunkName[chunkName];
-    if (!Array.isArray(chunkValue)) {
-      chunkValue = [chunkValue];
-    }
-    chunkValue.forEach((value) => addChunkToMap(value, map));
-    return map;
-  }, {});
-}
