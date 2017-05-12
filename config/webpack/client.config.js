@@ -85,9 +85,16 @@ exports = module.exports = {
     }),
   ].concat(IS_PROD ? [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.SHOULD_PROFILE': JSON.stringify(IS_PROD && !!process.env.SHOULD_PROFILE),
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: {
+        /* eslint-disable camelcase */
+        keep_fnames: true,
+        /* eslint-enable camelcase */
+      },
+    }),
     new AssetsPlugin({
       filename: 'assets.json',
       path: `${CWD}/dist/client`,

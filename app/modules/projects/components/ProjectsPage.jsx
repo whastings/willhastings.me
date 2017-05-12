@@ -1,7 +1,8 @@
 import ProjectTabs from './ProjectTabs';
 import React from 'react';
+import profiler from 'app/utils/components/profiler';
 
-export default function ProjectsPage(props) {
+export function ProjectsPage(props) {
   return (
     <section className="projects-page">
       <h2 className="page-title">Projects</h2>
@@ -10,3 +11,5 @@ export default function ProjectsPage(props) {
     </section>
   );
 }
+
+export default profiler(ProjectsPage);

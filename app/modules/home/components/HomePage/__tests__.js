@@ -1,5 +1,5 @@
-import HomePage from './';
 import React from 'react';
+import { HomePage } from './';
 import { assert } from 'chai';
 import { createPost } from 'posts/__tests__/helpers';
 import { shallow } from 'enzyme';

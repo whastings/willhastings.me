@@ -7,6 +7,7 @@
     "analyze": "./bin/analyze-client-build",
     "build-app": "webpack --progress --color --config=config/webpack.config.js",
     "build-content": "gulp",
+    "build-with-profile": "SHOULD_PROFILE=true NODE_ENV=production npm run build-app",
     "build": "npm run build-content && npm run build-app",
     "c": "./bin/repl",
     "db:clear": "./bin/db clear",
