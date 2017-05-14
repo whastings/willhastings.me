@@ -1,13 +1,5 @@
-<!doctype html>
-<html>
-  <head>
-    <title>{{title}}</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{csrfToken}}">
-    <link rel="stylesheet" href="{{getAsset 'app.css'}}">
-    <link rel="alternate" type="application/rss+xml" href="http://www.willhastings.me/rss">
+    <title>{{title}}</title>
   </head>
   <body>
     <header class="site-header">
@@ -25,7 +17,8 @@
       </div>
     </header>
 
-    {{{body}}}
+    {{!-- No whitespace in tag since React will render into it client-side --}}
+    <main class="site-main">{{{html}}}</main>
 
     <footer class="site-footer">
       &copy; 2016 Will Hastings
@@ -34,9 +27,5 @@
     {{#if data}}
       <script type="text/json" id="init-data">{{{data}}}</script>
     {{/if}}
-
-    <script src="{{getAsset 'manifest.js'}}"></script>
-    <script src="{{getAsset 'vendor.js'}}"></script>
-    <script src="{{getAsset 'app.js'}}"></script>
   </body>
 </html>

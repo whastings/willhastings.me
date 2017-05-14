@@ -1,16 +1,19 @@
-export default function runRouteHandlers(handlers, onError, args, currentHandler = 0) {
+export default function runRouteHandlers(handlers, onError, onWillRender, args, currentHandler = 0) {
+  const isLastHandler = currentHandler === (handlers.length - 1);
   try {
-    let result = handlers[currentHandler](...args, function triggerNextHandler() {
-      let nextHandler = currentHandler + 1;
-      if (nextHandler < handlers.length) {
-        runRouteHandlers(handlers, onError, args, nextHandler);
+    if (isLastHandler && onWillRender) {
+      onWillRender();
+    }
+    const result = handlers[currentHandler](...args, function triggerNextHandler() {
+      if (!isLastHandler) {
+        runRouteHandlers(handlers, onError, onWillRender, args, currentHandler + 1);
       }
     });
 
     if (result && typeof result.catch === 'function') {
       result.catch(onError);
     }
-  } catch(error) {
+  } catch (error) {
     onError(error);
   }
 }

@@ -26,6 +26,14 @@ export default class App {
     }
   }
 
+  handleWillRender() {
+    let { onWillRender } = this.options;
+
+    if (onWillRender) {
+      onWillRender();
+    }
+  }
+
   redirect(path) {
     this.options.onRedirect(path);
   }
@@ -52,12 +60,12 @@ export default class App {
   }
 
   route(path, req) {
-    let preMiddleware = this.preMiddleware.match(req.path),
-        routeHandler = ROUTES[path],
-        handlers = [],
-        { handleError, store } = this;
+    const preMiddleware = this.preMiddleware.match(req.path);
+    const routeHandler = ROUTES[path];
+    let handlers = [];
+    const { handleError, handleWillRender, store } = this;
 
-    let res = {
+    const res = {
       dispatch: store.dispatch,
       handleError,
       redirect: this.redirect,
@@ -72,10 +80,10 @@ export default class App {
       handlers.push(routeHandler);
     }
 
-    runRouteHandlers(handlers, handleError, [req, res, store.getState]);
+    runRouteHandlers(handlers, handleError, handleWillRender, [req, res, store.getState]);
   }
 }
 
-autobindMethods(App, 'handleError', 'redirect', 'render', 'render404');
+autobindMethods(App, 'handleError', 'handleWillRender', 'redirect', 'render', 'render404');
 
 App.routes = Object.keys(ROUTES);

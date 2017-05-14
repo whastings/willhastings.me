@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const configViews = require('server/utils/configViews');
 const csrf = require('csurf');
 const express = require('express');
 const http = require('http');
@@ -20,7 +19,6 @@ exports = module.exports = class ServerManager {
     this._connectToDb();
 
     let app = this.app = express();
-    configViews(app);
     app.use(express.static(options.staticDir));
     applyPreMiddleware(app, this.dbConnection);
     applyRoutes(app);
