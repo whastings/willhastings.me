@@ -4,5 +4,8 @@ module.exports = {
     'transform-object-rest-spread',
     ['transform-runtime', {polyfill: false, regenerator: false}]
   ],
-  presets: ['react', 'es2015-node']
+  presets: [
+    'es2015-node',
+    'react',
+  ],
 };
