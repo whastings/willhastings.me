@@ -1,5 +1,5 @@
 export default function asyncActionMiddleware(...actionResources) {
-  return store => next => action => {
+  return (store) => (next) => (action) => {
     if (typeof action !== 'function') {
       return next(action);
     }

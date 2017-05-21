@@ -16,6 +16,7 @@
     "dev": "concurrently -p '[{name}]' -n 'CLIENT,SERVER' -c 'bgBlue.bold,bgGreen.bold' 'npm run dev-client' 'npm run dev-server'",
     "dev-client": "webpack-dev-server --config=config/webpack/client.config.js",
     "dev-server": "npm run build-app -- --watch",
+    "fti": "flow-typed install",
     "g": "plop",
     "migrations": "sequelize db:migrate",
     "postinstall": "npm run build && npm run migrations",

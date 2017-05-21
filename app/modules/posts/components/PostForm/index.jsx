@@ -1,25 +1,38 @@
-import PropTypes from 'prop-types';
+// @flow
+
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
-import { PostType } from 'posts/propTypes';
+import type { Post } from 'posts/types';
 
-const {
-  Component
-} = React;
+class PostForm extends React.Component {
+  props: {
+    post?: Post,
+    bodyValue: string,
+    imageUrlValue: string,
+    publishedValue: boolean,
+    titleValue: string,
+    WrappedInput: any, // TODO: Fix to not use any.
+    onSubmit: (data: {
+      id?: number,
+      title: string,
+      body: string,
+      imageUrl: string,
+      published: boolean,
+    }) => void
+  };
 
-class PostForm extends Component {
-  handleSubmit(event) {
+  handleSubmit(event: Event) {
     event.preventDefault();
-    let {
+    const {
       post,
       titleValue: title,
       bodyValue: body,
       imageUrlValue: imageUrl,
       publishedValue: published
     } = this.props;
-    let id = post && post.id;
-    this.props.onSubmit({id, title, body, imageUrl, published});
+    const id = post && post.id;
+    this.props.onSubmit({ id, title, body, imageUrl, published });
   }
 
   render() {
@@ -76,16 +89,6 @@ class PostForm extends Component {
   }
 }
 
-PostForm.propTypes = {
-  bodyValue: PropTypes.string,
-  imageUrlValue: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-  post: PostType,
-  publishedValue: PropTypes.bool,
-  titleValue: PropTypes.string,
-  WrappedInput: PropTypes.func.isRequired
-};
-
 autobindMethods(PostForm, 'handleSubmit');
 
 export default wrapForm({
@@ -94,9 +97,9 @@ export default wrapForm({
     'title',
     'body',
     'imageUrl',
-    {name: 'published', type: Boolean}
+    { name: 'published', type: Boolean },
   ],
-  initials: (props) => {
+  initials: (props: { post: Post }) => {
     if (!props.post) {
       return null;
     }

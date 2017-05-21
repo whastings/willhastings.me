@@ -1,19 +1,25 @@
+// @flow
+
 import memoizeStateLookup from 'app/utils/memoizeStateLookup';
 import { createSelector } from 'reselect';
+import type { State } from 'app/types';
+import type { Post, PostsState } from './types';
+
+type GetPost = (state: State, permalink: string) => Post | null;
 
 export const getPosts = createSelector(
-  (state) => state.posts,
-  (posts) => Object.keys(posts)
+  (state: State) => state.posts,
+  (posts: PostsState) => Object.keys(posts)
     .map((postId) => posts[postId])
     .sort(comparePosts)
 );
 
-export const getPost = memoizeStateLookup(
+export const getPost: GetPost = memoizeStateLookup(
   getPosts,
   (posts, permalink) => posts.find((post) => post.permalink === permalink)
 );
 
-function comparePosts(post1, post2) {
+function comparePosts(post1: Post, post2: Post): number {
   if (!post1.published && !post2.published) {
     return post1.createdAt > post2.createdAt ? -1 : 1;
   }

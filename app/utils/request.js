@@ -1,6 +1,6 @@
 // @flow
 
-type QueryParamMap = { [string]: number | string | boolean };
+type QueryParamMap = { [string]: any };
 type URL = string;
 
 const DEFAULT_OPTIONS = {
@@ -20,7 +20,7 @@ export function deleteResource(route: URL): Promise<Response> {
   }));
 }
 
-export function getJSON(route: URL): Promise<Object> {
+export function getJSON(route: URL): Promise<Object | Array<Object>> {
   return fetch(route, getOptions())
     .then((response) => {
       // TODO: Check response.ok

@@ -1,3 +1,5 @@
+// @flow
+
 type PageId = string;
 
 export type Page = {

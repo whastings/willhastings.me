@@ -1,3 +1,5 @@
+// @flow
+
 import adminApi from 'app/modules/admin/api';
 import homeApi from 'app/modules/home/api';
 import postsApi from 'app/modules/posts/api';

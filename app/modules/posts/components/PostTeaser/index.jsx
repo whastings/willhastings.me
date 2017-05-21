@@ -1,12 +1,20 @@
-import './styles.scss';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { PostType } from 'posts/propTypes';
-import { toFriendlyDate } from 'app/utils/dates';
+// @flow
 
-export default function PostTeaser({post, children, showPreview = true}) {
-  let preview = {__html: post.preview};
-  let publishDate = post.published && post.publishDate ?
+import './styles.scss';
+import React from 'react';
+import { toFriendlyDate } from 'app/utils/dates';
+import type { Post } from 'posts/types';
+import type { Children } from 'react';
+
+type Props = {
+  post: Post,
+  children?: Children,
+  showPreview?: boolean,
+};
+
+export default function PostTeaser({post, children, showPreview = true}: Props) {
+  const preview = { __html: post.preview };
+  const publishDate = post.published && post.publishDate ?
     toFriendlyDate(post.publishDate) :
     'Unpublished';
 
@@ -28,13 +36,7 @@ export default function PostTeaser({post, children, showPreview = true}) {
   );
 }
 
-PostTeaser.propTypes = {
-  children: PropTypes.any,
-  post: PostType,
-  showPreview: PropTypes.bool
-};
-
-function toThumbnailUrl(url) {
+function toThumbnailUrl(url: string): string {
   let urlParts = url.split('/');
   urlParts.pop();
   urlParts.push('thumbnail.jpg');
