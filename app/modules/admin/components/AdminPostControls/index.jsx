@@ -1,18 +1,26 @@
+// @flow
+
 import './styles.scss';
 import React from 'react';
 import { autobindMethods } from '@whastings/js_utils';
+import type { Post } from 'posts/types';
 
 const { Component } = React;
 
 export default class AdminPostListItem extends Component {
+  props: {
+    onDelete: (Post) => void,
+    post: Post,
+  };
+
   handleDelete() {
-    let { onDelete, post } = this.props;
+    const { onDelete, post } = this.props;
     onDelete(post);
   }
 
   render() {
-    let { post } = this.props,
-        { permalink } = post;
+    const { post } = this.props;
+    const { permalink } = post;
 
     return (
       <ul className="admin-post-controls">

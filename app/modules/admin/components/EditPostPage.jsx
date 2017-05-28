@@ -1,9 +1,17 @@
-import AdminPageLayout from 'admin/components/AdminPageLayout';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { PostForm } from 'app/modules/posts/components';
+// @flow
 
-export default function EditPostPage({onFormSubmit, onSignOut, post}) {
+import AdminPageLayout from 'admin/components/AdminPageLayout';
+import React from 'react';
+import { PostForm } from 'posts/components';
+import type { Post } from 'posts/types';
+
+type Props = {
+  onFormSubmit: Function,
+  onSignOut: Function,
+  post: Post,
+};
+
+export default function EditPostPage({onFormSubmit, onSignOut, post}: Props) {
   return (
     <AdminPageLayout onSignOut={onSignOut}>
       <section className="edit-post-page post-form-page">
@@ -12,7 +20,3 @@ export default function EditPostPage({onFormSubmit, onSignOut, post}) {
     </AdminPageLayout>
   );
 }
-
-EditPostPage.propTypes = {
-  onFormSubmit: PropTypes.func.isRequired
-};

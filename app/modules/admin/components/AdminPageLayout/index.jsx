@@ -1,8 +1,16 @@
+// @flow
+
 import './styles.scss';
 import AdminNav from 'admin/components/AdminNav';
 import React from 'react';
+import type { Children } from 'react';
 
-export default function AdminPageLayout({children, onSignOut}) {
+type Props = {
+  children?: Children, // Flow bug requires making it optional param
+  onSignOut: Function,
+};
+
+export default function AdminPageLayout({children, onSignOut}: Props) {
   return (
     <div className="admin-page">
       <div className="admin-sidebar">

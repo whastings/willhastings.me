@@ -1,15 +1,22 @@
+// @flow
+
 import AdminPageLayout from 'admin/components/AdminPageLayout';
 import AdminPostList from 'admin/components/AdminPostList';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from 'posts/selectors';
+import type { Post } from 'posts/types';
+import type { State } from 'app/types';
 
-const {
-  Component
-} = React;
+const { Component } = React;
 
 class AdminIndexPage extends Component {
+  props: {
+    posts: Post[],
+    onPostDelete: Function,
+    onSignOut: Function,
+  };
+
   render() {
     let { onPostDelete, onSignOut, posts } = this.props;
 
@@ -24,11 +31,6 @@ class AdminIndexPage extends Component {
   }
 }
 
-AdminIndexPage.propTypes = {
-  onPostDelete: PropTypes.func.isRequired,
-  onSignOut: PropTypes.func.isRequired
-};
-
 export default connect(
-  (state) => ({posts: getPosts(state)})
+  (state: State) => ({posts: getPosts(state)})
 )(AdminIndexPage);

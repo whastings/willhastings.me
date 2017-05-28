@@ -1,7 +1,13 @@
+// @flow
+
 import './styles.scss';
 import React from 'react';
 
-export default function AdminNav({onSignOut}) {
+type Props = {
+  onSignOut: () => void,
+};
+
+export default function AdminNav({onSignOut}: Props) {
   return (
     <nav className="admin-nav card-primary">
       <ul className="admin-nav__links">

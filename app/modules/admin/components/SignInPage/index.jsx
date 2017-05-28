@@ -1,15 +1,21 @@
+// @flow
+
 import './styles.scss';
-import PropTypes from 'prop-types';
 import React from 'react';
 import wrapForm from 'app/utils/components/wrapForm';
 import { autobindMethods } from '@whastings/js_utils';
 
-const {
-  Component
-} = React;
+const { Component } = React;
 
 class SignInPage extends Component {
-  handleSubmit(event) {
+  props: {
+    onSubmit: (string, string) => void,
+    passwordValue: string,
+    usernameValue: string,
+    WrappedInput: any,
+  };
+
+  handleSubmit(event: Event) {
     let { usernameValue, passwordValue } = this.props;
     event.preventDefault();
     this.props.onSubmit(usernameValue, passwordValue);
@@ -39,10 +45,6 @@ class SignInPage extends Component {
     );
   }
 }
-
-SignInPage.propTypes = {
-  onSubmit: PropTypes.func.isRequired
-};
 
 autobindMethods(SignInPage, 'handleSubmit');
 
