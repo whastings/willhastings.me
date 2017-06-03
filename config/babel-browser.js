@@ -22,6 +22,7 @@ const BASE_PRESETS = IS_PROD ?
 
 module.exports = {
   plugins: BASE_PLUGINS.concat([
+    'syntax-dynamic-import',
     'transform-object-rest-spread',
     ['transform-runtime', {polyfill: false, regenerator: false}]
   ]),

@@ -1,4 +1,4 @@
-const app = require('server/modules/appRouter');
+const app = require('v2/server/appRouter');
 const home = require('server/modules/home');
 const posts = require('server/modules/posts');
 const projects = require('server/modules/projects');

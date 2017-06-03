@@ -4,7 +4,7 @@ const shared = require('./shared.config');
 
 module.exports = {
   entry: {
-    app: './app/index.jsx'
+    app: './v2/app/App.js',
   },
 
   output: Object.assign({}, shared.output, {

@@ -1,4 +1,5 @@
 import './styles.scss';
+import React from 'react';
 import { AdminIndexPage, EditPostPage, NewPostPage, SignInPage } from './components';
 import { signIn, signOut } from './actions';
 import {
@@ -7,46 +8,27 @@ import {
 import { getPost } from 'posts/selectors';
 
 export default {
-  index(req, res) {
-    return res.dispatch(loadPosts({includeUnpublished: true}))
-      .then(() => res.render(AdminIndexPage, {
-        onPostDelete: handlePostDelete.bind(null, res),
-        onSignOut: handleSignOut.bind(null, res)
-      }));
+  index(req, store) {
+    return store.dispatch(loadPosts({ includeUnpublished: true }))
+      .then(() => <AdminIndexPage onPostDelete={handlePostDelete} onSignOut={handleSignOut} />);
   },
 
-  newPost(req, res) {
-    res.render(NewPostPage, {
-      onFormSubmit: handlePostCreate.bind(null, res),
-      onSignOut: handleSignOut.bind(null, res)
-    });
+  newPost() {
+    return <NewPostPage onFormSubmit={handlePostCreate} onSignOut={handleSignOut} />;
   },
 
-  editPost(req, res, getState) {
-    let permalink = req.params.post;
+  editPost(req, store) {
+    const permalink = req.params.post;
 
-    return res.dispatch(loadPost(permalink, {editable: true}))
+    return store.dispatch(loadPost(permalink, { editable: true }))
       .then(() => {
-        let post = getPost(getState(), permalink);
-        res.render(
-          EditPostPage,
-          {
-            post,
-            onFormSubmit: handlePostEdit.bind(null, res),
-            onSignOut: handleSignOut.bind(null, res)
-          }
-        );
+        const post = getPost(store.getState(), permalink);
+        return <EditPostPage post={post} onFormSubmit={handlePostEdit} onSignOut={handleSignOut} />;
       });
   },
 
-  signIn(req, res) {
-    res.render(SignInPage, {
-      onSubmit(username, password) {
-        res.dispatch(signIn(username, password))
-          .then(() => res.redirect('/admin'))
-          .catch(res.handleError);
-      }
-    });
+  signIn(req) {
+    return <SignInPage onSubmit={handleSignIn} />;
   }
 };
 
@@ -64,6 +46,12 @@ function handlePostDelete(res, post) {
 function handlePostEdit(res, postData) {
   res.dispatch(updatePost(postData))
     .then(({payload: post}) => res.redirect(`/blog/${post.permalink}`))
+    .catch(res.handleError);
+}
+
+function handleSignIn(store, res, username, password) {
+  store.dispatch(signIn(username, password))
+    .then(() => res.redirect('/admin'))
     .catch(res.handleError);
 }
 
