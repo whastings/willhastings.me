@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+yarn install --ignore-scripts
+NODE_ENV=production yarn start

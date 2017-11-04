@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/whastings/willhastings.me#readme",
   "engines": {
-    "node": "^6.11.1"
+    "node": ">= 6.11.1"
   },
   "dependencies": {
     "@whastings/css_utils": "^0.1.0",
