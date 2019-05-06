@@ -3,6 +3,7 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Tabs from '../components/tabs/Tabs';
+import TabsList from '../components/tabs/TabsList';
 import Tab from '../components/tabs/Tab';
 import TabPanel from '../components/tabs/TabPanel';
 
@@ -10,9 +11,11 @@ const IndexPage = () => (
   <Layout>
     <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
     <Tabs>
-      <Tab index={0}>About</Tab>
-      <Tab index={1}>Work</Tab>
-      <Tab index={2}>Posts</Tab>
+      <TabsList>
+        <Tab index={0}>About</Tab>
+        <Tab index={1}>Work</Tab>
+        <Tab index={2}>Posts</Tab>
+      </TabsList>
       <TabPanel index={0}>
         <p>Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.</p>
 

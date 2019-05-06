@@ -3,6 +3,7 @@
   border: 0;
   background-color: var(--color-main-accent);
   color: var(--color-text-invert);
+  padding: 1rem 0;
 }
 
 .buttonActive {
