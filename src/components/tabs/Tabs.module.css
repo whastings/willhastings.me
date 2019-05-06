@@ -1,0 +1,4 @@
+.container {
+  border: 1px var(--color-main-accent) solid;
+  padding: 1.5rem;
+}

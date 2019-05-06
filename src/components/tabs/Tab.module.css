@@ -1,0 +1,11 @@
+.button {
+  appearance: none;
+  border: 0;
+  background-color: var(--color-main-accent);
+  color: var(--color-text-invert);
+}
+
+.buttonActive {
+  background-color: white;
+  color: #000;
+}
