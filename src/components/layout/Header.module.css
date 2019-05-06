@@ -1,5 +1,5 @@
 .header {
-  background: rebeccapurple;
+  background: var(--color-main-accent);
   margin-bottom: 1.45rem;
 }
 
@@ -10,6 +10,6 @@
 }
 
 .link {
-  color: white;
+  color: var(--color-text-invert);
   text-decoration: none;
 }
