@@ -8,10 +8,20 @@ export const TabsContext = React.createContext();
 const Tabs = ({ children }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
+  let nextTabPanelIndex = 0;
+  const renderedChildren = React.Children.map(children, (child) => {
+    if (child.type.displayName === 'TabPanel') {
+      const props = { index: nextTabPanelIndex };
+      nextTabPanelIndex += 1;
+      return React.cloneElement(child, props);
+    }
+    return child;
+  });
+
   return (
     <div className={styles.container}>
       <TabsContext.Provider value={{ activeTabIndex, setActiveTabIndex }}>
-        {children}
+        {renderedChildren}
       </TabsContext.Provider>
     </div>
   )

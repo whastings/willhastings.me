@@ -24,7 +24,7 @@ const Tab = ({ children, index }) => {
 
 Tab.propTypes = {
   children: PropTypes.node.isRequired,
-  index: PropTypes.number.isRequired,
+  index: PropTypes.number,
 };
 
 export default Tab;
