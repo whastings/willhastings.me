@@ -1,9 +1,17 @@
 .button {
   appearance: none;
   border: 0;
+  border-right: 2px #fff solid;
   background-color: var(--color-main-accent);
   color: var(--color-text-invert);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
   padding: 1rem 0;
+}
+
+.button:last-child {
+  border-right: 0;
 }
 
 .buttonActive {

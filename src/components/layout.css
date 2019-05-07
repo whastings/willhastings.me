@@ -1,6 +1,8 @@
 :root {
   --color-main-accent: #055f8c;
   --color-text-invert: #fff;
+  --font-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 html {
