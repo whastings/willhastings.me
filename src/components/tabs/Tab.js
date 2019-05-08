@@ -6,12 +6,21 @@ import styles from './Tab.module.css';
 import { TabsContext } from './Tabs';
 
 const Tab = ({ children, index }) => {
-  const { activeTabIndex, setActiveTabIndex } = useContext(TabsContext);
+  const { activeTabIndex, incrementTabIndex, setActiveTabIndex } = useContext(TabsContext);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      incrementTabIndex(-1);
+    } else if (event.key === 'ArrowRight') {
+      incrementTabIndex(1);
+    }
+  };
 
   return (
     <button
       type="button"
       onClick={() => setActiveTabIndex(index)}
+      onKeyDown={handleKeyDown}
       className={classNames(
         styles.button,
         { [styles.buttonActive]: activeTabIndex === index },
