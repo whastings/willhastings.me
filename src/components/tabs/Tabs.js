@@ -17,26 +17,32 @@ const renderChildren = (children) => {
   });
 };
 
+const incrementTabIndex = (activeTabIndex, setActiveTabIndex, numTabs) => (increment) => {
+  const newIndex = activeTabIndex + increment;
+  if (newIndex < 0) {
+    setActiveTabIndex(numTabs - 1);
+  } else if (newIndex >= numTabs) {
+    setActiveTabIndex(0);
+  } else {
+    setActiveTabIndex(newIndex);
+  }
+}
+
 const Tabs = ({ children }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const numTabs = React.Children.toArray(children).reduce(
     (count, child) => count + (child.type.displayName === 'TabPanel' ? 1 : 0),
     0
   );
-  const incrementTabIndex = (increment) => {
-    const newIndex = activeTabIndex + increment;
-    if (newIndex < 0) {
-      setActiveTabIndex(numTabs - 1);
-    } else if (newIndex >= numTabs) {
-      setActiveTabIndex(0);
-    } else {
-      setActiveTabIndex(newIndex);
-    }
+  const contextValue = {
+    activeTabIndex,
+    incrementTabIndex: incrementTabIndex(activeTabIndex, setActiveTabIndex, numTabs),
+    setActiveTabIndex,
   };
 
   return (
     <div className={styles.container}>
-      <TabsContext.Provider value={{ activeTabIndex, incrementTabIndex, setActiveTabIndex }}>
+      <TabsContext.Provider value={contextValue}>
         {renderChildren(children)}
       </TabsContext.Provider>
     </div>

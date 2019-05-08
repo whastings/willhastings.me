@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -7,6 +7,9 @@ import { TabsContext } from './Tabs';
 
 const Tab = ({ children, index }) => {
   const { activeTabIndex, incrementTabIndex, setActiveTabIndex } = useContext(TabsContext);
+  const buttonRef = useRef(null);
+  const hasMountedRef = useRef(false);
+  const isActive = activeTabIndex === index;
 
   const handleKeyDown = (event) => {
     if (event.key === 'ArrowLeft') {
@@ -16,14 +19,23 @@ const Tab = ({ children, index }) => {
     }
   };
 
+  useEffect(() => {
+    if (hasMountedRef.current && isActive) {
+      buttonRef.current.focus();
+    }
+  }, [isActive, buttonRef, hasMountedRef]);
+  useEffect(() => { hasMountedRef.current = true; }, []);
+
   return (
     <button
+      ref={buttonRef}
       type="button"
+      tabIndex={isActive ? null : -1}
       onClick={() => setActiveTabIndex(index)}
       onKeyDown={handleKeyDown}
       className={classNames(
         styles.button,
-        { [styles.buttonActive]: activeTabIndex === index },
+        { [styles.buttonActive]: isActive },
       )}
     >
       {children}
