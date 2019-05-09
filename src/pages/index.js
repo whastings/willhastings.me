@@ -10,7 +10,7 @@ import TabPanel from '../components/tabs/TabPanel';
 const IndexPage = () => (
   <Layout>
     <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-    <Tabs>
+    <Tabs name="home-content">
       <TabsList>
         <Tab>About</Tab>
         <Tab>Work</Tab>

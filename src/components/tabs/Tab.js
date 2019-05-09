@@ -6,10 +6,12 @@ import styles from './Tab.module.css';
 import { TabsContext } from './Tabs';
 
 const Tab = ({ children, index }) => {
-  const { activeTabIndex, incrementTabIndex, setActiveTabIndex } = useContext(TabsContext);
+  const { activeTabIndex, incrementTabIndex, setActiveTabIndex, tabsName } = useContext(TabsContext);
   const buttonRef = useRef(null);
   const hasMountedRef = useRef(false);
   const isActive = activeTabIndex === index;
+  const id = `${tabsName}-${index}-tab`;
+  const panelId = `${tabsName}-${index}-panel`;
 
   const handleKeyDown = (event) => {
     if (event.key === 'ArrowLeft') {
@@ -28,9 +30,13 @@ const Tab = ({ children, index }) => {
 
   return (
     <button
+      id={id}
       ref={buttonRef}
       type="button"
+      role="tab"
       tabIndex={isActive ? null : -1}
+      aria-controls={panelId}
+      aria-selected={isActive}
       onClick={() => setActiveTabIndex(index)}
       onKeyDown={handleKeyDown}
       className={classNames(

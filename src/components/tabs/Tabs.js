@@ -28,7 +28,7 @@ const incrementTabIndex = (activeTabIndex, setActiveTabIndex, numTabs) => (incre
   }
 }
 
-const Tabs = ({ children }) => {
+const Tabs = ({ children, name }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const numTabs = React.Children.toArray(children).reduce(
     (count, child) => count + (child.type.displayName === 'TabPanel' ? 1 : 0),
@@ -38,6 +38,7 @@ const Tabs = ({ children }) => {
     activeTabIndex,
     incrementTabIndex: incrementTabIndex(activeTabIndex, setActiveTabIndex, numTabs),
     setActiveTabIndex,
+    tabsName: name,
   };
 
   return (
@@ -51,6 +52,7 @@ const Tabs = ({ children }) => {
 
 Tabs.propTypes = {
   children: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default Tabs;

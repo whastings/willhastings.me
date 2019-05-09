@@ -5,11 +5,13 @@ import { TabsContext } from './Tabs';
 import styles from './TabPanel.module.css';
 
 const TabPanel = ({ children, index }) => {
-  const { activeTabIndex } = useContext(TabsContext);
+  const { activeTabIndex, tabsName } = useContext(TabsContext);
   const isActive = activeTabIndex === index;
+  const id = `${tabsName}-${index}-panel`;
+  const tabId = `${tabsName}-${index}-tab`;
 
   return (
-    <div hidden={!isActive} className={styles.container}>
+    <div id={id} role="tabpanel" hidden={!isActive} className={styles.container} aria-labelledby={tabId}>
       {isActive && children}
     </div>
   );
