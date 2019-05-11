@@ -12,7 +12,11 @@ const TabsList = ({ children }) => {
   });
 
   return (
-    <div role="tablist" className={styles.container} aria-label="Page Contents">
+    <div
+      role="tablist"
+      className={styles.container}
+      aria-label="Page Contents"
+    >
       {renderedChildren}
     </div>
   )

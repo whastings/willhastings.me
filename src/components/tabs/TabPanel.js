@@ -17,6 +17,9 @@ const TabPanel = ({ children, index }) => {
   );
 };
 
+// For some reason the displayName is undefined in tests
+TabPanel.displayName = 'TabPanel';
+
 TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.number,
