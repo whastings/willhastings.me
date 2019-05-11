@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, within } from 'react-testing-library';
+import { fireEvent, render, within } from 'react-testing-library';
 
 import Tabs from '../Tabs';
 import TabsList from '../TabsList';
@@ -8,7 +8,7 @@ import TabPanel from '../TabPanel';
 
 describe('Tabs', () => {
   const renderTabs = () => {
-    return render(
+    const result = render(
       <Tabs name="test-tabs">
         <TabsList>
           <Tab>Tab 1</Tab>
@@ -26,6 +26,28 @@ describe('Tabs', () => {
         </TabPanel>
       </Tabs>
     );
+    return {
+      ...result,
+      getAllPanels: () => result.getAllByRole('tabpanel'),
+      getAllTabs: () => result.getAllByRole('tab'),
+    };
+  };
+
+  const expectActiveTab = (tab, panel) => {
+    expect(tab).toHaveAttribute('aria-selected', 'true');
+    expect(tab).not.toHaveAttribute('tabIndex');
+    expect(tab).toHaveFocus();
+
+    expect(panel).not.toHaveAttribute('hidden');
+    expect(panel).not.toBeEmpty();
+  };
+
+  const expectInactiveTab = (tab, panel) => {
+    expect(tab).toHaveAttribute('aria-selected', 'false');
+    expect(tab).toHaveAttribute('tabIndex', '-1');
+
+    expect(panel).toHaveAttribute('hidden');
+    expect(panel).toBeEmpty();
   };
 
   it('renders tabs inside a tablist', () => {
@@ -68,5 +90,54 @@ describe('Tabs', () => {
     expect(panel1).toHaveAttribute('aria-labelledby', tab1.id);
     expect(panel2).toHaveAttribute('aria-labelledby', tab2.id);
     expect(panel3).toHaveAttribute('aria-labelledby', tab3.id);
+  });
+
+  describe('when clicking a tab', () => {
+    it('activates that tab', () => {
+      const { getAllPanels, getAllTabs } = renderTabs();
+      const [tab1, tab2, tab3] = getAllTabs();
+      const [panel1, panel2, panel3] = getAllPanels();
+      fireEvent.click(tab2);
+
+      expectActiveTab(tab2, panel2);
+      expectInactiveTab(tab1, panel1);
+      expectInactiveTab(tab3, panel3);
+    });
+  });
+
+  describe('when pressing right and left arrow keys', () => {
+    it('navigates to the next and previous tabs', () => {
+      const { getAllPanels, getAllTabs } = renderTabs();
+      const [tab1, tab2, tab3] = getAllTabs();
+      const [panel1, panel2, panel3] = getAllPanels();
+
+      fireEvent.keyDown(tab1, { key: 'ArrowRight' });
+      expectActiveTab(tab2, panel2);
+      expectInactiveTab(tab1, panel1);
+      expectInactiveTab(tab3, panel3);
+
+      fireEvent.keyDown(tab2, { key: 'ArrowLeft' });
+      expectActiveTab(tab1, panel1);
+      expectInactiveTab(tab2, panel2);
+      expectInactiveTab(tab3, panel3);
+    });
+  });
+
+  describe('when navigating past the first or last tab', () => {
+    it('loops around', () => {
+      const { getAllPanels, getAllTabs } = renderTabs();
+      const [tab1, tab2, tab3] = getAllTabs();
+      const [panel1, panel2, panel3] = getAllPanels();
+
+      fireEvent.keyDown(tab1, { key: 'ArrowLeft' });
+      expectActiveTab(tab3, panel3);
+      expectInactiveTab(tab1, panel1);
+      expectInactiveTab(tab2, panel2);
+
+      fireEvent.keyDown(tab3, { key: 'ArrowRight' });
+      expectActiveTab(tab1, panel1);
+      expectInactiveTab(tab2, panel2);
+      expectInactiveTab(tab3, panel3);
+    });
   });
 });
