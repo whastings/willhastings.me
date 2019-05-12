@@ -37,6 +37,7 @@ describe('Tabs', () => {
     expect(tab).toHaveAttribute('aria-selected', 'true');
     expect(tab).not.toHaveAttribute('tabIndex');
     expect(tab).toHaveFocus();
+    expect(tab.className).toMatch(/Active/);
 
     expect(panel).not.toHaveAttribute('hidden');
     expect(panel).not.toBeEmpty();
@@ -45,10 +46,16 @@ describe('Tabs', () => {
   const expectInactiveTab = (tab, panel) => {
     expect(tab).toHaveAttribute('aria-selected', 'false');
     expect(tab).toHaveAttribute('tabIndex', '-1');
+    expect(tab.className).not.toMatch(/Active/);
 
     expect(panel).toHaveAttribute('hidden');
     expect(panel).toBeEmpty();
   };
+
+  it('does not grab keyboard focus initially', () => {
+    renderTabs();
+    expect(document.body).toHaveFocus();
+  });
 
   it('renders tabs inside a tablist', () => {
     const { getByRole } = renderTabs();
@@ -66,6 +73,10 @@ describe('Tabs', () => {
     expect(tab1).not.toHaveAttribute('tabIndex');
     expect(tab2).toHaveAttribute('tabIndex', '-1');
     expect(tab3).toHaveAttribute('tabIndex', '-1');
+
+    expect(tab1.className).toMatch(/Active/);
+    expect(tab2.className).not.toMatch(/Active/);
+    expect(tab3.className).not.toMatch(/Active/);
   });
 
   it('renders tab panels connected to the tabs', () => {
