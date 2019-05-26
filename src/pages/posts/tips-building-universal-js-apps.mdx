@@ -1,0 +1,493 @@
+---
+title: "Tips for Building Universal JavaScript Apps"
+---
+
+import Layout from '../../components/layout';
+export default Layout;
+
+# Tips for Building Universal JavaScript Apps
+
+Following in the footsteps of some great JavaScript developers like [Nicolás
+Bevacqua][ponyfoo], I've built my own, over-engineered blog. In my case, I built
+it as a single-page application running on React and Redux client-side and
+Express server-side.  While the endeavor hasn't been the most practical I've
+ever undertaken (a blog hardly needs to be a SPA), it's been extremely helpful
+to me in learning an awesome technology stack.
+
+One challenge I wanted to tackle as part of this project was to get my blogging
+app to support both server-side and client-side rendering (make it a "universal"
+app). In my experience, server-side rendering is great for enabling a quick
+initial render and client-side rendering is great for quick subsequent page
+views. As part of achieving this goal, I discovered a few handy tips. I'm going
+to share these in the hopes they'll be of help to others.
+[ponyfoo]: https://ponyfoo.com/articles/most-over-engineered-blog-ever
+
+## Abstract API Calls
+
+A universal app is easiest to understand when the amount of conditional logic
+creating separate code branches for the server-side and the client-side is kept
+to a minimum. But obviously some things have to be done differently in these
+different environments. On the client, we make Ajax requests and render DOM. On
+the server, we load data from a database and render a string of HTML to send to
+the client. For the view layer, a library like React is great for keeping
+conditional logic away. You pretty much write your components in a client-side
+mindset and React will take care of what not to do server-side (e.g. setting up
+event listeners). For other concerns, you have to come up with your own
+abstraction to limit environment-based conditionals.
+
+An important concern is how you make API calls to fetch your data. As said, this
+requires an Ajax request client-side and database calls server-side. To keep
+this simple for my universal application, I found the best approach was to
+abstract API calls into a separate object that can be passed into the
+application as a dependency. The application defines a client-side version of
+this object as a set of functions that make Ajax requests to the server and
+return promises. If no other API object is provided to the application, it uses
+this one by default. The server-side code also defines an API object that
+returns promises, but it makes database calls instead of Ajax calls. Since the
+server-side version has the exact same interface as the client-side version, the
+server can simply pass it to the application when running it server-side.
+
+Let's look at some code examples to illustrate this approach:
+
+I've constructed [the entry point of my application][app-class] as a class that
+can be instantiated:
+
+```javascript
+class App {
+  constructor(options) {
+    this.options = options;
+    options.api = options.api || appApi;
+    this.store = createStore(options.api);
+    // ...
+  }
+
+  // ...
+}
+```
+
+The `App` class is responsible for, among other things, instantiating the Redux
+store and making the API object available to it, which it then makes available
+to action creators through a [custom async action
+middleware][async-action-middleware]. An action creator will call a function
+from the API object and return its promise for the middleware to track. As an
+example, consider this action creator that loads posts:
+
+```javascript
+export function loadPosts(options) {
+  return (api) =>
+    api.getPosts(options)
+      .then((posts) => ({type: 'POSTS_ADD', payload: posts}));
+}
+```
+
+The action creator returns a function that the middleware then invokes with the
+API object. The function then calls an API function and returns its promise,
+chaining onto it to specify an action to dispatch after the posts are loaded.
+
+Let's look at the client-side implementation of this API function:
+
+```javascript
+export default {
+  // ...
+
+  getPosts(queryParams = null) {
+    let url = '/api/posts';
+    url = queryParams ? url + stringifyQueryParams(queryParams) : url;
+    return getJSON(url);
+  },
+
+  // ...
+};
+```
+
+Besides dealing with some query parameters (which I use to load unpublished
+posts in the admin view), this API function simply delegates to a
+[`getJSON`][get-json] utility for making an Ajax request and returning parsed
+JSON.
+
+Now let's consider the server-side implementation:
+
+```javascript
+export default {
+  // ...
+
+  getPosts({includeUnpublished = false} = {}) {
+    let conditions = includeUnpublished ? {} : {published: true};
+    let cacheKey = conditions.published ? CACHE_KEY_POSTS_ALL : CACHE_KEY_POSTS;
+
+    return cacheOrQuery(
+      cacheKey,
+      () => Post.model.findAll({where: conditions})
+        .then(formatters.postList)
+    );
+  },
+
+  // ...
+};
+```
+
+Besides some additional caching logic to minimize database access, the
+server-side version of the API function is still pretty simple, and it adheres
+to the same interface as the client-side version.
+
+With this setup, the action creator in the app will simply call the server-side
+version directly when the app is run server-side. When running client-side, it
+will make an Ajax request and the [server-side routing code][posts-server] will
+use the API object to load data for a response:
+
+```javascript
+app.get('/', asyncRoute(function* postsRouteIndex(req, res) {
+  let options = {includeUnpublished: !!req.query.includeUnpublished};
+
+  if (options.includeUnpublished && !req.currentUser) {
+    res.status(401).end();
+    return;
+  }
+
+  res.json(yield api.getPosts(options));
+}));
+```
+
+Overall, I find this to be an elegant approach to managing data access for a
+universal app. The only downside I've found is that it's sometimes necessary to
+duplicate authorization logic between client and server. For example, I have a
+both a [client-side authorization middleware][client-auth-mw] and a [server-side
+authorization middleware][server-auth-mw]. An alternative to this would be to
+use something like [isomorphic-fetch][iso-fetch] so that the app makes HTTP
+requests both client-side and server-side. This would allow all the
+authorization logic to be captured in the server-side request handling code.
+Even when taking this alternative into consideration, I currently prefer the
+abstract API object method, as it make it unnecessary to take on the overhead of
+running additional server routes when the app is running server-side. Though I
+reserve the right to change my mind.
+
+## Abstract Rendering and Other Environment-Dependent Operations
+
+Continuing in the vein of the previous section, I also found it necessary to
+abstract how the application handles a few other concerns: rendering, redirects,
+page not found, and errors. All of these require specialized handling that is
+environment-dependent. Rendering must use `ReactDOM.render()` client-side and
+`renderToString()` server-side. Redirects must be implemented as HTTP redirects
+server-side and as a route transition client-side. A page not found should
+result in a special page rendered from both environments, but with a 404 HTTP
+status returned on the server-side. Errors need to be logged differently
+depending on the environment. As before, my goal is to minimize
+environment-based conditionals in my application code.
+
+My approach to handling these concerns was to pass callbacks as options to my
+`App` class that it can then invoke when it encounters these particular
+scenarios:
+
+```javascript
+class App {
+  constructor(options) {
+    this.options = options;
+    options.api = options.api || appApi;
+    this.store = createStore(options.api);
+    // ...
+  }
+
+  handleError(error) {
+    let { onError } = this.options;
+
+    if (onError) {
+      onError(error);
+    }
+  }
+
+  redirect(path) {
+    this.options.onRedirect(path);
+  }
+
+  render(Component, props = {}) {
+    this.options.renderer(
+      <Provider store={this.store}>
+        <UI>
+          <Component {...props}/>
+        </UI>
+      </Provider>
+    );
+  }
+
+  render404() {
+    let { on404 } = this.options;
+
+    if (on404) {
+      on404();
+    }
+
+    this.render(Page404);
+  }
+
+  // ...
+}
+```
+
+As you can see, `App` has methods for handling these concerns, and each method
+delegates to the appropriate callback that was provided to the app on
+instantiation. This way, the server can pass in appropriate functions when
+instantiating the app:
+
+```javascript
+let app = new App({
+  renderer: (element) => {
+    res.render('base', {
+      assets: res.assets,
+      csrfToken: req.csrfToken(),
+      data: JSON.stringify(app.store.getState()),
+      html: renderToString(element),
+      isDev: IS_DEV
+    });
+  },
+  onRedirect: res.redirect.bind(res),
+  onError: next,
+  on404: () => res.status(404),
+  api
+});
+```
+
+In the server's case, it uses React's `renderToString` to render the app as an
+HTML string, which it then passes to Express's rendering logic. For redirects,
+it uses the Express response object's `redirect()` method. For errors, it passes
+the Express route's `next()` callback, which will register an error if invoked
+with an argument. And for page not found, it simply sets a 404 status for the
+HTTP response.
+
+On the client-side, appropriate handlers can also be passed in when running the
+initialization logic:
+
+```javascript
+app = new App({
+  renderer: appRenderer,
+  onRedirect: page,
+  onError: errorHandler
+});
+
+function appRenderer(element) {
+  ReactDOM.render(element, rootEl);
+}
+
+function errorHandler(error) {
+  console.error && console.error(error);
+}
+```
+
+In this version, the `appRenderer` function will call `ReactDOM.render()`.
+`onRedirect` will trigger a route transition (I'm using [Page.js][page-js] for
+routing). For error handling, I'm currently just logging to `console.error()`,
+though in the future I hope to send errors to the server via Ajax for real
+production logging. In the client's case, I've omitted an `on404` callback, as
+the default app behavior of rendering the 404 page is sufficient.
+
+## Use Separate Builds for Client and Server
+
+I'm a huge fan of modern JavaScript's syntax and latest standard library
+additions (ES2015 and beyond). So naturally I want to use some of these niceties
+in writing my application's code. This of course makes
+[transpilation][transpilation-article] necessary, as not all syntax and library
+features are available in every environment.
+
+In addition to the need for transpilation, a modern JS app also needs its
+modules built and managed in a way that's appropriate for its target environment
+(or environments in my case). For my app code, I prefer to use [ES6
+modules][es6-modules]. And besides your application code, you need a way to
+build and bundle all the third-party libraries you depend on. Finally, there are
+non-JavaScript assets you likely also need to manage, such as CSS files written
+with Sass.
+
+My top choice for handling these concerns is [Webpack][webpack]. It's a
+feature-rich and extensible tool that handles all these needs efficiently. When
+it comes to building my app so it can run server-side and client-side, I've
+found the best approach is to output two builds: one optimized for the browser
+and one optimized for the server.
+
+To facilitate this, I have a [Webpack configuration for the
+client][webpack-client] and a [Webpack configuration for the
+server][webpack-server]. Both share a few values from a [shared
+configuration][webpack-shared] and then diverge to configure an optimized build
+for each environment. For example, I can take advantage of Webpack's
+`CommonsChunkPlugin` for the client build to pull third-party code and
+commonly-used utilities into their own JS files. And for the server, I can
+output the app as a CommonJS module for easy use in Node and configure Webpack
+to optimize for the Node environment:
+
+```javascript
+module.exports = {
+  entry: {
+    app: './app/index.jsx'
+  },
+
+  output: Object.assign({}, shared.output, {
+    path: path.join(shared.output.path, 'server'),
+    library: 'app',
+    libraryTarget: 'commonjs2'
+  }),
+
+  resolve: shared.resolve,
+  target: 'node',
+
+  // ...
+};
+```
+
+You may think this means I have to run Webpack twice each time I build, but
+Webpack will accept an array of configuration objects and then run all of them
+during one execution. Here's what my top-level configuration file that I pass to
+Webpack looks like:
+
+```javascript
+module.exports = [
+  require('./webpack/client.config'),
+  require('./webpack/server.config')
+];
+```
+
+Let's look a little closer at how using separate build configurations allows me
+to optimize build output for each environment.
+
+### Handling Transpilation
+
+As I mentioned before, I need to transpile my application code so I can take
+advantage of the latest and greatest capabilities of the JavaScript language.
+But that doesn't mean I need to transpile in the same way for the server and for
+the client. I'm using Node.js version 6 to run my server-side code, which has
+[excellent ES6 support][node6-es6]. It needs very little transpiled, mostly just
+bleeding-edge features like [Object spread][object-spread]. For the client,
+however, I want to support even some older browsers that don't support any ES6
+features, and so I want to transpile the code entirely to ES5. Using separate
+build configurations, it's easy to set up optimal transpilation for both
+environments.
+
+I'm using [Babel][babel] for transpilation since it's become the industry
+standard tool. For the client, I'm using
+[babel-preset-es2015][babel-preset-es2015] and
+[babel-preset-react][babel-preset-react] to transpile my app code for widest
+browser support. For the server, I'm using
+[babel-preset-es2015-node][babel-preset-es2015-node] and babel-preset-react to
+transpile only the features that Node version 6 doesn't already support.
+
+I think it makes sense to only transpile as much as needed, and take advantage
+of native feature support when it's available. Babel's excellent preset system
+combined with my two-build setup makes it easy for me to produce the best bundle
+for client and server.
+
+### Handling Styles
+
+I also want to call out handling styles during build. For my styles, I'm using
+Sass to write my CSS and Webpack to run it through the Sass compiler. This
+allows me to declare styling dependencies directly in my JavaScript modules,
+which I think helps with keeping dependencies explicit and related code
+together. For example, I have a `PostPage/index.jsx` module that defines a
+`PostPage` component and also declares a dependency on the
+`PostPage/styles.scss` Sass file that lives next to it.
+
+```javascript
+import './styles.scss';
+import React from 'react';
+import SafeOutput from 'app/utils/components/SafeOutput';
+
+export default function PostPage({post}) {
+  return (
+    <section className="post-view-page post">
+      <h2 className="page-title">{post.title}</h2>
+
+      <SafeOutput className="post__body card" content={post.body}/>
+    </section>
+  );
+}
+```
+
+But this poses an issue when it comes to outputting a build of the app to run
+server-side. Styles aren't needed in that environment. Thankfully, there's a
+handy [null-loader][null-loader] for Webpack you can use to ignore a file type
+during a build. I simply apply it to Sass files in my server build configuration
+and the issue is no more (Note that I'm using [Webpack 2 beta's new
+configuration API][webpack2-api]).
+
+```javascript
+module.exports = {
+  // ...
+
+  module: {
+    rules: [
+      // ...
+
+      {
+        test: /\.scss$/,
+        use: [
+          'null-loader'
+        ]
+      }
+    ]
+  },
+};
+```
+
+Now I don't need to worry about styles for the server-side and for the
+client-side I can configure advanced tools like Autoprefixer for my styles.
+
+## Enable Hot-Reloading of the App Server-Side during Development
+
+The last tip I have pertains to reloading app code during development on the
+server-side. For my actual server code, I use [Nodemon][nodemon] to
+automatically restart my server when I change code. But for built application
+code, I instead hot-reload it server-side so I don't even need a server restart
+to pick up changes (which is safe because I re-instantiate the app for each
+request). To do this, I use the [require-reload module][require-reload], which
+removes a module from Node's require cache so the next time it's required, it
+reruns from scratch. I capture loading of the app in a utility function which
+clears the cache for the app's built JS when in development:
+
+```javascript
+const IS_DEV = process.env.NODE_ENV === 'development';
+
+let App = require(APP_SRC);
+
+module.exports = function loadApp() {
+  if (IS_DEV) {
+    let srcFiles = fs.readdirSync(APP_DIST_DIR);
+    srcFiles.forEach((file) => reload(`${APP_DIST_DIR}/${file}`));
+    App = require(APP_SRC);
+  }
+
+  return App.default;
+};
+```
+
+Note that there are multiple JS files even for the server side build because I'm
+using Webpack's code-splitting functionality to lazy-load code client-side and
+this unfortunately results in split code for the server too.
+
+## Conclusion
+
+Those were some helpful tips I discovered while building my blog as a universal
+JS app. I hope they'll be of use to others embarking on similar adventures. If
+you have any feedback for me, feel free to [reach out to me on Twitter at
+@WillHPower][twitter] (yes, I plan to add commenting functionality to my blog in
+the near future).
+
+[app-class]: https://github.com/whastings/willhastings.me/blob/master/app/index.jsx
+[async-action-middleware]: https://github.com/whastings/willhastings.me/blob/master/app/utils/asyncActionMiddleware.js
+[babel]: http://babeljs.io/
+[babel-preset-es2015]: https://babeljs.io/docs/plugins/preset-es2015/
+[babel-preset-es2015-node]: https://github.com/rtsao/babel-preset-es2015-node
+[babel-preset-react]: https://babeljs.io/docs/plugins/preset-react/
+[client-auth-mw]: https://github.com/whastings/willhastings.me/blob/master/app/middleware/auth.js
+[es6-modules]: https://ponyfoo.com/articles/es6-modules-in-depth
+[get-json]: https://github.com/whastings/willhastings.me/blob/master/app/utils/request.js#L18
+[iso-fetch]: https://github.com/matthew-andrews/isomorphic-fetch
+[node6-es6]: http://node.green/
+[nodemon]: https://github.com/remy/nodemon
+[null-loader]: https://github.com/webpack/null-loader
+[object-spread]: http://www.2ality.com/2016/10/rest-spread-properties.html
+[page-js]: https://visionmedia.github.io/page.js/
+[posts-server]: https://github.com/whastings/willhastings.me/blob/master/server/modules/posts/index.js
+[require-reload]: https://github.com/fastest963/require-reload
+[server-auth-mw]: https://github.com/whastings/willhastings.me/blob/master/server/middleware/auth.js
+[transpilation-article]: https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them
+[twitter]: https://twitter.com/WillHPower
+[webpack]: http://webpack.github.io/
+[webpack-client]: https://github.com/whastings/willhastings.me/blob/master/config/webpack/client.config.js
+[webpack-server]: https://github.com/whastings/willhastings.me/blob/master/config/webpack/server.config.js
+[webpack-shared]: https://github.com/whastings/willhastings.me/blob/master/config/webpack/shared.config.js
+[webpack2-api]: https://webpack.js.org/configuration/module/

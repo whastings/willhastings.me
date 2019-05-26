@@ -1,6 +1,7 @@
 import React from "react"
 
 import Layout from "../components/layout"
+import PostsTab from '../components/home/PostsTab';
 import SEO from "../components/seo"
 import Tabs from '../components/tabs/Tabs';
 import TabsList from '../components/tabs/TabsList';
@@ -8,7 +9,6 @@ import Tab from '../components/tabs/Tab';
 import TabPanel from '../components/tabs/TabPanel';
 
 import AboutTabContent from '../content/home/AboutTabContent.mdx';
-import PostsTabContent from '../content/home/PostsTabContent.mdx';
 import WorkTabContent from '../content/home/WorkTabContent.mdx';
 
 const IndexPage = () => (
@@ -27,7 +27,7 @@ const IndexPage = () => (
         <WorkTabContent />
       </TabPanel>
       <TabPanel>
-        <PostsTabContent />
+        <PostsTab />
       </TabPanel>
     </Tabs>
   </Layout>
