@@ -11,6 +11,7 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
+  background-color: #f1f1f1;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -48,7 +49,9 @@ template {
 }
 a {
   background-color: transparent;
+  color: var(--color-main-accent);
   -webkit-text-decoration-skip: objects;
+  text-decoration: none;
 }
 a:active,
 a:hover {

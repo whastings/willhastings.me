@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'Will Hastings',
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: 'Will Hastings',
+    author: `@gatsbyjs`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -16,20 +16,23 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: 'gatsby-source-filesystem',
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        name: 'content',
+        path: `${__dirname}/src/content`,
       },
     },
     {
-      resolve: 'gatsby-mdx',
+      resolve: 'gatsby-transformer-remark',
     },
-    'gatsby-plugin-react-svg',
+    'gatsby-plugin-mdx',
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /images/,
+        }
+      }
+    }
   ],
 }

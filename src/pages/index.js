@@ -1,36 +1,45 @@
 import React from "react"
+import { useStaticQuery, graphql } from 'gatsby'
 
 import Layout from "../components/layout"
-import PostsTab from '../components/home/PostsTab';
 import SEO from "../components/seo"
-import Tabs from '../components/tabs/Tabs';
-import TabsList from '../components/tabs/TabsList';
-import Tab from '../components/tabs/Tab';
-import TabPanel from '../components/tabs/TabPanel';
+import FeedItem from '../components/home/FeedItem'
+import styles from './index.module.css'
 
-import AboutTabContent from '../content/home/AboutTabContent.mdx';
-import WorkTabContent from '../content/home/WorkTabContent.mdx';
+const feedQuery = graphql`
+  query FeedQuery {
+    allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+    ) {
+      nodes {
+        id
+        frontmatter {
+          title
+          date
+          link
+        }
+        html
+      }
+    }
+  }
+`;
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-    <Tabs name="home-content">
-      <TabsList>
-        <Tab>About</Tab>
-        <Tab>Work</Tab>
-        <Tab>Posts</Tab>
-      </TabsList>
-      <TabPanel>
-        <AboutTabContent />
-      </TabPanel>
-      <TabPanel>
-        <WorkTabContent />
-      </TabPanel>
-      <TabPanel>
-        <PostsTab />
-      </TabPanel>
-    </Tabs>
-  </Layout>
-)
+const IndexPage = () => {
+  const data = useStaticQuery(feedQuery);
+  const feed = data.allMarkdownRemark.nodes;
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <ul className={styles.feedList}>
+        {feed.map((feedItem) => (
+          <li key={feedItem.id}>
+            <FeedItem item={feedItem} />
+          </li>
+        ))}
+      </ul>
+    </Layout>
+  )
+}
 
 export default IndexPage
