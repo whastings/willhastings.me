@@ -1,8 +1,10 @@
 import React from 'react'
+import { MDXProvider } from '@mdx-js/react'
 
 import Layout from '../layout/Layout'
 import SEO from '../layout/SEO'
 import styles from './PostLayout.module.css'
+import PostPre from './PostPre'
 
 const PostLayout = (props) => {
   const postTitle = props.pageContext.frontmatter.title
@@ -21,7 +23,13 @@ const PostLayout = (props) => {
       <p className={styles.postedDate}>
         Posted on {getPostDate()}
       </p>
-      {props.children}
+      <MDXProvider
+        components={{
+          pre: PostPre,
+        }}
+      >
+        {props.children}
+      </MDXProvider>
     </Layout>
   )
 }
