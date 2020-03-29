@@ -14,7 +14,7 @@ const Header = ({ siteTitle }) => (
       className={styles.contentContainer}
     >
       <div>
-        <h1 className={styles.siteTitle} style={{ marginBottom: '0.3rem' }}>
+        <h1 className={styles.siteTitle}>
           <Link
             to='/'
             className={styles.link}
