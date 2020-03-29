@@ -3,6 +3,20 @@
   margin-bottom: 1.45rem;
 }
 
+.siteTitle {
+  margin: 0,
+}
+
+.tagline {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 400px) {
+  .siteTitle {
+    font-size: 2rem;
+  }
+}
+
 .contentContainer {
   color: var(--color-text-invert);
 

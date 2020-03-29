@@ -13,14 +13,17 @@ const Header = ({ siteTitle }) => (
     <div
       className={styles.contentContainer}
     >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to='/'
-          className={styles.link}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
+      <div>
+        <h1 className={styles.siteTitle} style={{ marginBottom: '0.3rem' }}>
+          <Link
+            to='/'
+            className={styles.link}
+          >
+            {siteTitle}
+          </Link>
+        </h1>
+        <p className={styles.tagline}>Software engineer with a passion for JS and the frontend</p>
+      </div>
       <a
         className={styles.socialLink}
         href='https://github.com/whastings'
