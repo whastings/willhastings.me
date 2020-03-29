@@ -22,9 +22,9 @@ const FeedItem = (props) => {
 
   return (
     <article className={styles.container}>
-      <h2 className={styles.title}>
+      <h3 className={styles.title}>
         {renderLink(item.frontmatter.title, item.frontmatter.link)}
-      </h2>
+      </h3>
       <div dangerouslySetInnerHTML={{ __html: item.html }} />
     </article>
   )

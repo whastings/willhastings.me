@@ -31,6 +31,7 @@ const IndexPage = () => {
   return (
     <Layout>
       <SEO title="Home" />
+      <h2 className={styles.sectionHeading}>Posts</h2>
       <ul className={styles.feedList}>
         {feed.map((feedItem) => (
           <li key={feedItem.id}>
