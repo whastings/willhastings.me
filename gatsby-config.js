@@ -25,7 +25,14 @@ module.exports = {
     {
       resolve: 'gatsby-transformer-remark',
     },
-    'gatsby-plugin-mdx',
+    {
+      resolve: 'gatsby-plugin-mdx',
+      options: {
+        defaultLayouts: {
+          default: require.resolve('./src/components/posts/PostLayout.js'),
+        },
+      },
+    },
     {
       resolve: 'gatsby-plugin-react-svg',
       options: {
