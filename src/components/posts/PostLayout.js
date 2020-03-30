@@ -5,6 +5,7 @@ import Layout from '../layout/Layout'
 import SEO from '../layout/SEO'
 import styles from './PostLayout.module.css'
 import PostPre from './PostPre'
+import PostLink from './PostLink'
 
 const PostLayout = (props) => {
   const postTitle = props.pageContext.frontmatter.title
@@ -27,6 +28,7 @@ const PostLayout = (props) => {
         <MDXProvider
           components={{
             pre: PostPre,
+            a: PostLink,
           }}
         >
           {props.children}
