@@ -1,5 +1,6 @@
 import React from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
+import theme from 'prism-react-renderer/themes/github'
 
 // Based on: https://malikgabroun.com/syntax-highlighting-in-gatsby-mdx
 const PostPre = (props) => {
@@ -12,6 +13,7 @@ const PostPre = (props) => {
       {...defaultProps}
       code={props.children.props.children}
       language={language}
+      theme={theme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={className} style={style}>
