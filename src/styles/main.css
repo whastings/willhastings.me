@@ -40,6 +40,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -256,6 +260,11 @@ p *:last-child {
 code {
   font-size: 0.85rem;
   line-height: 1.45rem;
+}
+
+p code,
+li code {
+  font-size: inherit;
 }
 
 @media only screen and (max-width: 480px) {

@@ -16,20 +16,22 @@ const PostLayout = (props) => {
 
   return (
     <Layout>
-      <SEO title={postTitle} />
-      <h1 className={styles.title}>
-        {postTitle}
-      </h1>
-      <p className={styles.postedDate}>
-        Posted on {getPostDate()}
-      </p>
-      <MDXProvider
-        components={{
-          pre: PostPre,
-        }}
-      >
-        {props.children}
-      </MDXProvider>
+      <div className={styles.container}>
+        <SEO title={postTitle} />
+        <h1 className={styles.title}>
+          {postTitle}
+        </h1>
+        <p className={styles.postedDate}>
+          Posted on {getPostDate()}
+        </p>
+        <MDXProvider
+          components={{
+            pre: PostPre,
+          }}
+        >
+          {props.children}
+        </MDXProvider>
+      </div>
     </Layout>
   )
 }
