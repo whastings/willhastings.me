@@ -1,0 +1,190 @@
+---
+title: Speeding Up Page Load with Early Flush
+date: 2017-6-26
+---
+
+There are a lot of challenges to overcome when optimizing the page load speed of your website or web
+app. One of these is getting your most important assets downloaded to the client as quickly as
+possible. These assets likely include one or more CSS files and one or more JavaScript files. CSS is
+crucial to get to the client right away since it's needed for initial render. JavaScript may be
+equally as crucial if you're doing your rendering client-side. So these are the assets you want the
+browser to start downloading as soon as possible. One thing that can get in the way is generating
+the HTML for your page server-side. If generating the HTML takes any significant amount of time, the
+browser can't start downloading assets until your server generates and sends down all the HTML with
+the assets referenced via link and script tags. For example, on this blog I server-side render the
+React components that make up my pages, which usually requires waiting for a database call to
+complete before I can finish rendering the contents of a page. It'd be great if the browser didn't
+have to wait for the server to finish this work before it can start downloading assets.
+
+Thankfully, there are a few techniques you can utilize to get the browser downloading your critical
+assets even before your server has finished generating all of the page's HTML. One of them is called
+[early flush][early-flush], and it involves sending down the HTML for a page in separate chunks
+instead of all at once. In this post, we'll take a look at how early flush works, how you can use it
+to get the browser downloading assets early, and how big of a difference it can make when your
+server has a lot to do.
+[early-flush]: https://www.stevesouders.com/blog/2009/05/18/flushing-the-document-early/
+
+## How Early Flush Works
+
+Early flush is possible to do because HTTP supports a feature called [chunked transfer
+encoding][chunked-transfer]. Normally when a server responds to a request, it must indicate the
+total size of the response using the `Content-Length` header and then send the whole response in one
+go. When using chunked transfer encoding, the server no longer needs to provide `Content-Length` and
+can send parts of the response as they're ready. The client can then start parsing these parts even
+before it has received the entirety of the response.
+
+In the case of browsers receiving HTML for a web page, you can send down the `<head>` section of the
+HTML as soon as your server receives the browser's request, and before your server starts working on
+the contents of the page. If this first part of the response contains references to CSS and
+JavaScript assets, the browser will likely start downloading those right away. Removing the
+dependency on page content from getting your asset URLs to the browser means those assets will be
+downloaded and parsed sooner than if they'd had to wait for the content to be generated.
+
+## An Example Usage
+
+I was able to easily implement early flush on this blog since [Express][express] has support for it
+built in. With Express, you can simply send part of the response by calling `res.write`.  After
+you've sent the last part of the response, call `res.end` to end the response. Express will handle
+sending the appropriate HTTP headers.
+
+I wrote a small utility function to send down the start of the HTML markup common to all my blog's
+pages, including the references to CSS and JavaScript files. It uses another [utility I wrote that
+wraps the express-handlebars module][handlebars-util] to render a template to produce the initial
+response chunk that I want to send immediately when my server receives a request for a page. It
+renders the template on server start and caches the resulting string so it's ready for when requests
+start coming in.
+
+Here's the utility function:
+
+```javascript
+const handlebars = require('server/utils/handlebars');
+
+let earlyFlushResponse;
+handlebars.render('start.hbs').then((result) => earlyFlushResponse = result);
+
+module.exports = function earlyFlush(res) {
+  res.write(earlyFlushResponse);
+};
+```
+
+The function is called with the Express `res` object when a request is first received, before the
+server starts making database calls and rendering React components.
+
+And here's the Handlebars template it renders:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{getAsset 'app.css'}}">
+    <link rel="alternate" type="application/rss+xml" href="http://www.willhastings.me/rss">
+    <script src="{{getAsset 'manifest.js'}}" defer></script>
+    <script src="{{getAsset 'vendor.js'}}" defer></script>
+    <script src="{{getAsset 'app.js'}}" defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+```
+
+The template uses a helper to pull in the names of CSS and JS assets from my app's latest build,
+which contain [content-based hashes for effective cache busting][hash-cache-busting]. There are a
+couple important points to highlight. The first is I can leave the `<head>` unclosed. This allows me
+to fill in more details later, such as setting the page `<title>` to the title of a blog post loaded
+from the database.
+
+The second is the use of the `defer` attribute on the script tag. By default, a script tag blocks
+rendering of the HTML that comes after it until it has been downloaded, parsed, and executed. That's
+why the age-old advice for page load performance and scripts is to put your scripts at the bottom of
+your HTML after the rest of the page contents. But in my case I want to both get the browser
+downloading my scripts immediately and have it render my server-side generated content ASAP. Using
+`defer`, I can tell the browser to start downloading my scripts right away, but to wait to execute
+them until it's finished receiving and parsing the page HTML. This approach works pretty well,
+especially for a content-driven site like a blog. But there are ways to get scripts loading and
+executing even faster. For more techniques, I recommend reading ["Deep dive into the murky waters of
+script loading" on HTML5 Rocks][script-loading-article].
+
+## Caveat
+
+One important caveat to keep in mind regarding early flush is that once you've sent part of the
+response, you can't change your mind and do something else like redirect the user to another page.
+This presented some difficulty for me in adding early flush to this blog, as I have logic that
+redirects the user under certain circumstances, such as when a user who isn't logged in tries to
+load the admin dashboard. This meant I had to execute the logic to determine if the user should be
+redirected before executing the early flush. This made things a little more complicated than I had
+hoped they would be, but mostly because I try to handle redirection in a way that works both
+my server-side and client-side routing.
+
+## Illustrating with an Experiment
+
+In order to illustrate the effect of early flush, I performed a simple experiment in which I added
+an artificial three second delay (using `setTimeout`) to generating the page contents on my blog's
+server, and measured page load using Chrome's Dev Tools for loading a page with and without early
+flush. In addition to the server-side delay, I used Dev Tools to throttle network speed to regular
+3g and to throttle CPU to -5x in order to simulate a more moderate speed network connection and
+device.
+
+Here's a screenshot from the Network tab when loading the page without early flush. Notice that no
+CSS or JS starts downloading until after the browser starts receiving the full HTML response after
+the delay has elapsed.
+
+![Asset requests in Chrome Dev Tools Network tab without early flush][no-early-flush-screenshot]
+
+Additionally, I observed the following timings relative to the start of page load:
+
+* React started executing client-side at 8,640ms.
+* React finished executing at 8,726ms.
+* `app.css` started downloading at 3,150ms.
+* `manifest.js`, `vendor.js`, and `app.js` started downloading at 4,730ms.
+
+Here's the Network tab screenshot for loading the page with early flush. Notice that CSS and JS
+start downloading almost at the beginning of page load, as this is when the first chunk of HTML is
+received.
+
+![Asset requests in Chrome Dev Tools Network tab with early flush][early-flush-screenshot]
+
+And the timing observations:
+
+* React started executing client-side at 5,947ms.
+* React finished executing at 6,024ms.
+* `app.css` started downloading at 132ms.
+* `manifest.js` started downloading at 377ms.
+* `vendor.js` started downloading at 501ms.
+* `app.js` started downloading at `2,880ms`.
+
+I was really surprised to see that Chrome was downloading my scripts sequentially rather than in
+parallel like it had without early flush. Without parallel downloading, the effort hardly seemed
+worth it. Thankfully, I found that when running Chrome against my site in production it does
+actually download my scripts in parallel even with early flush enabled. I'm guessing the sequential
+downloading behavior I observed in my experiment is due to some quirk in the way Chrome handles
+pages served off of localhost.
+
+## Conclusion
+
+As we saw, early flush is a nice optimization you can employ to speed up page loads on sites that
+have to do any non-trivial server-side generation of page contents. As far as implementing it on my
+blog goes, the work I've done so far is just a first stab at trying out the technique. There is more
+work to do to optimize things further. For example, the eagle-eyed reader may have noticed in the
+network tab screenshots from my experiment that early flush did not do much for the downloading of
+the script named `2.js`. This is because I use Webpack's code splitting functionality to split my
+client-side JS into smaller chunks. Since `2.js` is a chunk that's programmatically downloaded by
+Webpack, it's download can't be kicked off until all the previous scripts have been downloaded,
+parsed, and executed. Because of this, my time-to-interactive is probably not much better than it
+was without early flush. To really speed it up, I'll probably have to try an alternative script
+loading technique, such as [dynamically adding script tags to the DOM][dynamic-script-tags].
+
+Note that though we only looked at early-flush as a mechanism for speeding up asset loading, you can
+also use it to improve perceived performance by sending down parts of the page contents, such as
+your site header and navigation, so the browser can render it before the rest of the page is ready.
+
+Finally, remember that early flush is just another technique for page load optimization that may or
+may not speed things up for your particular use case. As with any technique, be sure to profile and
+measure to see if things are indeed improving.
+
+[chunked-transfer]: https://en.wikipedia.org/wiki/Chunked_transfer_encoding
+[dynamic-script-tags]: https://www.html5rocks.com/en/tutorials/speed/script-loading/#toc-dom-rescue
+[early-flush-screenshot]: https://s3-us-west-1.amazonaws.com/willhastings.me/images/posts/speeding-up-page-load-with-early-flush/network-waterfall-early-flush.png
+[express]: https://expressjs.com/
+[handlebars-util]: https://github.com/whastings/willhastings.me/blob/b5d8e088ffb319a03bec025eef4e1a09c5731bdc/server/utils/handlebars.js
+[hash-cache-busting]: https://jakearchibald.com/2016/caching-best-practices/#pattern-1-immutable-content-long-max-age
+[no-early-flush-screenshot]: https://s3-us-west-1.amazonaws.com/willhastings.me/images/posts/speeding-up-page-load-with-early-flush/network-waterfall-no-early-flush.png
+[script-loading-article]: https://www.html5rocks.com/en/tutorials/speed/script-loading/

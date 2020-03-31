@@ -1,0 +1,679 @@
+---
+title: Building a Vanilla-JS Image Zoomer
+date: 2017-1-2
+---
+
+One of my favorite ways of improving my knowledge of "vanilla" JavaScript and
+the browser's DOM API is to create complex UI components without utilizing any
+libraries or frameworks. It's a great way to familiarize myself with the methods
+available for DOM manipulation, event handling, and information retrieval. Along
+the way, I always pick up a few tips and tricks to add to my front end toolbelt.
+The technique fits in nicely with my philosophy that one of the best ways to
+learn in programming is to "re-invent the wheel".
+
+In this post, I'm going to walk through implementing an image zoomer component.
+It's basically what you use on a site like Amazon to get a closer look at an
+image by hovering your mouse over a thumbnail. I'll be building a slightly
+simplified implementation [based on this implementation from my UI Components
+project][orig-impl] ([code here][orig-code]). Along the way, I'll touch on
+topics like listening to mouse events, getting an element's position within the
+viewport, and calculating the position of the zoomed image.
+[orig-code]: https://github.com/whastings/ui-components/tree/master/lib/image-zoomer
+[orig-impl]: https://whastings.github.io/ui-components/image-zoomer/
+
+## Defining the Component
+
+To keep things simple, we'll define our component as a JavaScript class whose
+constructor takes an image element. In the real world, a class like this can be
+hooked into a more declarative system for instantiating components. For example,
+in my original implementation, I define an `<image-zoomer>` custom element that
+I can use for creating instances.
+
+So to start off, here's our class:
+
+```javascript
+class ImageZoomer {
+  constructor(image) {
+    this.image = image;
+  }
+}
+```
+
+## Setting up the DOM
+
+Before we can start coding the logic to handle the behavior of the image zoomer,
+we need to modify our initialization logic to transform the DOM into the state
+we need it to be in. We'll need the following:
+
+* **Zoom Box:** A `div` to represent the box that surrounds the cursor and
+  outlines the zoomed portion of the image while the user hovers over the
+  original image. We'll reference this element as `this.zoomBox`.
+* **Zoom Container:** A `div` to wrap the original image and the zoom box. Its
+  job is to support positioning the zoom box over the image, so it should be the
+  same size as the image. Well reference it as `this.zoomContainer`.
+* **Zoomed Image:** A copy of the original image that we'll allow to grow to its
+  full size so it can be "zoomed". For this effect to work well, the layout in
+  which the image zoomer component is used should display the original image at
+  a much smaller size than it's true size. We'll reference the zoomed image as
+  `this.zoomedImage`.
+* **Zoom Window:** A `div` to contain the zoomed image. It should be smaller
+  than the full size of the image to ensure that only a portion of the zoomed
+  image is visible. We'll move the zoomed image around inside the zoom window as
+  the user moves the mouse cursor over the original image. We'll reference the
+  zoom window as `this.zoomWindow`.
+
+Now that we know what DOM structure we'll need, let's add the logic to set it
+up:
+
+```javascript
+class ImageZoomer {
+  constructor(image) {
+    let parentEl = image.parentNode;
+    this.image = image;
+
+    this.zoomedImage = image.cloneNode();
+    this.zoomWindow = createZoomWindow(this.zoomedImage);
+
+    this.zoomBox = createZoomBox();
+    this.zoomContainer = createZoomContainer(image, this.zoomBox);
+
+    parentEl.appendChild(this.zoomContainer);
+    parentEl.appendChild(this.zoomWindow);
+  }
+}
+
+function createZoomBox() {
+  let zoomBox = document.createElement('div');
+  zoomBox.classList.add('zoom-box');
+  return zoomBox;
+}
+
+function createZoomContainer(image, zoomBox) {
+  let zoomContainer = document.createElement('div');
+  zoomContainer.classList.add('zoom-container');
+  zoomContainer.appendChild(image);
+  zoomContainer.appendChild(zoomBox);
+  return zoomContainer;
+}
+
+function createZoomWindow(zoomedImage) {
+  let zoomWindow = document.createElement('div');
+  zoomWindow.classList.add('zoom-window');
+
+  zoomedImage.setAttribute('aria-hidden', 'true');
+  zoomWindow.appendChild(zoomedImage);
+  return zoomWindow;
+}
+
+let image = document.querySelector('.image-zoomer-demo img');
+let zoomer = new ImageZoomer(image);
+```
+
+Say our initial HTML is the following:
+
+```html
+<div class="image-zoomer-demo">
+  <img src="..." alt="...">
+</div>
+```
+
+Executing the JS code will change the DOM to the following structure:
+
+* div.image-zoomer-demo
+  * div.zoom-container
+    * img (the original image)
+    * div.zoom-box
+  * div.zoom-window
+    * img (the cloned `zoomedImage` for zooming)
+
+Here are a few important points to note about the code above:
+
+* We take advantage of the browser's [`document.createElement`][create-element]
+  API to create new elements like the zoom container, zoom box, and zoom window.
+* We use the [`cloneNode`][clone-node] API to make a copy of the original image
+  to use as our zoomed image.
+* We use the [`classList`][class-list] API for adding CSS classes to our new
+  elements.
+* We use the [`appendChild`][append-child] API for adding elements to other
+  elements to achieve our desired DOM structure.
+
+These APIs are some of the handiest built-in browser APIs for manipulating the
+DOM. They may not be as elegant as jQuery's API, but they certainly get the job
+done and done cheaply.
+
+Note also that the `createZoomBox()` function is not yet complete, as we'll be
+adding logic to properly size the zoom box in an upcoming section.
+
+## Setting up the Styles
+
+Now that we have the JS to initialize our component state and DOM structure,
+let's shift our focus for a moment to styling. We want to apply styling that
+will:
+
+* Size the original image smaller than the zoomed image, with the original image
+  and the zoomed image laid out next to each other.
+* Size the zoom window to be (roughly) a square.
+* Ensure the zoomed image does not shrink inside the zoom window but also that
+  the part of it that overflows the zoom window is not visible.
+* Set the zoom box and the zoomed image up to be positioned dynamically.
+* Keep the zoom box and zoomed image invisible until we want to show them.
+
+Here's our styling. Note that I've written it with Sass to keep it
+concise.
+
+```scss
+.image-zoomer-demo {
+  display: flex;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.zoom-container {
+  flex: 1;
+  padding-right: 25px;
+  position: relative;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.zoom-box {
+  backface-visibility: hidden; // Hack to activate GPU acceleration.
+  border: 2px lightblue solid;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.zoom-window {
+  border: 1px #31708f solid;
+  flex: 2;
+  padding-bottom: calc(66.66% - 25px);
+  overflow: hidden;
+  position: relative;
+
+  img {
+    backface-visibility: hidden; // Hack to activate GPU acceleration.
+    position: absolute;
+    opacity: 0;
+  }
+
+  &.active img {
+    opacity: 1;
+  }
+}
+```
+
+Here are some important points to note about our styling code:
+
+* We use Flexbox to lay out the zoom container and zoom window horizontally,
+  sizing the zoom container roughly one-third of the container's width and the
+  zoom window roughly two-thirds of the container's width. We add `max-width:
+  100%` to the original image in the zoom container so it doesn't grow larger
+  than the container.
+* We use the [padding hack][padding-hack] to make the zoom window's height
+  roughly equal to its width.
+* We prevent the part of the zoomed image that exceeds the bounds of the zoom
+  window from showing by setting `overflow: hidden` on the zoom window.
+* We absolutely position the zoom box and the zoomed image, as well as
+  relatively position their containers, so they will render at the top left
+  corners of their containers before we position them dynamically.
+* We set `opacity: 0` on the zoom box and zoomed image so they won't be visible
+  initially. We also add styling for `active` classes that, when added to the
+  zoom box or zoomed image, will reveal them by setting opacity to 1.
+
+A quick note on performance: We could have used `display: none` instead of
+`opacity: 0` to hide the zoom box and the zoomed image. But opacity is a better
+choice for performance because it is one of the things the browser can use the
+GPU to animate, a process known as hardware acceleration. Using the GPU leads to
+smoother animation as the browser does not have to re-paint the areas of the
+screen that are animating. Instead, the browser paints the elements to be
+animated to "layers" that are uploaded to the GPU, which it can then animate.
+Note that the browser doesn't always create new layers for the GPU when you want
+it to, so you can force it to do so by setting certain properties like
+`backface-visibility` (in the future, [`will-change`][will-change] will be the
+official mechanism). For more on this, check out ["High Performance
+Animations"][high-perf-anim] on HTML5 Rocks.
+
+## Sizing the Zoom Box
+
+The next step in building the image zoomer is to size the zoom box. We want to
+size it so it covers the same area on the original image that is visible in the
+zoom window. This sizing must be done dynamically in JavaScript so we can
+support variable widths for our layout (e.g. if it's placed somewhere smaller
+than its current max width of 600 pixels). Here's the relevant update to the
+code:
+
+```javascript
+class ImageZoomer {
+  constructor(image)  {
+    // Same code as before...
+    sizeZoomBox(this.zoomBox, image, this.zoomWindow, this.zoomedImage);
+  }
+}
+
+function sizeZoomBox(zoomBox, image, zoomWindow, zoomedImage) {
+  let widthPercentage = zoomWindow.clientWidth / zoomedImage.clientWidth;
+  let heightPercentage = zoomWindow.clientHeight / zoomedImage.clientHeight;
+
+  zoomBox.style.width = Math.round(image.clientWidth * widthPercentage) + 'px';
+  zoomBox.style.height = Math.round(image.clientHeight * heightPercentage) + 'px';
+}
+```
+
+Here we add a new `sizeZoomBox()` function which we call at the end of the
+`constructor`. The function will be accessing the computed dimensions of the
+original image, the zoom window, and the zoomed image in order to calculate the
+zoom box's size. Therefore, it must be called after these elements have been
+added to the DOM. The function works as follows:
+
+* Calculate the percentage of the zoomed image's width that fits in the zoom
+  window: zoom window's width / zoomed image's width.
+* Calculate the percentage of the zoomed image's height that fits in the zoom
+  window: zoom window's height / zoomed image's height.
+* Set the zoom box's width to the original image's width times the width
+  percentage calculated in the first step (rounded).
+* Set the zoom box's height to the original image's height times the height
+  percentage calculated in the second step (rounded).
+
+This gives us dimensions for the zoom box that are proportional to the zoomed
+image inside the zoom window. As far as DOM APIs go, we use the `clientWidth`
+and `clientHeight` properties to get the width and height of our elements in
+pixels, and we use the `style` property to set the zoom box's width and height.
+One additional consideration would be to re-run this operation if the user
+changes the size of the browser window. I'll leave that as an exercise for the
+reader.
+
+A quick performance-related note: The code in its current state will cause a
+forced synchronous layout. What this means is that when we ask for the
+`clientWidth` and `clientHeight` of our elements, the browser will have to pause
+our JS and do layout calculations before it can give us those values. For our
+purposes this probably isn't a big deal, but too much of this kind of thing can
+cause [layout thrashing][layout-thrashing]. In my original implementation, I
+avoid the synchronous layout by lazily creating the zoom box element when the
+user first mouses over the image.
+
+## Moving the Zoom Box
+
+Now that we have everything laid out, let's get something interesting happening:
+moving the zoom box to follow the mouse cursor while it's over the original
+image.
+
+### Setting Up Event Listeners
+
+First, we need to set up our event listeners. After initialization, we'll start
+listening for the mouse to enter the original image or the zoom box (since it's
+sitting on top of the image). Once the mouse enters, we'll show the zoom box,
+stop listening for mouse enter, and start listening for mouse move events so we
+can move the zoom box in response.
+
+The following code additions will set up our listener logic:
+
+```javascript
+class ImageZoomer {
+  constructor(image) {
+    // Same code as before...
+    this.activate = this.activate.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.listenForMouseEnter();
+  }
+
+  activate() {
+    this.zoomBox.classList.add('active');
+    this.zoomWindow.classList.add('active');
+    this.listenForMouseMove();
+  }
+
+  handleMouseMove() {
+    // TODO
+  }
+
+  listenForMouseEnter() {
+    let { image, zoomBox } = this;
+    document.body.removeEventListener('mousemove', this.handleMouseMove);
+    image.addEventListener('mouseenter', this.activate);
+    zoomBox.addEventListener('mouseenter', this.activate);
+  }
+
+  listenForMouseMove() {
+    let { image, zoomBox } = this;
+    image.removeEventListener('mouseenter', this.activate);
+    zoomBox.removeEventListener('mouseenter', this.activate);
+    document.body.addEventListener('mousemove', this.handleMouseMove);
+  }
+}
+```
+
+This gets us as far as showing the zoom box when the user mouses over the
+original image and switching from listening to mouse enter to mouse move.
+Important points to note:
+
+* In the constructor we bind methods that will be passed to the browser's
+  [`addEventListener`][add-event-listener] and
+  [`removeEventListener`][remove-event-listener] APIs so they don't lose their
+  context (`this` value) when invoked.
+* We always remove our `mousemove` listener when adding our `mouseenter`
+  listeners, as that will be necessary once we implement the code to handle the
+  mouse leaving the image. For the first call, the browser doesn't care if we
+  try to remove a listener that hasn't been added.
+* The `activate` method adds the `active` class to the zoom box and zoom window
+  so the zoom box and the image in the zoom window will become visible.
+
+### Handling Mouse Move Events
+
+The `handleMouseMove` method will be responsible for responding to mouse move
+events and either moving the zoom box or hiding it if the cursor has left the
+image. Moving the zoom box will require calculating a position that places it
+around the cursor.
+
+Let's implement `handleMouseMove`:
+
+```javascript
+class ImageZoomer {
+  constructor(image) {
+    // Same code as before...
+    this.imageBounds = toDocumentBounds(image.getBoundingClientRect());
+  }
+  // ...
+
+  handleMouseMove(event) {
+    if (this.isMoveScheduled) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      if (isWithinImage(this.imageBounds, event)) {
+        this.updateUI(event.pageX, event.pageY);
+      } else {
+        this.deactivate();
+      }
+      this.isMoveScheduled = false;
+    });
+    this.isMoveScheduled = true;
+  }
+
+  // ...
+}
+
+// ...
+
+function isWithinImage(imageBounds, event) {
+  let { bottom, left, right, top } = imageBounds;
+  let { pageX, pageY } = event;
+
+  return pageX > left && pageX < right && pageY > top && pageY < bottom;
+}
+
+// ...
+
+function toDocumentBounds(bounds) {
+  let { scrollX, scrollY } = window;
+  let { bottom, height, left, right, top, width } = bounds;
+
+  return {
+    bottom: bottom + scrollY,
+    height,
+    left: left + scrollX,
+    right: right + scrollX,
+    top: top + scrollY,
+    width
+  };
+}
+```
+
+Here's how the `handleMouseMove` code works:
+
+When an event comes in, it calls the browser's
+[`requestAnimationFrame`][request-animation-frame] API to schedule the work of
+responding to the event. `requestAnimationFrame` will invoke the callback passed
+to it at the optimal time before the browser paints the next frame.  This way,
+we can either move the box or hide it at the best point in time.
+
+The method also utilizes an `isMoveScheduled` instance variable so the work is
+not scheduled more than once per frame. When an event comes in and no work is
+scheduled, it schedules the work and sets the instance variable to true. If
+another event comes in before the scheduled work has run, it will check the
+instance variable and not schedule duplicate work. Once `requestAnimationFrame`
+fires and the work is performed, the instance variable is set back to false so
+that more work can be scheduled. Without this check, duplicate work could be
+scheduled if the user moves the mouse over the image very quickly.
+
+In the `requestAnimationFrame` callback, it checks to see if the mouse event
+reports the cursor as within the image or not using the new `isWithinImage`
+utility function. It passes the `imageBounds`, which we've added a calculation
+for in the constructor using the
+[`getBoundingClientRect`][get-bounding-client-rect] API method. This method,
+while not the most fun to type, is extremely useful in that it returns to you an
+object containing info on the element's position (bottom, left, right, top) and
+dimensions (height and width). One caveat of this method is that it gives you
+the element's position relative to the browser's viewport, not the beginning of
+the document. So if you want to know where the element is relative to the
+beginning of the entire document, you need to account for whether and by how
+much the page is scrolled. We do this using another utility function,
+`toDocumentBounds`, which uses `window.scrollX` and `window.scrollY` to
+determine how much the page is scrolled and adds those values to the appropriate
+data points for the element's position.
+
+`isWithinImage` then uses then `pageX` and `pageY` properties of the mouse
+event, which tell where in the document the cursor was when the event occurred,
+to determine if the mouse has left the image or not.  `handleMouseMove` uses the
+result to either call the `updateUI` method or the `deactivate` method, which
+we'll implement in the next couple of sections.
+
+### Changing Zoom Box Position
+
+Okay, after much preliminary work, we're finally ready to change the zoom box's
+position. To do this, we'll implement the `updateUI` method. For now, it'll only
+move the zoom box but later we'll also have it move the zoomed image. Here's the
+code we need to move the zoom box:
+
+```javascript
+class ImageZoomer {
+  constructor(image) {
+    // Same code as before...
+    this.zoomBoxBounds = toDocumentBounds(this.zoomBox.getBoundingClientRect());
+  }
+
+  // ...
+
+  updateUI(mouseX, mouseY) {
+    let { imageBounds, zoomBox, zoomBoxBounds } = this;
+    let { x: xOffset, y: yOffset } = getZoomBoxOffset(mouseX, mouseY, zoomBoxBounds, imageBounds);
+    zoomBox.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+  }
+}
+
+// ...
+function getZoomBoxOffset(mouseX, mouseY, zoomBoxBounds, imageBounds) {
+  let x = mouseX - (zoomBoxBounds.width / 2);
+  let y = mouseY - (zoomBoxBounds.height / 2);
+
+  x -= zoomBoxBounds.left;
+  y -= zoomBoxBounds.top;
+
+  return {x: Math.round(x), y: Math.round(y)};
+}
+```
+
+With those changes in place, the zoom box now appears when the mouse hovers over
+the original image, surrounds the cursor, and follows it as it moves over the
+image. Here are the important points to note about this code:
+
+* We capture the position of the zoom box relative to the document as
+  `this.zoomBoxBounds` using the same technique we used for the image bounds.
+* `updateUI` invokes the new utility function `getZoomBoxOffset` to figure out
+  how much we need to move the zoom box relative to its original position at the
+  top left corner of the zoom container.
+* The `getZoomBoxOffset` utility calculates the zoom box offset by first
+  figuring out the position relative to the document that would place the zoom
+  box around the cursor, subtracting from the X and Y values of the mouse
+  position half of the width and half of the height of the zoom box (so the
+  cursor will be in the middle). It then subtracts the original position of the
+  zoom box relative to the document from those values to yield the amount to
+  move the zoom box in the X and Y directions.
+* `updateUI` then moves the zoom box by applying a [translate
+  transform][translate-transform] to it using the offset values from
+  `getZoomBoxOffset`. The translate transform supports hardware acceleration via
+  the GPU the same way as opacity, which we discussed earlier. This means the
+  browser can move the zoom box without doing any re-painting, which is great
+  for performance. This is in contrast to properties like `top` and `left` that
+  do cause re-paints.
+
+### Hiding the Zoom Box
+
+Next we need to hide the zoom box when the mouse leaves the original image.
+Additionally, we must switch our event listening back from mouse move to mouse
+enter so we'll know the next time the user hovers over the image. The logic for
+this is simple compared to what we've already implemented. We just need to
+implement the `deactivate` method to remove the `active` class from the zoom box
+(we'll also remove it from the zoom window to get that out of the way):
+
+```javascript
+class ImageZoomer {
+  // ...
+
+  deactivate() {
+    this.zoomBox.classList.remove('active');
+    this.zoomWindow.classList.remove('active');
+    this.listenForMouseEnter();
+  }
+
+  // ...
+}
+```
+
+## Containing the Zoom Box in the Image
+
+At this point, we show, move, and hide the zoom box based on mouse movement. The
+final concern to address with the zoom box is keeping it from moving outside the
+original image when the mouse gets close to the image's edge. In general, the
+zoom box should surround the cursor with it in the middle. But once it hits the
+edge of the image it should move no further in that direction. Thankfully, this
+only requires a small update to the code that calculates the zoom box offset and
+the creation of one more utility. Here's the updated `getZoomBoxOffset` function
+and a new `containNum` utility:
+
+```javascript
+// ...
+
+function containNum(num, lowerBound, upperBound) {
+  if (num < lowerBound) {
+    return lowerBound;
+  }
+  if (num > upperBound) {
+    return upperBound;
+  }
+  return num;
+}
+
+// ...
+
+function getZoomBoxOffset(mouseX, mouseY, zoomBoxBounds, imageBounds) {
+  let x = mouseX - (zoomBoxBounds.width / 2);
+  let y = mouseY - (zoomBoxBounds.height / 2);
+
+  x = containNum(x, imageBounds.left, imageBounds.right - zoomBoxBounds.width);
+  y = containNum(y, imageBounds.top, imageBounds.bottom - zoomBoxBounds.height);
+
+  x -= zoomBoxBounds.left;
+  y -= zoomBoxBounds.top;
+
+  return {x: Math.round(x), y: Math.round(y)};
+}
+
+// ...
+```
+
+The new lines in `getZoomBoxOffset` are the ones that call the new `containNum`
+utility. `containNum` simply takes a number, a lower bound number, and an upper
+bound number, and returns either the number or one of the bounds if the number
+is outside the bounds. `getZoomBoxOffset` uses it to adjust the x and y offsets
+for the zoom box so they can't move the zoom box outside the image. For example,
+it adjusts the X offset by passing the current X value, the left bound of the
+image, and the right bound of the image minus the width of the zoom box (to
+account for the horizontal position of the zoom box being set relative to its
+left edge, not its center).
+
+## Moving the Zoomed Image
+
+The last major feature of the image zoomer for us to implement is moving the
+zoomed image to match the zoom box. Given that we implemented event listeners
+and a UI update method for the zoom box, adding support for moving the zoomed
+image won't be too complex. Here's the code update:
+
+```javascript
+class ImageZoomer {
+  // ...
+
+  moveZoomedImage(xPercent, yPercent) {
+    let { zoomedImage } = this;
+    let xOffset = Math.round(zoomedImage.clientWidth * xPercent) * -1;
+    let yOffset = Math.round(zoomedImage.clientHeight * yPercent) * -1;
+
+    zoomedImage.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+  }
+
+  updateUI(mouseX, mouseY) {
+    // Same code as before...
+
+    this.moveZoomedImage(xOffset / imageBounds.width, yOffset / imageBounds.height);
+  }
+}
+```
+
+The `updateUI` method now calls a new `moveZoomedImage` method, passing it the
+percentages of how much to move the zoomed image in the horizontal and vertical
+directions. It calculates these percentages by dividing the offset applied to
+the zoom box by the corresponding dimension of the original image (e.g.
+horizontal zoom box offset / width of original image).
+
+`moveZoomedImage` then uses those percentages to move the zoomed image. For each
+direction, it calculates the offset by multiplying the percentage by the
+corresponding dimension of the zoomed image (e.g. X percentage * width of zoomed
+image). It then multiplies that offset by -1 to account for the zoomed image
+needing to move the same relative distance as the zoom box, but in the opposite
+direction. Finally, it sets a translate transform to the zoomed image to
+performantly change its position.
+
+## Conclusion
+
+There you have it: a working image zoomer component. If you want to play around
+with it more, I've posted [the code from this walkthrough on
+CodePen][codepen-demo]. Let's recap what we've covered:
+
+* Setting up a class to define the state and behavior for our component.
+* Setting up the initial DOM structure for the image zoomer using browser APIs
+  like `document.createElement`, `classList`, and `appendChild`.
+* Writing styles that lay out the original image and zoomed image and position
+  them appropriately for dynamic movement.
+* Sizing and moving the zoom box.
+* Setting up event listeners for mouse movement.
+* Showing, moving, and hiding the zoom box and zoomed image using the
+  hardware-accelerated CSS properties `opacity` and `transform`.
+
+If you liked this post, note that I plan to write in the future on implementing
+tooltips and modals with vanilla JS. If you'd like to discuss this further, feel
+free to [reach out to me on Twitter at @WillHPower][twitter].
+
+[add-event-listener]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+[append-child]: https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
+[class-list]: https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+[clone-node]: https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
+[codepen-demo]: https://codepen.io/whastings/pen/zNOYxq
+[create-element]: https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+[get-bounding-client-rect]: https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+[high-perf-anim]: https://www.html5rocks.com/en/tutorials/speed/high-performance-animations/
+[image-credit]: https://www.nasa.gov/image-feature/goddard/2016/hubble-spies-a-spiral-snowflake
+[layout-thrashing]: http://wilsonpage.co.uk/preventing-layout-thrashing/
+[padding-hack]: http://andyshora.com/css-image-container-padding-hack.html
+[remove-event-listener]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
+[request-animation-frame]: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+[translate-transform]: http://learn.shayhowe.com/advanced-html-css/css-transforms/#two-dimensional-transforms
+[twitter]: https://twitter.com/WillHPower
+[will-change]: https://developer.mozilla.org/en-US/docs/Web/CSS/will-change

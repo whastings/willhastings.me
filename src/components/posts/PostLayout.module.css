@@ -1,0 +1,12 @@
+.container {
+  background-color: #fff;
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.postedDate {
+  font-weight: bold;
+}
