@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-export NODE_PATH="$(pwd)/:$NODE_PATH"
-node lib/repl.js

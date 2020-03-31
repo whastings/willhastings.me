@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-export NODE_PATH="$(pwd)/:$NODE_PATH"
-
-if [ "$NODE_ENV" == "production" ]; then
-  node index.js
-else
-  nodemon
-fi

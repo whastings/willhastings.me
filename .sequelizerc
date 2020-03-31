@@ -1,9 +1,0 @@
-require('./lib/env');
-const path = require('path');
-
-const CWD = process.cwd();
-
-module.exports = {
-  config: path.join(CWD, 'config/db.js'),
-  'migrations-path': path.join(CWD, 'lib/db/migrations')
-};
