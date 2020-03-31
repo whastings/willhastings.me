@@ -4,4 +4,4 @@ date: 2019-10-25
 link: https://tech.omadahealth.com/graphql-reaping-the-benefits/
 ---
 
-Beetroot water spinach okra water chestnut ricebean pea catsear courgette summer purslane. Water spinach arugula pea tatsoi aubergine spring onion bush tomato kale radicchio turnip chicory salsify pea sprouts fava bean. Dandelion zucchini burdock yarrow chickpea dandelion sorrel courgette turnip greens tigernut soybean radish artichoke wattle seed endive groundnut broccoli arugula.
+This is my second post for the Omada Health Tech Blog on adopting GraphQL. In it, I outline the various benefits we found GraphQL brought compared to how we traditionally implemented APIs, including better documentation, mobile client support, and performance.
