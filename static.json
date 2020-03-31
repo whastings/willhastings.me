@@ -23,16 +23,32 @@
       "url": "/posts/speeding-up-page-load-with-early-flush",
       "status": 301
     },
+    "/blog/speeding-up-page-load-with-early-flush/": {
+      "url": "/posts/speeding-up-page-load-with-early-flush/",
+      "status": 301
+    },
     "/blog/questions-to-ask-when-applying-for-a-software-engineering-job": {
       "url": "/posts/questions-applying-swe-job",
+      "status": 301
+    },
+    "/blog/questions-to-ask-when-applying-for-a-software-engineering-job/": {
+      "url": "/posts/questions-applying-swe-job/",
       "status": 301
     },
     "/blog/building-a-vanilla-js-image-zoomer": {
       "url": "/posts/building-a-vanilla-js-image-zoomer",
       "status": 301
     },
+    "/blog/building-a-vanilla-js-image-zoomer/": {
+      "url": "/posts/building-a-vanilla-js-image-zoomer/",
+      "status": 301
+    },
     "/blog/tips-for-building-universal-javascript-apps": {
       "url": "/posts/tips-for-building-universal-javascript-apps",
+      "status": 301
+    },
+    "/blog/tips-for-building-universal-javascript-apps/": {
+      "url": "/posts/tips-for-building-universal-javascript-apps/",
       "status": 301
     }
   }
