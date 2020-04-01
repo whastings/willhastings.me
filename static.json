@@ -18,6 +18,7 @@
     }
   },
   "error_page": "404.html",
+  "https_only": true,
   "redirects": {
     "/blog/speeding-up-page-load-with-early-flush": {
       "url": "/posts/speeding-up-page-load-with-early-flush",
